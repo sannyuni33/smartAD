@@ -97,6 +97,8 @@ def faceAnalyse(FILE_NAME):
             else:
                 recog_result[11] += 1
 
+    window.label.setStyleSheet(FILE_NAME)
+
     if max(recog_result) == 0:
         return -1, -1
     else:
@@ -239,7 +241,8 @@ class CameraThread(Thread):
             global genderAge
             genderAge = que.get()
             print("서버가 받은 결과는: ", genderAge)
-            window.textBrowser.append("성별, 연령대: "+genderAge)
+            guimsg = "성별, 연령대: "+genderAge[0]+str(genderAge[1])
+            window.textBrowser.append(guimsg)
             global ADname
 
             if genderAge == (-1, -1):
@@ -248,11 +251,12 @@ class CameraThread(Thread):
                 ADname = DB.decideID(majority[0], majority[1])
             else:
                 ADname = DB.decideID(genderAge[0], genderAge[1])
-                self.insert_result(genderAge, today.year+"."+today.month+"."+today.day,
-                                   today.hour, ADname)
+                self.insert_result(genderAge, str(today.year)+"."+str(today.month)+"."+str(today.day),
+                                   str(today.hour), ADname)
 
             print("광고가 멀로 정해졌냐면: ", ADname)
             window.textBrowser.append("광고 ID: "+ADname)
+            window.label_2.setStyleSheet('image:url(m20.jpg)')
 
     def recvImage(FILE_NAME):
         global camConn

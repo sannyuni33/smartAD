@@ -140,8 +140,8 @@ class Window(QDialog):
         QDialog.__init__(self, None)
         uic.loadUi(MainUI, self)
         self.setWindowTitle("서버 GUI")
-        self.label.setStyleSheet('image:url(ggg.jpg)')
-        self.label_2.setStyleSheet('image:url(ggg.jpg)')
+        self.label.setStyleSheet('image:url(sexysang.jpg)')
+        self.label_2.setStyleSheet('image:url(hijoo.jpg)')
 
         self.pushButton.clicked.connect(self.startAD)
         self.pushButton_3.clicked.connect(self.pauseAD)

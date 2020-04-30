@@ -15,7 +15,7 @@ class ClientThread(Thread):
         Thread.__init__(self)
 
     def run(self):
-        host = '192.168.219.172'
+        host = '192.168.100.38'
         port = 9988
         BUFFER_SIZE = 2048
         global tcpClientA

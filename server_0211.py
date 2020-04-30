@@ -189,7 +189,7 @@ class ServerThread(Thread):
         self.window = window
 
     def run(self):
-        TCP_IP = '192.168.219.172'
+        TCP_IP = '192.168.100.38'
         TCP_PORT = 9988
         # BUFFER_SIZE = 2048
         tcpServer = socket(AF_INET, SOCK_STREAM)
@@ -206,12 +206,12 @@ class ServerThread(Thread):
             conn, (ip, port) = tcpServer.accept()
             print(conn, ip, port)
 
-            if ip == '192.168.219.172':
+            if ip == '192.168.100.38':
                 camConn = conn
                 camthread = CameraThread(ip, port, window)
                 camthread.start()
                 threads.append(camthread)
-            if ip == '192.168.219.172':
+            if ip == '192.168.141.100':
                 disConn = conn
                 disthread = DisplayThread(ip, port, window)
                 disthread.start()

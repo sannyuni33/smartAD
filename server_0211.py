@@ -220,7 +220,7 @@ class CameraThread(Thread):
         self.window = window
         self.ip = ip
         self.port = port
-        print("[+] 카메라 클라이언트와 연결되었습니다! " + ip + ':' + str(port))
+        window.textBrowser.append("[+] 카메라 클라이언트와 연결되었습니다! " + ip + ':' + str(port))
 
     def run(self):
         while True:
@@ -231,7 +231,7 @@ class CameraThread(Thread):
             # FILE_NAME = ('image.jpg')  # 나중엔 파일 이름 다 다른걸로 저장
             # self.recvImage(FILE_NAME)
             # window.textBrowser.append("이미지 수신 완료")
-            faceThread = Thread(target=lambda q, arg1: q.put(faceAnalyse(arg1)), args=(que, 'tagtag.jpg'))  # 나중엔 self.FILE_NAME
+            faceThread = Thread(target=lambda q, arg1: q.put(faceAnalyse(arg1)), args=(que, 'asiana.jpg'))  # 나중엔 self.FILE_NAME
             faceThread.setDaemon(True)
             faceThread.start()
             faceThread.join()
@@ -239,7 +239,7 @@ class CameraThread(Thread):
             global genderAge
             genderAge = que.get()
             print("서버가 받은 결과는: ", genderAge)
-            window.textBrowser.append("성별, 연령대: ", genderAge)
+            window.textBrowser.append("성별, 연령대: "+genderAge)
             global ADname
 
             if genderAge == (-1, -1):
@@ -252,7 +252,7 @@ class CameraThread(Thread):
                                    today.hour, ADname)
 
             print("광고가 멀로 정해졌냐면: ", ADname)
-            window.textBrowser.append("광고 ID: ", ADname)
+            window.textBrowser.append("광고 ID: "+ADname)
 
     def recvImage(FILE_NAME):
         global camConn
@@ -293,7 +293,7 @@ class DisplayThread(Thread):
         self.window = window
         self.ip = ip
         self.port = port
-        print("[+] 광고판 클라이언트와 연결되었습니다! " + ip + ':' + str(port))
+        window.textBrowser.append("[+] 광고판 클라이언트와 연결되었습니다! " + ip + ':' + str(port))
 
     def run(self):
         while True:

@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel
 from PyQt5 import uic
 
 tcpClientA = None
-MainUI = 'label.ui'
+MainUI = 'label5.ui'
 
 
 class Window(QDialog, ):

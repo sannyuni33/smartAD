@@ -144,9 +144,10 @@ class Window(QDialog):
         self.label_2.setStyleSheet('image:url(hijoo.jpg)')
 
         self.pushButton.clicked.connect(self.startAD)
-        self.pushButton_3.clicked.connect(self.pauseAD)
-        self.pushButton_2.clicked.connect(self.closeAD)
+        self.pushButton_2.clicked.connect(self.pauseAD)
+        self.pushButton_3.clicked.connect(self.showStat)
         self.pushButton_4.clicked.connect(self.changeAD)
+        self.pushButton_5.clicked.connect(self.changeAD) # 여기에서 정상적으로 종료시키려면 어떻게 해야할까요
 
     def startAD(self):
         print("시작")
@@ -157,6 +158,10 @@ class Window(QDialog):
         print("일시정지")
         self.send("pause")
         self.textBrowser.append("일시정지")
+
+    def showStat(self):
+        print("통계조회")
+        self.textBrowser.append("통계조회")
 
     def closeAD(self):
         print("종료")
@@ -232,7 +237,6 @@ class CameraThread(Thread):
 
     def run(self):
         while True:
-            # (conn, (self.ip,self.port)) = serverThread.tcpServer.accept()
             global camConn
             data = camConn.recv(BUFF_SIZE)
             window.textBrowser.append(data.decode('utf-8'))

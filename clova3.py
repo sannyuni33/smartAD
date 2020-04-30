@@ -143,6 +143,6 @@ class FaceRecog(Thread):
 
 
 if __name__ == '__main__':
-    FRthread = FaceRecog('asiana.jpg')
+    FRthread = FaceRecog('ggg.jpg')
     FRthread.setDaemon(True)
     FRthread.start()

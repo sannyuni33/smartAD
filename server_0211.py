@@ -134,6 +134,16 @@ def faceAnalyse(FILE_NAME):
     return genderAge
 
 
+def send(msg):
+    text = msg
+    # 여기서 카메라로 보낼 메시지 광고판으로 보낼 메시지
+    # 구분 잘해야 함
+    global camConn
+    global disConn
+    camConn.send(text.encode("utf-8"))
+    disConn.send(text.encode("utf-8"))
+
+
 class Window(QDialog):
     # 서버 관리자용 GUI
     def __init__(self):
@@ -147,45 +157,25 @@ class Window(QDialog):
         self.pushButton_2.clicked.connect(self.pauseAD)
         self.pushButton_3.clicked.connect(self.showStat)
         self.pushButton_4.clicked.connect(self.changeAD)
-        self.pushButton_5.clicked.connect(self.changeAD) # 여기에서 정상적으로 종료시키려면 어떻게 해야할까요
+        self.pushButton_5.clicked.connect(self.closeAD) # 여기에서 정상적으로 종료시키려면 어떻게 해야할까요
 
     def startAD(self):
-        print("시작")
-        self.send("start")
+        send("start")
         self.textBrowser.append("시작")
 
     def pauseAD(self):
-        print("일시정지")
-        self.send("pause")
+        send("pause")
         self.textBrowser.append("일시정지")
 
     def showStat(self):
-        print("통계조회")
         self.textBrowser.append("통계조회")
 
     def closeAD(self):
-        print("종료")
-        self.send("exit")
+        send("exit")
         self.textBrowser.append("종료")
 
     def changeAD(self):
-        print("광고 변경")
         self.textBrowser.append("광고 변경")
-
-    def send(self, msg):
-        text = msg
-        # font = self.chat.font()
-        # font.setPointSize(13)
-        # self.chat.setFont(font)
-        # textFormatted = '{:>80}'.format(text)
-        # self.chat.append(textFormatted)
-        # 여기서 카메라로 보낼 메시지 광고판으로 보낼 메시지
-        # 구분 잘해야 함
-        global camConn
-        global disConn
-        camConn.send(text.encode("utf-8"))
-        disConn.send(text.encode("utf-8"))
-        # self.chatTextField.setText("")
 
 
 class ServerThread(Thread):
@@ -196,7 +186,6 @@ class ServerThread(Thread):
     def run(self):
         TCP_IP = '192.168.100.38'
         TCP_PORT = 9988
-        # BUFFER_SIZE = 2048
         tcpServer = socket(AF_INET, SOCK_STREAM)
         tcpServer.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
         tcpServer.bind((TCP_IP, TCP_PORT))
@@ -209,7 +198,6 @@ class ServerThread(Thread):
             global camConn
             global disConn
             conn, (ip, port) = tcpServer.accept()
-            print(conn, ip, port)
 
             if ip == '192.168.100.38':
                 camConn = conn
@@ -224,7 +212,6 @@ class ServerThread(Thread):
 
         for t in threads:
             t.join()
-
 
 
 class CameraThread(Thread):
@@ -243,7 +230,7 @@ class CameraThread(Thread):
             print(data.decode('utf-8'))
             # FILE_NAME = ('image.jpg')  # 나중엔 파일 이름 다 다른걸로 저장
             # self.recvImage(FILE_NAME)
-            faceThread = Thread(target=lambda q, arg1: q.put(faceAnalyse(arg1)), args=(que, '1-2.jpg'))  # 나중엔 self.FILE_NAME
+            faceThread = Thread(target=lambda q, arg1: q.put(faceAnalyse(arg1)), args=(que, 'tagtag.jpg'))  # 나중엔 self.FILE_NAME
             faceThread.setDaemon(True)
             faceThread.start()
             faceThread.join()

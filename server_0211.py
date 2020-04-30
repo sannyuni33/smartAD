@@ -98,7 +98,6 @@ def faceAnalyse(FILE_NAME):
                 recog_result[11] += 1
 
     if max(recog_result) == 0:
-        print("인식실패띠 ㅜ")
         return -1, -1
     else:
         max_index = recog_result.index(max(recog_result))
@@ -194,6 +193,7 @@ class ServerThread(Thread):
 
         while True:
             print("Multi Threaded Python server : Waiting for connections from TCP clients...")
+            window.textBrowser.append("클라이언트 접속 대기중...")
             global conn
             global camConn
             global disConn
@@ -230,6 +230,7 @@ class CameraThread(Thread):
             print(data.decode('utf-8'))
             # FILE_NAME = ('image.jpg')  # 나중엔 파일 이름 다 다른걸로 저장
             # self.recvImage(FILE_NAME)
+            # window.textBrowser.append("이미지 수신 완료")
             faceThread = Thread(target=lambda q, arg1: q.put(faceAnalyse(arg1)), args=(que, 'tagtag.jpg'))  # 나중엔 self.FILE_NAME
             faceThread.setDaemon(True)
             faceThread.start()
@@ -238,9 +239,11 @@ class CameraThread(Thread):
             global genderAge
             genderAge = que.get()
             print("서버가 받은 결과는: ", genderAge)
+            window.textBrowser.append("성별, 연령대: ", genderAge)
             global ADname
 
             if genderAge == (-1, -1):
+                window.textBrowser.append("얼굴이 인식되지 않습니다. 통계기반의 광고를 출력합니다.")
                 majority = DB.findMajority(today.hour)
                 ADname = DB.decideID(majority[0], majority[1])
             else:
@@ -249,6 +252,7 @@ class CameraThread(Thread):
                                    today.hour, ADname)
 
             print("광고가 멀로 정해졌냐면: ", ADname)
+            window.textBrowser.append("광고 ID: ", ADname)
 
     def recvImage(FILE_NAME):
         global camConn

@@ -35,7 +35,7 @@ class Window(QDialog, ):
         else:
             self.label.setStyleSheet('image:url(m20.jpg)')
 
-    def urlGo(self):
+    def urlGo(self, ID):
 
         self.webEngineView.load(QUrl("https://viewer.youvr.io/post/view/1mwWGkzGqpAqXxjz"))
         self.timer = QTimer(self)

@@ -40,7 +40,7 @@ def faceAnalyse(FILE_NAME):
     # 카메라 클라이언트가 전송한 이미지에 대해 얼굴분석 수행
 
     #히스토그램 평활화
-    src = cv2.imread(FILE_NAME)
+    src = cv2.imread("imgFile/"+FILE_NAME)
 
     # hsv 컬러 형태로 변형합니다.
     hsv = cv2.cvtColor(src, cv2.COLOR_BGR2HSV)
@@ -247,11 +247,11 @@ class CameraThread(Thread):
             img_path = 'imgFile/'
             count =0
 
-            #FILE_NAME = (img_path + str(count) + '.jpg')
-            # self.recvImage(FILE_NAME)
-            # window.textBrowser.append(FILE_NAME+"이미지 수신 완료")
+            FILE_NAME = (img_path + str(count) + '.jpg')
+            self.recvImage(FILE_NAME)
+            window.textBrowser.append(FILE_NAME+"이미지 수신 완료")
 
-            faceThread = Thread(target=lambda q, arg1: q.put(faceAnalyse(arg1)), args=(que, 'asiana.jpg'))  # 나중엔 self.FILE_NAME
+            faceThread = Thread(target=lambda q, arg1: q.put(faceAnalyse(arg1)), args=(que, FILE_NAME))  # 나중엔 self.FILE_NAME
             faceThread.setDaemon(True)
             faceThread.start()
             faceThread.join()
@@ -275,7 +275,7 @@ class CameraThread(Thread):
             window.textBrowser.append("광고 ID: "+ADname)
             count += 1
 
-    def recvImage(FILE_NAME):
+    def recvImage(self, FILE_NAME):
         global camConn
         FILE_LEN = 0
         FILE_SIZE = camConn.recv(8)

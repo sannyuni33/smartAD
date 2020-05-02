@@ -13,13 +13,13 @@ ADDR = (HOST, PORT)
 BUFF_SIZE = 1024
 
 
-"""def picam2():
+def picam2(FILE_NAME):
     camera = PiCamera()
     camera.start_preview()
     sleep(5)
     camera.capture('/home/pi/sang/'+FILE_NAME)
     camera.stop_preview()
-"""
+
 
 def sendImage(FILE_NAME):
     FILE_SIZE = os.path.getsize(FILE_NAME)

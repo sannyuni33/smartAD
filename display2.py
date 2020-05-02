@@ -27,8 +27,8 @@ class Window(QDialog, ):
     def __init__(self):
         QDialog.__init__(self, None)
         uic.loadUi(MainUI, self)
-        self.setWindowTitle("영상윤주 서버 GUI")
-        self.label.setStyleSheet('image:url(video.mp4)')
+        self.setWindowTitle("영상윤주 디스플레이 GUI")
+        self.label.setStyleSheet('image:url(ready.png)')
         self.pushButton.clicked.connect(self.vid)
         self.pushButton_2.clicked.connect(self.vr)
         self.pushButton_3.clicked.connect(self.ThreeD)

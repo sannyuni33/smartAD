@@ -3,8 +3,8 @@ import struct
 import clova3
 from DB_interface_test import DB_interface
 
-HOST ="192.168.101.125"
-PORT = 9069
+HOST ="172.30.1.27"
+PORT = 9999
 
 ADDR = (HOST, PORT)
 BUFF_SIZE = 1024

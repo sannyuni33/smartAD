@@ -15,7 +15,7 @@ class ClientThread(Thread):
         Thread.__init__(self)
 
     def run(self):
-        host = '192.168.100.38'
+        host = '172.30.1.27'
         port = 9988
         BUFFER_SIZE = 2048
         global tcpClientA
@@ -45,7 +45,7 @@ class CameraWork(Thread):
     def __init__(self, tcpClientA):
         Thread.__init__(self)
         self.clientSocket = tcpClientA
-        self.FILE_NAME = ('image.jpg')
+        self.FILE_NAME = 'image.jpg'
         self.onOff = True
 
     def setStop(self):
@@ -53,26 +53,26 @@ class CameraWork(Thread):
 
     def run(self):
         while True:
-            time.sleep(1)
-            print('찍고')
-            time.sleep(1)
-            print('보내고')
-            msg = '파일 받았어유'
-            self.clientSocket.send(msg.encode('utf-8'))
-            time.sleep(1)
-            print('삭제하고')
+            # time.sleep(1)
+            # print('찍고')
+            # time.sleep(1)
+            # print('보내고')
+            # msg = '이미지파일 수신'
+            # self.clientSocket.send(msg.encode('utf-8'))
+            # time.sleep(1)
+            # print('삭제하고')
 
             # 찍고 보내고 삭제하는데 걸리는 시간을 적절히 조절해야함
             # 서버에서 이미지 도착 안했는데 분석 돌릴 가능성 있음
             # FILE_NAME = ('image.jpg' % i) 얘는 주석안풀어줄거임.
-            # self.captureImage(self.FILE_NAME)
-            # self.sendImage(self.FILE_NAME)
-            # os.remove(r'image.jpg')
+            self.captureImage(self.FILE_NAME)
+            self.sendImage(self.FILE_NAME)
+            os.remove(r'image.jpg')
 
             if not self.onOff:
                 break
 
-    def captureImage(FILE_NAME):
+    def captureImage(self, FILE_NAME):
         camera = PiCamera()
         camera.start_preview()
         time.sleep(5)

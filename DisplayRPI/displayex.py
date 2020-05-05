@@ -14,9 +14,10 @@ from PyQt5.QtCore import pyqtSlot, QTimer
 
 tcpClientA = None
 MainUI = 'UI\displayUi.ui'
-#IDflag = None # idflag boolean 처리
+# IDflag = None # idflag boolean 처리
 
-class Window(QDialog, ):
+
+class Window(QDialog):
     def __init__(self):
         QDialog.__init__(self, None)
         uic.loadUi(MainUI, self)

@@ -70,7 +70,7 @@ class ClientThread(Thread):
 
     def run(self):
         host = '172.30.98.130'
-        port = 9988
+        port = 9899
         BUFFER_SIZE = 2048
         global tcpClientA
         #global IDflag

@@ -27,11 +27,11 @@ class DB_interface:
         self.conn.close()
 
     # 최종 결정된 성별, 연령대를 바탕으로 송출 광고 결정
-    def decideID(self, sex, age):
+    def decideID(self, gender, age):
         try:
             sql = "select AD_ID from AD where " \
-                  "target_sex = %s and target_age = %s order by rand() limit 1"
-            self.curs.execute(sql, (sex, age))
+                  "target_gender = %s and target_age = %s order by rand() limit 1"
+            self.curs.execute(sql, (gender, age))
             rows = self.curs.fetchone()
             return rows[0]
         except Exception as e:
@@ -40,8 +40,8 @@ class DB_interface:
     # 얼굴이 인식되지 않았을 경우 해당 시간대에 많이 인식된 성별과 연령대 추출
     def findMajority(self, time):
         try:
-            sql = "select sex, age, count(*) as cnt from recog_result where " \
-                  "time = %s group by sex, age order by cnt desc"
+            sql = "select gender, age, count(*) as cnt from recog_result where " \
+                  "time = %s group by gender, age order by cnt desc"
             self.curs.execute(sql, (time))
             rows = self.curs.fetchone()
             return rows[0], rows[1]
@@ -49,11 +49,11 @@ class DB_interface:
             print("에러 발생!!", e)
 
     # 얼굴인식에 성공했을 경우 인식결과를 통계 테이블에 추가
-    def insertRecogResult(self, sex, age, date, time, AD_ID):
+    def insertRecogResult(self, gender, age, date, time, AD_ID):
         try:
             sql = "insert into recog_result " \
                   "values(%s, %s, %s, %s, %s)"
-            self.curs.execute(sql, (sex, age, date, time, AD_ID))
+            self.curs.execute(sql, (gender, age, date, time, AD_ID))
             self.conn.commit()
         except Exception as e:
             print("에러 발생!!", e)
@@ -69,11 +69,11 @@ class DB_interface:
             print("에러 발생!!", e)
 
     # 제어 API 에서 통계정보를 조회하려고 할 때 수행.. 제일 나중에
-    def lookUpStat(self, sex, age):
+    def lookUpStat(self, gender, age):
         try:
             sql = "select AD_ID from AD where " \
-                  "target_sex =%s and target_age=%s"
-            self.curs.execute(sql, (sex, age))
+                  "target_gender =%s and target_age=%s"
+            self.curs.execute(sql, (gender, age))
             self.conn.commit()
         except Exception as e:
             print("에러 발생!!", e)

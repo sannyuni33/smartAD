@@ -60,9 +60,6 @@ def faceAnalyse(FILE_NAME):
     response = requests.post(url, files=files, headers=headers)
     rescode = response.status_code
 
-    # 요 부분에 히스토그램이 들어와야겠네
-
-
     if rescode == 200:
         pass
         # print(response.text)
@@ -212,7 +209,7 @@ class ServerThread(Thread):
 
     def run(self):
         TCP_IP = '172.30.98.130'
-        TCP_PORT = 9988
+        TCP_PORT = 9899
         tcpServer = socket(AF_INET, SOCK_STREAM)
         tcpServer.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
         tcpServer.bind((TCP_IP, TCP_PORT))
@@ -270,7 +267,7 @@ class CameraThread(Thread):
             print("서버가 받은 결과는: ", genderAge)
             guimsg = "성별, 연령대: "+genderAge[0]+str(genderAge[1])
             window.textBrowser.append(guimsg)
-            window.label_2.setStyleSheet('image:url(f20.jpg)')
+            window.label_2.setStyleSheet('image:url(m20.jpg)')
 
             global ADname
 

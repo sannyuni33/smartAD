@@ -4,8 +4,7 @@ import struct
 import time
 import socket
 from threading import Thread
-import datetime
-#from picamera import PiCamera
+from picamera import PiCamera
 
 tcpClientA = None
 
@@ -53,21 +52,17 @@ class CameraWork(Thread):
 
     def run(self):
         while True:
-            # time.sleep(1)
-            # print('찍고')
-            # time.sleep(1)
-            # print('보내고')
-            # msg = '이미지파일 수신'
-            # self.clientSocket.send(msg.encode('utf-8'))
-            # time.sleep(1)
-            # print('삭제하고')
-
             # 찍고 보내고 삭제하는데 걸리는 시간을 적절히 조절해야함
             # 서버에서 이미지 도착 안했는데 분석 돌릴 가능성 있음
             # FILE_NAME = ('image.jpg' % i) 얘는 주석안풀어줄거임.
+            print("찍습니다")
             self.captureImage(self.FILE_NAME)
+            time.sleep(2)
+            print("보내기 전이요")
             self.sendImage(self.FILE_NAME)
+            time.sleep(1)
             os.remove(r'image.jpg')
+            print("삭제 완료")
 
             if not self.onOff:
                 break

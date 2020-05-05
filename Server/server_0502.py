@@ -185,18 +185,23 @@ class Window(QDialog):
 
     def startAD(self):
         send("start")
-        self.textBrowser.append("시작")
+        self.textBrowser.append("광고를 시작합니다!")
 
     def pauseAD(self):
         send("pause")
-        self.textBrowser.append("일시정지")
+        self.textBrowser.append("광고를 일시 중단합니다!")
 
-    def showStat(self):
-        self.textBrowser.append("통계조회")
+    def showTimeStat(self):
+        DB.lookUpTimeStat(datetime.datetime.hour)
+        self.textBrowser.append("시간대별 인식통계를 조회합니다.")
+
+    def showAdStat(self):
+        DB.lookUpADStat()
+        self.textBrowser.appen("광고별 관심지수통계를 조회합니다.")
 
     def closeAD(self):
         send("exit")
-        self.textBrowser.append("종료")
+        self.textBrowser.append("시스템을 종료합니다.")
 
     def changeAD(self):
         self.textBrowser.append("광고 변경")

@@ -69,11 +69,16 @@ class DB_interface:
             print("에러 발생!!", e)
 
     # 제어 API 에서 통계정보를 조회하려고 할 때 수행.. 제일 나중에
-    def lookUpStat(self, gender, age):
+    def lookUpTimeStat(self, time):
         try:
             sql = "select AD_ID from AD where " \
                   "target_gender =%s and target_age=%s"
-            self.curs.execute(sql, (gender, age))
-            self.conn.commit()
+        except Exception as e:
+            print("에러 발생!!", e)
+
+    def lookUpADStat(self, time):
+        try:
+            sql = "select AD_ID from AD where " \
+                  "target_gender =%s and target_age=%s"
         except Exception as e:
             print("에러 발생!!", e)

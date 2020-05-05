@@ -39,10 +39,29 @@ ADname = None
 
 def faceAnalyse(FILE_NAME):
     # 카메라 클라이언트가 전송한 이미지에 대해 얼굴분석 수행
+
+    # 히스토그램 평활화
+    src = cv2.imread(FILE_NAME)
+
+    # hsv 컬러 형태로 변형합니다.
+    hsv = cv2.cvtColor(src, cv2.COLOR_BGR2HSV)
+    # h, s, v로 컬러 영상을 분리 합니다.
+    h, s, v = cv2.split(hsv)
+    # v값을 히스토그램 평활화를 합니다.
+    equalizedV = cv2.equalizeHist(v)
+    # h,s,equalizedV를 합쳐서 새로운 hsv 이미지를 만듭니다.
+    hsv2 = cv2.merge([h, s, equalizedV])
+
+    # 마지막으로 hsv2를 다시 BGR 형태로 변경합니다.
+    hsv3 = cv2.cvtColor(hsv2, cv2.COLOR_HSV2BGR)
+    cv2.imwrite(FILE_NAME,hsv3)
     files = {'image': open(FILE_NAME, 'rb')}
-    # 요 부분에 히스토그램이 들어와야겠네
+
     response = requests.post(url, files=files, headers=headers)
     rescode = response.status_code
+
+    # 요 부분에 히스토그램이 들어와야겠네
+
 
     if rescode == 200:
         pass
@@ -192,7 +211,7 @@ class ServerThread(Thread):
         self.window = window
 
     def run(self):
-        TCP_IP = '172.30.1.27'
+        TCP_IP = '172.30.98.130'
         TCP_PORT = 9988
         tcpServer = socket(AF_INET, SOCK_STREAM)
         tcpServer.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
@@ -208,7 +227,7 @@ class ServerThread(Thread):
             global disConn
             conn, (ip, port) = tcpServer.accept()
 
-            if ip == '172.30.1.36':
+            if ip == '172.30.98.130':
                 camConn = conn
                 camthread = CameraThread(ip, port, window)
                 camthread.start()
@@ -237,7 +256,7 @@ class CameraThread(Thread):
             # data = camConn.recv(BUFF_SIZE)
             # window.textBrowser.append(data.decode('utf-8'))
             # print(data.decode('utf-8'))
-            img_path = 'imgFile/'
+            img_path = '../imgFile/'
             count = 0
 
             FILE_NAME = (img_path + str(count) + '.jpg')
@@ -254,6 +273,8 @@ class CameraThread(Thread):
             print("서버가 받은 결과는: ", genderAge)
             guimsg = "성별, 연령대: "+genderAge[0]+str(genderAge[1])
             window.textBrowser.append(guimsg)
+            window.label_2.setStyleSheet('image:url(f20.jpg)')
+
             global ADname
 
             if genderAge == (-1, -1):
@@ -262,14 +283,15 @@ class CameraThread(Thread):
                 ADname = DB.decideID(majority[0], majority[1])
             else:
                 ADname = DB.decideID(genderAge[0], genderAge[1])
-                self.insert_result(genderAge, str(today.year)+"."+str(today.month)+"."+str(today.day),
+                self.insert_result(genderAge, str(today.year) + "." + str(today.month) + "." + str(today.day),
                                    str(today.hour), ADname)
 
             print("광고가 멀로 정해졌냐면: ", ADname)
-            window.textBrowser.append("광고 ID: "+ADname)
+            window.textBrowser.append("광고 ID: " + ADname)
             window.label_2.setStyleSheet('image:url(m20.jpg)')
             # window.qPixmapVar_2.load('f20.jpg')
             # window.label_2.setPixmap(window.qPixmapVar_2)
+
             count += 1
 
     def recvImage(self, FILE_NAME):

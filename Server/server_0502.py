@@ -24,7 +24,7 @@ BUFF_SIZE = 1024
 que = queue.Queue()
 
 # 서버 GUI 구성 ui 파일
-MainUI = 'serverfinal.ui'
+MainUI = 'UI\serverUi.ui'
 
 # NAVER API 연결
 client_id = "38hNSdXWRhGUHxMpaRoV"
@@ -227,12 +227,12 @@ class ServerThread(Thread):
             global disConn
             conn, (ip, port) = tcpServer.accept()
 
-            if ip == '172.30.98.130':
+            if ip == '172.30.98.74':
                 camConn = conn
                 camthread = CameraThread(ip, port, window)
                 camthread.start()
                 threads.append(camthread)
-            if ip == '172.30.1.27':
+            if ip == '172.30.98.130':
                 disConn = conn
                 disthread = DisplayThread(ip, port, window)
                 disthread.start()
@@ -253,9 +253,6 @@ class CameraThread(Thread):
     def run(self):
         while True:
             global camConn
-            # data = camConn.recv(BUFF_SIZE)
-            # window.textBrowser.append(data.decode('utf-8'))
-            # print(data.decode('utf-8'))
             img_path = '../imgFile/'
             count = 0
 

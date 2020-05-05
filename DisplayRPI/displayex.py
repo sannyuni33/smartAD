@@ -13,7 +13,7 @@ from PyQt5.QtCore import pyqtSlot, QTimer
 
 
 tcpClientA = None
-MainUI = 'label5.ui'
+MainUI = 'UI\displayUi.ui'
 #IDflag = None # idflag boolean 처리
 
 class Window(QDialog, ):
@@ -68,7 +68,7 @@ class ClientThread(Thread):
         self.window = window
 
     def run(self):
-        host = '172.30.1.27'
+        host = '172.30.98.130'
         port = 9988
         BUFFER_SIZE = 2048
         global tcpClientA

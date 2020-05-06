@@ -24,7 +24,9 @@ BUFF_SIZE = 1024
 que = queue.Queue()
 
 # 서버 GUI 구성 ui 파일
-MainUI = 'UI\serverUi.ui'
+MainUI = 'serverUI.ui'
+# 광고변경 ui 파일
+changeUI = 'chAD.ui'
 
 # NAVER API 연결
 client_id = "38hNSdXWRhGUHxMpaRoV"

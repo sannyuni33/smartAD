@@ -1,3 +1,4 @@
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QScrollBar, QSplitter, QTableWidgetItem, QTableWidget, QComboBox, QVBoxLayout, QGridLayout, \
     QDialog, QWidget, QPushButton, QApplication, QMainWindow, QAction, QMessageBox, QLabel, QTextEdit, QProgressBar, \
     QLineEdit
@@ -6,9 +7,11 @@ from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui
 import sys
 from PyQt5 import uic
+
 MainUI = 'serverUI.ui'
 changeUI = 'chAD.ui'
 
+#광고 변경 GUI
 class ch_Dialog(QDialog):
     def __init__(self,parent):
         self.ad_ID =None
@@ -18,6 +21,31 @@ class ch_Dialog(QDialog):
         self.show()
         self.pushButton.clicked.connect(self.f10)
         self.pushButton_2.clicked.connect(self.f11)
+        self.pushButton_3.clicked.connect(self.f20)
+        self.pushButton_4.clicked.connect(self.f21)
+        self.pushButton_5.clicked.connect(self.f30)
+        self.pushButton_6.clicked.connect(self.f31)
+
+        self.pushButton_7.clicked.connect(self.f40)
+        self.pushButton_8.clicked.connect(self.f41)
+        self.pushButton_9.clicked.connect(self.f50)
+        self.pushButton_10.clicked.connect(self.f51)
+        self.pushButton_11.clicked.connect(self.f60)
+        self.pushButton_12.clicked.connect(self.f61)
+
+        self.pushButton_13.clicked.connect(self.m10)
+        self.pushButton_14.clicked.connect(self.m10)
+        self.pushButton_15.clicked.connect(self.m20)
+        self.pushButton_16.clicked.connect(self.m21)
+        self.pushButton_17.clicked.connect(self.m30)
+        self.pushButton_18.clicked.connect(self.m31)
+
+        self.pushButton_19.clicked.connect(self.m40)
+        self.pushButton_20.clicked.connect(self.m41)
+        self.pushButton_21.clicked.connect(self.m50)
+        self.pushButton_22.clicked.connect(self.m51)
+        self.pushButton_23.clicked.connect(self.m60)
+        self.pushButton_24.clicked.connect(self.m61)
     def retranslateUi(self):
         #이함수는 탭마다 광고 이미지 넣어주는 함수
         _translate = QApplication.translate
@@ -36,29 +64,112 @@ class ch_Dialog(QDialog):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_12), _translate("MainWindow", "M60"))
 
         #이부분에 변경할 광고 이미지 추가해주세용
-        self.pushButton.setStyleSheet('image:url(hi.jpg.);border:0px;')
-        self.pushButton_2.setStyleSheet('image:url(hi2.jpg.);border:0px;')
+        self.pushButton.setStyleSheet('image:url(imgFile/chAD/f10.jpeg.);border:0px;')
+        self.pushButton_2.setStyleSheet('image:url(imgFile/chAD/f11.jpg.);border:0px;')
+        self.pushButton_3.setStyleSheet('image:url(imgFile/chAD/f20.jpg.);border:0px;')
+        self.pushButton_4.setStyleSheet('image:url(imgFile/chAD/f21.jpg.);border:0px;')
+        self.pushButton_5.setStyleSheet('image:url(imgFile/chAD/f30.jpeg.);border:0px;')
+        self.pushButton_6.setStyleSheet('image:url(imgFile/chAD/f31.jpeg.);border:0px;')
 
-#이미지 선택해서 광고판이 변경되도록 하기 위해선 이미지마다 메소드 만들고
-    #커넥트 해줘야해서 메소드가 많이 생기는데 이걸 어떻게 해결하지? 반복문?
+        self.pushButton_7.setStyleSheet('image:url(imgFile/chAD/f40.jpeg.);border:0px;')
+        self.pushButton_8.setStyleSheet('image:url(imgFile/chAD/f41.jpeg.);border:0px;')
+        self.pushButton_9.setStyleSheet('image:url(imgFile/chAD/f50.jpg.);border:0px;')
+        self.pushButton_10.setStyleSheet('image:url(imgFile/chAD/f51.jpg.);border:0px;')
+        self.pushButton_11.setStyleSheet('image:url(imgFile/chAD/f60.jpeg.);border:0px;')
+        self.pushButton_12.setStyleSheet('image:url(imgFile/chAD/f61.jpg.);border:0px;')
 
+        self.pushButton_13.setStyleSheet('image:url(imgFile/chAD/m10.jpg.);border:0px;')
+        self.pushButton_14.setStyleSheet('image:url(imgFile/chAD/m11.jpg.);border:0px;')
+        self.pushButton_15.setStyleSheet('image:url(imgFile/chAD/m20.jpeg.);border:0px;')
+        self.pushButton_16.setStyleSheet('image:url(imgFile/chAD/m21.png.);border:0px;')
+        self.pushButton_17.setStyleSheet('image:url(imgFile/chAD/m30.jpg.);border:0px;')
+        self.pushButton_18.setStyleSheet('image:url(imgFile/chAD/m31.jpg.);border:0px;')
+        self.pushButton_19.setStyleSheet('image:url(imgFile/chAD/m40.jpg.);border:0px;')
+        self.pushButton_20.setStyleSheet('image:url(imgFile/chAD/m41.jpg.);border:0px;')
+        self.pushButton_21.setStyleSheet('image:url(imgFile/chAD/m50.jpg.);border:0px;')
+        self.pushButton_22.setStyleSheet('image:url(imgFile/chAD/m51.jpg.);border:0px;')
+        self.pushButton_23.setStyleSheet('image:url(imgFile/chAD/m60.jpeg.);border:0px;')
+        self.pushButton_24.setStyleSheet('image:url(imgFile/chAD/m61.jpeg.);border:0px;')
+
+    #여자
     def f10(self):
         self.ad_ID = 'f10'
-        #여기다가 인자값을 줘야한다 광고 id 값
         self.close()
     def f11(self):
         self.ad_ID = 'f11'
-        # 여기다가 인자값을 줘야한다 광고 id 값
         self.close()
-
-
-   # def showModal(self):
-    #    return super(ch_Dialog).exec_()
-
+    def f20(self):
+        self.ad_ID = 'f20'
+        self.close()
+    def f21(self):
+        self.ad_ID = 'f21'
+        self.close()
+    def f30(self):
+        self.ad_ID = 'f30'
+        self.close()
+    def f31(self):
+        self.ad_ID = 'f31'
+        self.close()
+    def f40(self):
+        self.ad_ID = 'f40'
+        self.close()
+    def f41(self):
+        self.ad_ID = 'f41'
+        self.close()
+    def f50(self):
+        self.ad_ID = 'f50'
+        self.close()
+    def f51(self):
+        self.ad_ID = 'f51'
+        self.close()
+    def f60(self):
+        self.ad_ID = 'f60'
+        self.close()
+    def f61(self):
+        self.ad_ID = 'f61'
+        self.close()
+    #남자
+    def m10(self):
+        self.ad_ID = 'm10'
+        self.close()
+    def m11(self):
+        self.ad_ID = 'm11'
+        self.close()
+    def m20(self):
+        self.ad_ID = 'm20'
+        self.close()
+    def m21(self):
+        self.ad_ID = 'm21'
+        self.close()
+    def m30(self):
+        self.ad_ID = 'm30'
+        self.close()
+    def m31(self):
+        self.ad_ID = 'm31'
+        self.close()
+    def m40(self):
+        self.ad_ID = 'm40'
+        self.close()
+    def m41(self):
+        self.ad_ID = 'm41'
+        self.close()
+    def m50(self):
+        self.ad_ID = 'm50'
+        self.close()
+    def m51(self):
+        self.ad_ID = 'm51'
+        self.close()
+    def m60(self):
+        self.ad_ID = 'm60'
+        self.close()
+    def m61(self):
+        self.ad_ID = 'm61'
+        self.close()
+#서버 메인 GUI
 class Window(QMainWindow,):
     def __init__(self):
         super().__init__()
-
+        # 초기화면 세팅
         uic.loadUi(MainUI, self)
         self.setWindowTitle("서버 GUI")
         self.label.setStyleSheet('image:url(ready.png)')
@@ -68,6 +179,14 @@ class Window(QMainWindow,):
         self.pushButton_3.clicked.connect(self.pauseAD)
         self.pushButton_2.clicked.connect(self.closeAD)
         self.pushButton_4.clicked.connect(self.changeAD)
+
+        """self.qPixmapVar_1 = QPixmap()
+        self.qPixmapVar_2 = QPixmap()
+
+        self.qPixmapVar_1.load('hi.jpg')
+        self.qPixmapVar_2.load('hijoo.jpg')
+
+        self.label.setPixmap(self.qPixmapVar_1)"""
 
     def startAD(self):
         print("시작")
@@ -79,16 +198,94 @@ class Window(QMainWindow,):
         print("종료")
         self.textBrowser.append("종료")
     def changeAD(self):
+        #ch window를 인자로 받아서 실행시킨다.
+
         cd=ch_Dialog(self)
         cd.exec()
         self.textBrowser.append("광고 변경을 시작합니다")
         id=cd.ad_ID
-
+        #10대 여자
         if id =='f10':
-            self.label_2.setStyleSheet('image:url(hi.jpg)')
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/f10.jpeg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
         if id == 'f11':
-            self.label_2.setStyleSheet('image:url(hi2.jpg)')
-        self.textBrowser.append(id+"로광고 변경")
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/f11.jpg)')
+            self.textBrowser.append(id+"광고로 변경됐슴다")
+        #20대 여자
+        if id =='f20':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/f20.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'f21':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/f21.jpg)')
+            self.textBrowser.append(id+"광고로 변경됐슴다")
+        #30대 여자
+        if id =='f30':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/f30.jpeg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'f31':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/f31.jpeg)')
+            self.textBrowser.append(id+"광고로 변경됐슴다")
+        #40대 여자
+        if id =='f40':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/f40.jpeg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'f41':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/f41.jpeg)')
+            self.textBrowser.append(id+"광고로 변경됐슴다")
+        #50대 여자
+        if id =='f50':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/f50.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'f51':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/f51.jpg)')
+            self.textBrowser.append(id+"광고로 변경됐슴다")
+        #60대 여자
+        if id == 'f60':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/f60.jpeg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        #10대 남자
+        if id == 'm10':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/m10.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'm11':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/m11.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        #20대 남자
+        if id == 'm20':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/m20.jpeg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'm21':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/m21.png)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        #30대 남자
+        if id == 'm30':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/m30.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'm31':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/m31.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+
+        #40대 남자
+        if id == 'm40':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/m40.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'm41':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/m41.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        #50대 남자
+        if id == 'm50':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/m50.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'm51':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/m51.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        #60대 남자
+        if id == 'm60':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/m60.jpeg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'm61':
+            self.label_2.setStyleSheet('image:url(imgFile/chAD/m61.jpeg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
 
 
 if __name__ == '__main__':

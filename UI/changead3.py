@@ -29,7 +29,7 @@ class Window(QDialog, form_class1):
 
     def startAD(self):
         print("시작")
-        self.textBrowser.append("시작")
+        self.textBrowser.append("남기범 불륜입니까?")
     def pauseAD(self):
         print("일시정지")
         self.textBrowser.append("일시정지")

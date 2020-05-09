@@ -16,10 +16,10 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>40</x>
+     <x>20</x>
      <y>20</y>
-     <width>751</width>
-     <height>291</height>
+     <width>261</width>
+     <height>581</height>
     </rect>
    </property>
    <property name="text">
@@ -29,10 +29,10 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>320</y>
-     <width>151</width>
-     <height>71</height>
+     <x>60</x>
+     <y>620</y>
+     <width>181</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="font">
@@ -48,10 +48,10 @@
   <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>320</y>
-     <width>151</width>
-     <height>71</height>
+     <x>330</x>
+     <y>620</y>
+     <width>181</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="font">
@@ -67,10 +67,10 @@
   <widget class="QPushButton" name="pushButton_3">
    <property name="geometry">
     <rect>
-     <x>420</x>
-     <y>320</y>
-     <width>151</width>
-     <height>71</height>
+     <x>600</x>
+     <y>620</y>
+     <width>181</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="font">
@@ -80,29 +80,37 @@
     </font>
    </property>
    <property name="text">
-    <string>3D 모델</string>
+    <string>3D 모델링</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_4">
+  <widget class="QWebEngineView" name="webEngineView">
    <property name="geometry">
     <rect>
-     <x>580</x>
-     <y>320</y>
-     <width>151</width>
-     <height>71</height>
+     <x>70</x>
+     <y>10</y>
+     <width>831</width>
+     <height>601</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <family>Agency FB</family>
-     <pointsize>24</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>이전광고</string>
+   <property name="url">
+    <url>
+     <string>about:blank</string>
+    </url>
    </property>
   </widget>
+  <zorder>webEngineView</zorder>
+  <zorder>label</zorder>
+  <zorder>pushButton</zorder>
+  <zorder>pushButton_2</zorder>
+  <zorder>pushButton_3</zorder>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QWebEngineView</class>
+   <extends>QWidget</extends>
+   <header location="global">QtWebEngineWidgets/QWebEngineView</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

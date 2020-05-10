@@ -25,7 +25,7 @@
     </property>
     <property name="font">
      <font>
-      <family>Agency FB</family>
+      <family>08서울남산체 EB</family>
       <pointsize>24</pointsize>
      </font>
     </property>
@@ -44,7 +44,7 @@
     </property>
     <property name="font">
      <font>
-      <family>Agency FB</family>
+      <family>08서울남산체 EB</family>
       <pointsize>24</pointsize>
      </font>
     </property>
@@ -55,7 +55,7 @@
    <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>370</x>
       <y>470</y>
       <width>171</width>
       <height>81</height>
@@ -63,12 +63,12 @@
     </property>
     <property name="font">
      <font>
-      <family>Agency FB</family>
+      <family>08서울남산체 EB</family>
       <pointsize>24</pointsize>
      </font>
     </property>
     <property name="text">
-     <string>일시 정지</string>
+     <string>통계 조회</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -110,7 +110,7 @@
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>390</x>
+      <x>200</x>
       <y>470</y>
       <width>151</width>
       <height>81</height>
@@ -118,12 +118,12 @@
     </property>
     <property name="font">
      <font>
-      <family>Agency FB</family>
+      <family>08서울남산체 EB</family>
       <pointsize>24</pointsize>
      </font>
     </property>
     <property name="text">
-     <string>종료</string>
+     <string>일시 중단</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_5">
@@ -137,12 +137,12 @@
     </property>
     <property name="font">
      <font>
-      <family>Agency FB</family>
+      <family>08서울남산체 EB</family>
       <pointsize>24</pointsize>
      </font>
     </property>
     <property name="text">
-     <string>통계 조회</string>
+     <string>종료</string>
     </property>
    </widget>
   </widget>
@@ -152,7 +152,7 @@
      <x>0</x>
      <y>0</y>
      <width>946</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

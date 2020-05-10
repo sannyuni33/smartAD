@@ -115,7 +115,6 @@ print(AD)
 clientSocket.close()"""
 from socket import *
 import struct
-import clova3
 from DB_interface_test import DB_interface
 
 HOST = "172.30.1.27"
@@ -152,9 +151,6 @@ def recvcamera(FILE_NAME):
     server_msg = FILE_NAME + ' received complete'
     clientSocket.send(server_msg.encode())
 
-    result = clova3.recog_test(FILE_NAME)  # 여기서 하나의 메소드로 끝내버리는게 맞는건지.
-    AD = db.decide_AD(result[0], result[1])
-    print(AD)
 
 
 # server_msg = bytes(server_msg, encoding='utf-8')

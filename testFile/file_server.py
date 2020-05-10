@@ -1,6 +1,5 @@
 from socket import*
 import struct
-import clova3
 from DB_interface_test import DB_interface
 
 HOST ="172.30.1.27"

@@ -14,6 +14,8 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel,QTabWidget
 from PyQt5.QtWidgets import *
 from DB_interface_test import DB_interface
+from matplotlib import pyplot as plt
+import numpy as np
 
 # 클라이언트 연결
 conn = None
@@ -25,8 +27,9 @@ BUFF_SIZE = 1024
 que = queue.Queue()
 
 # 서버 GUI 구성 ui 파일
-MainUI = 'UI/serverUI.ui'# 광고변경 ui 파일
-changeUI = 'UI/chAD.ui'
+MainUI = 'serverUi.ui'
+# 광고변경 ui 파일
+changeUI = 'chAD.ui'
 
 # NAVER API 연결
 client_id = "38hNSdXWRhGUHxMpaRoV"
@@ -34,7 +37,7 @@ client_secret = "5YF8TJC9YQ"
 url = "https://openapi.naver.com/v1/vision/face"
 headers = {'X-Naver-Client-Id': client_id, 'X-Naver-Client-Secret': client_secret}
 
-recog_result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+recog_result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 genderAge = None
 ADname = None
 
@@ -110,15 +113,8 @@ def faceAnalyse(FILE_NAME):
                 recog_result[10] += 1
             else:
                 recog_result[11] += 1
-
-    # cv2.imshow('image', img)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
-
+    cv2.imwrite(FILE_NAME, img)
     window.label.setStyleSheet('image:url('+FILE_NAME+')')
-
-    # window.qPixmapVar_1.load(FILE_NAME)
-    # window.label.setPixmap(window.qPixmapVar_1)
 
     if max(recog_result) == 0:
         return -1, -1
@@ -161,12 +157,190 @@ def send(msg):
     global disConn
     camConn.send(text.encode("utf-8"))
     disConn.send(text.encode("utf-8"))
-#광고변경 GUI
-#광고 변경 GUI
+
+# 서버 관리자용 GUI
+class Window(QMainWindow,):
+    def __init__(self):
+        super().__init__()
+
+        #초기화면 세팅
+        uic.loadUi(MainUI, self)
+        self.setWindowTitle("서버 GUI")
+        # self.qPixmapVar_1 = QPixmap()
+        # self.qPixmapVar_2 = QPixmap()
+        # self.qPixmapVar_1.load('sexysang.jpg')
+        # self.qPixmapVar_2.load('hijoo.jpg')
+        # self.label.setPixmap(self.qPixmapVar_1)
+        # self.label_2.setPixmap(self.qPixmapVar_2)
+
+        self.label.setStyleSheet('image:url(../imgFile/ready.png)')
+        self.label_2.setStyleSheet('image:url(../imgFile/ready.png)')
+
+        self.pushButton.clicked.connect(self.startAD)
+        self.pushButton_2.clicked.connect(self.pauseAD)
+        self.pushButton_3.clicked.connect(self.showTimeStat)
+        self.pushButton_4.clicked.connect(self.changeAD)
+        self.pushButton_5.clicked.connect(self.closeAD)
+
+    def startAD(self):
+        send("start")
+        self.textBrowser.append("광고를 시작합니다!")
+
+    def pauseAD(self):
+        send("pause")
+        self.textBrowser.append("광고를 일시 중단합니다!")
+
+    def showTimeStat(self):
+        self.textBrowser.append("시간대별 인식통계를 조회합니다.")
+        res = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        res_cnt = DB.lookUpTimeStat(datetime.datetime.hour)
+        for row in res_cnt:
+            if row['gender'] == 'male' and row['age'] == 10:
+                res[0] += row['cnt']
+            elif row['gender'] == 'male' and row['age'] == 20:
+                res[1] += row['cnt']
+            elif row['gender'] == 'male' and row['age'] == 30:
+                res[2] += row['cnt']
+            elif row['gender'] == 'male' and row['age'] == 40:
+                res[3] += row['cnt']
+            elif row['gender'] == 'male' and row['age'] == 50:
+                res[4] += row['cnt']
+            elif row['gender'] == 'male' and row['age'] == 60:
+                res[5] += row['cnt']
+            elif row['gender'] == 'female' and row['age'] == 10:
+                res[6] += row['cnt']
+            elif row['gender'] == 'female' and row['age'] == 20:
+                res[7] += row['cnt']
+            elif row['gender'] == 'female' and row['age'] == 30:
+                res[8] += row['cnt']
+            elif row['gender'] == 'female' and row['age'] == 40:
+                res[9] += row['cnt']
+            elif row['gender'] == 'female' and row['age'] == 50:
+                res[10] += row['cnt']
+            elif row['gender'] == 'female' and row['age'] == 60:
+                res[11] += row['cnt']
+        label = ['(male, 10)', '(male, 20)', '(male, 30)', '(male, 40)',
+                 '(male, 50)', '(male, 60)', '(female, 10)', '(female, 20)',
+                 '(female, 30)', '(female, 40)', '(female, 50)', '(female, 60)']
+        n_groups = len(label)
+
+        index = np.agange(n_groups)
+        bar_width = 0.35
+        opacity = 0.5
+
+        plt.bar(index, res, bar_width,
+                tick_label=label, align='center',
+                alpha=opacity, color='b')
+
+        plt.ylabel('number of recognized')
+        plt.title(str(datetime.datetime.hour)+"'s recognition statistics")
+
+    def showAdStat(self):
+        DB.lookUpADStat()
+        self.textBrowser.appen("광고별 관심지수통계를 조회합니다.")
+
+    def closeAD(self):
+        send("exit")
+        self.textBrowser.append("시스템을 종료합니다.")
+
+    def changeAD(self):
+        # ch window를 인자로 받아서 실행시킨다.
+        cd = ch_Dialog(self)
+        cd.exec()
+        self.textBrowser.append("광고 변경을 시작합니다")
+        id = cd.ad_ID
+        # 10대 여자
+        if id == 'f10':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f10.jpeg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'f11':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f11.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        # 20대 여자
+        if id == 'f20':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f20.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'f21':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f21.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        # 30대 여자
+        if id == 'f30':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f30.jpeg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'f31':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f31.jpeg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        # 40대 여자
+        if id == 'f40':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f40.jpeg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'f41':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f41.jpeg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        # 50대 여자
+        if id == 'f50':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f50.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'f51':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f51.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        # 60대 여자
+        if id == 'f60':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f60.jpeg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'f61':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f61.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        # 10대 남자
+        if id == 'm10':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m10.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'm11':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m11.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        # 20대 남자
+        if id == 'm20':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m20.jpeg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'm21':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m21.png)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        # 30대 남자
+        if id == 'm30':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m30.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'm31':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m31.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+
+        # 40대 남자
+        if id == 'm40':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m40.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'm41':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m41.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        # 50대 남자
+        if id == 'm50':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m50.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'm51':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m51.jpg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        # 60대 남자
+        if id == 'm60':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m60.jpeg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+        if id == 'm61':
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m61.jpeg)')
+            self.textBrowser.append(id + "광고로 변경됐슴다")
+
+
+# 광고변경 GUI
 class ch_Dialog(QDialog):
-    def __init__(self,parent):
-        self.ad_ID =None
-        super(ch_Dialog,self).__init__(parent)
+    def __init__(self, parent):
+        self.ad_ID = None
+        super(ch_Dialog, self).__init__(parent)
         uic.loadUi(changeUI, self)
         self.retranslateUi()
         self.show()
@@ -185,7 +359,7 @@ class ch_Dialog(QDialog):
         self.pushButton_12.clicked.connect(self.f61)
 
         self.pushButton_13.clicked.connect(self.m10)
-        self.pushButton_14.clicked.connect(self.m10)
+        self.pushButton_14.clicked.connect(self.m11)
         self.pushButton_15.clicked.connect(self.m20)
         self.pushButton_16.clicked.connect(self.m21)
         self.pushButton_17.clicked.connect(self.m30)
@@ -197,10 +371,11 @@ class ch_Dialog(QDialog):
         self.pushButton_22.clicked.connect(self.m51)
         self.pushButton_23.clicked.connect(self.m60)
         self.pushButton_24.clicked.connect(self.m61)
+
     def retranslateUi(self):
-        #이함수는 탭마다 광고 이미지 넣어주는 함수
+        # 이 함수는 탭마다 광고 이미지 넣어주는 함수
         _translate = QApplication.translate
-        #먼저 tab 이름 설정 fm10 m10...
+        # 먼저 tab 이름 설정 fm10 m10...
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "Fm10"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Fm20"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "Fm30"))
@@ -214,33 +389,33 @@ class ch_Dialog(QDialog):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_11), _translate("MainWindow", "M50"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_12), _translate("MainWindow", "M60"))
 
-        #이부분에 변경할 광고 이미지 추가해주세용
-        self.pushButton.setStyleSheet('image:url(imgFile/chAD/f10.jpeg.);border:0px;')
-        self.pushButton_2.setStyleSheet('image:url(imgFile/chAD/f11.jpg.);border:0px;')
-        self.pushButton_3.setStyleSheet('image:url(imgFile/chAD/f20.jpg.);border:0px;')
-        self.pushButton_4.setStyleSheet('image:url(imgFile/chAD/f21.jpg.);border:0px;')
-        self.pushButton_5.setStyleSheet('image:url(imgFile/chAD/f30.jpeg.);border:0px;')
-        self.pushButton_6.setStyleSheet('image:url(imgFile/chAD/f31.jpeg.);border:0px;')
+        # 이부분에 변경할 광고 이미지 추가해주세용
+        self.pushButton.setStyleSheet('image:url(../imgFile/chAD/f10.jpeg.);border:0px;')
+        self.pushButton_2.setStyleSheet('image:url(../imgFile/chAD/f11.jpg.);border:0px;')
+        self.pushButton_3.setStyleSheet('image:url(../imgFile/chAD/f20.jpg.);border:0px;')
+        self.pushButton_4.setStyleSheet('image:url(../imgFile/chAD/f21.jpg.);border:0px;')
+        self.pushButton_5.setStyleSheet('image:url(../imgFile/chAD/f30.jpeg.);border:0px;')
+        self.pushButton_6.setStyleSheet('image:url(../imgFile/chAD/f31.jpeg.);border:0px;')
 
-        self.pushButton_7.setStyleSheet('image:url(imgFile/chAD/f40.jpeg.);border:0px;')
-        self.pushButton_8.setStyleSheet('image:url(imgFile/chAD/f41.jpeg.);border:0px;')
-        self.pushButton_9.setStyleSheet('image:url(imgFile/chAD/f50.jpg.);border:0px;')
-        self.pushButton_10.setStyleSheet('image:url(imgFile/chAD/f51.jpg.);border:0px;')
-        self.pushButton_11.setStyleSheet('image:url(imgFile/chAD/f60.jpeg.);border:0px;')
-        self.pushButton_12.setStyleSheet('image:url(imgFile/chAD/f61.jpg.);border:0px;')
+        self.pushButton_7.setStyleSheet('image:url(../imgFile/chAD/f40.jpeg.);border:0px;')
+        self.pushButton_8.setStyleSheet('image:url(../imgFile/chAD/f41.jpeg.);border:0px;')
+        self.pushButton_9.setStyleSheet('image:url(../imgFile/chAD/f50.jpg.);border:0px;')
+        self.pushButton_10.setStyleSheet('image:url(../imgFile/chAD/f51.jpg.);border:0px;')
+        self.pushButton_11.setStyleSheet('image:url(../imgFile/chAD/f60.jpeg.);border:0px;')
+        self.pushButton_12.setStyleSheet('image:url(../imgFile/chAD/f61.jpg.);border:0px;')
 
-        self.pushButton_13.setStyleSheet('image:url(imgFile/chAD/m10.jpg.);border:0px;')
-        self.pushButton_14.setStyleSheet('image:url(imgFile/chAD/m11.jpg.);border:0px;')
-        self.pushButton_15.setStyleSheet('image:url(imgFile/chAD/m20.jpeg.);border:0px;')
-        self.pushButton_16.setStyleSheet('image:url(imgFile/chAD/m21.png.);border:0px;')
-        self.pushButton_17.setStyleSheet('image:url(imgFile/chAD/m30.jpg.);border:0px;')
-        self.pushButton_18.setStyleSheet('image:url(imgFile/chAD/m31.jpg.);border:0px;')
-        self.pushButton_19.setStyleSheet('image:url(imgFile/chAD/m40.jpg.);border:0px;')
-        self.pushButton_20.setStyleSheet('image:url(imgFile/chAD/m41.jpg.);border:0px;')
-        self.pushButton_21.setStyleSheet('image:url(imgFile/chAD/m50.jpg.);border:0px;')
-        self.pushButton_22.setStyleSheet('image:url(imgFile/chAD/m51.jpg.);border:0px;')
-        self.pushButton_23.setStyleSheet('image:url(imgFile/chAD/m60.jpeg.);border:0px;')
-        self.pushButton_24.setStyleSheet('image:url(imgFile/chAD/m61.jpeg.);border:0px;')
+        self.pushButton_13.setStyleSheet('image:url(../imgFile/chAD/m10.jpg.);border:0px;')
+        self.pushButton_14.setStyleSheet('image:url(../imgFile/chAD/m11.jpg.);border:0px;')
+        self.pushButton_15.setStyleSheet('image:url(../imgFile/chAD/m20.jpeg.);border:0px;')
+        self.pushButton_16.setStyleSheet('image:url(../imgFile/chAD/m21.png.);border:0px;')
+        self.pushButton_17.setStyleSheet('image:url(../imgFile/chAD/m30.jpg.);border:0px;')
+        self.pushButton_18.setStyleSheet('image:url(../imgFile/chAD/m31.jpg.);border:0px;')
+        self.pushButton_19.setStyleSheet('image:url(../imgFile/chAD/m40.jpg.);border:0px;')
+        self.pushButton_20.setStyleSheet('image:url(../imgFile/chAD/m41.jpg.);border:0px;')
+        self.pushButton_21.setStyleSheet('image:url(../imgFile/chAD/m50.jpg.);border:0px;')
+        self.pushButton_22.setStyleSheet('image:url(../imgFile/chAD/m51.jpg.);border:0px;')
+        self.pushButton_23.setStyleSheet('image:url(../imgFile/chAD/m60.jpeg.);border:0px;')
+        self.pushButton_24.setStyleSheet('image:url(../imgFile/chAD/m61.jpeg.);border:0px;')
 
     #여자
     def f10(self):
@@ -316,138 +491,7 @@ class ch_Dialog(QDialog):
     def m61(self):
         self.ad_ID = 'm61'
         self.close()
- # 서버 관리자용 GUI
-class Window(QMainWindow,):
-    def __init__(self):
-        super().__init__()
-        #초기화면 세팅
-        uic.loadUi(MainUI, self)
-        self.setWindowTitle("서버 GUI")
-        # self.qPixmapVar_1 = QPixmap()
-        # self.qPixmapVar_2 = QPixmap()
-        # self.qPixmapVar_1.load('sexysang.jpg')
-        # self.qPixmapVar_2.load('hijoo.jpg')
-        # self.label.setPixmap(self.qPixmapVar_1)
-        # self.label_2.setPixmap(self.qPixmapVar_2)
 
-        self.label.setStyleSheet('image:url(imgFile/ready.png)')
-        self.label_2.setStyleSheet('image:url(imgFile/ready.png)')
-
-        self.pushButton.clicked.connect(self.startAD)
-        self.pushButton_2.clicked.connect(self.pauseAD)
-        self.pushButton_3.clicked.connect(self.showStat)
-        self.pushButton_4.clicked.connect(self.changeAD)
-        self.pushButton_5.clicked.connect(self.closeAD)
-
-    def startAD(self):
-        send("start")
-        self.textBrowser.append("광고를 시작합니다!")
-
-    def pauseAD(self):
-        send("pause")
-        self.textBrowser.append("광고를 일시 중단합니다!")
-
-    def showTimeStat(self):
-        DB.lookUpTimeStat(datetime.datetime.hour)
-        self.textBrowser.append("시간대별 인식통계를 조회합니다.")
-
-    def showAdStat(self):
-        DB.lookUpADStat()
-        self.textBrowser.appen("광고별 관심지수통계를 조회합니다.")
-
-    def closeAD(self):
-        send("exit")
-        self.textBrowser.append("시스템을 종료합니다.")
-
-    def changeAD(self):
-        # ch window를 인자로 받아서 실행시킨다.
-
-        cd = ch_Dialog(self)
-        cd.exec()
-        self.textBrowser.append("광고 변경을 시작합니다")
-        id = cd.ad_ID
-        # 10대 여자
-        if id == 'f10':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f10.jpeg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'f11':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f11.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 20대 여자
-        if id == 'f20':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f20.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'f21':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f21.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 30대 여자
-        if id == 'f30':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f30.jpeg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'f31':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f31.jpeg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 40대 여자
-        if id == 'f40':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f40.jpeg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'f41':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f41.jpeg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 50대 여자
-        if id == 'f50':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f50.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'f51':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f51.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 60대 여자
-        if id == 'f60':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f60.jpeg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 10대 남자
-        if id == 'm10':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m10.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'm11':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m11.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 20대 남자
-        if id == 'm20':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m20.jpeg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'm21':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m21.png)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 30대 남자
-        if id == 'm30':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m30.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'm31':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m31.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-
-        # 40대 남자
-        if id == 'm40':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m40.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'm41':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m41.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 50대 남자
-        if id == 'm50':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m50.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'm51':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m51.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 60대 남자
-        if id == 'm60':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m60.jpeg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'm61':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m61.jpeg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
 
 class ServerThread(Thread):
     def __init__(self, window):
@@ -455,7 +499,7 @@ class ServerThread(Thread):
         self.window = window
 
     def run(self):
-        TCP_IP = '172.30.98.130'
+        TCP_IP = '172.30.1.23'
         TCP_PORT = 9899
         tcpServer = socket(AF_INET, SOCK_STREAM)
         tcpServer.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
@@ -471,12 +515,12 @@ class ServerThread(Thread):
             global disConn
             conn, (ip, port) = tcpServer.accept()
 
-            if ip == '172.30.98.74':
+            if ip == '172.30.1.25':
                 camConn = conn
                 camthread = CameraThread(ip, port, window)
                 camthread.start()
                 threads.append(camthread)
-            if ip == '172.30.98.130':
+            if ip == '172.30.1.23':
                 disConn = conn
                 disthread = DisplayThread(ip, port, window)
                 disthread.start()
@@ -495,11 +539,10 @@ class CameraThread(Thread):
         window.textBrowser.append("[+] 카메라 클라이언트와 연결되었습니다! " + ip + ':' + str(port))
 
     def run(self):
+        count = 0
         while True:
             global camConn
             img_path = '../imgFile/'
-            count = 0
-
             FILE_NAME = (img_path + str(count) + '.jpg')
 
             self.recvImage(FILE_NAME)
@@ -514,7 +557,7 @@ class CameraThread(Thread):
             print("서버가 받은 결과는: ", genderAge)
             guimsg = "성별, 연령대: "+genderAge[0]+str(genderAge[1])
             window.textBrowser.append(guimsg)
-            window.label_2.setStyleSheet('image:url(m20.jpg)')
+            window.label_2.setStyleSheet('image:url(../imgFile/m20.jpg)')
 
             global ADname
 
@@ -529,10 +572,7 @@ class CameraThread(Thread):
 
             print("광고가 멀로 정해졌냐면: ", ADname)
             window.textBrowser.append("광고 ID: " + ADname)
-            window.label_2.setStyleSheet('image:url(m20.jpg)')
-            # window.qPixmapVar_2.load('f20.jpg')
-            # window.label_2.setPixmap(window.qPixmapVar_2)
-
+            window.label_2.setStyleSheet('image:url(../imgFile/m20.jpg)')
             count += 1
 
     def recvImage(self, FILE_NAME):
@@ -593,5 +633,5 @@ if __name__ == '__main__':
     serverThread = ServerThread(window)
     serverThread.start()
     DB = DB_interface()
-    window.exec()
+    window.show()
     sys.exit(app.exec_())

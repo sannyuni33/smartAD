@@ -71,8 +71,13 @@ class DB_interface:
     # 제어 API 에서 통계정보를 조회하려고 할 때 수행.. 제일 나중에
     def lookUpTimeStat(self, time):
         try:
-            sql = "select AD_ID from AD where " \
-                  "target_gender =%s and target_age=%s"
+            sql = "select gender, age, count(*) as cnt  " \
+                  "from recog_result where time=%s and" \
+                  "date > date_add(now(), interval-30 day) " \
+                  "group by gender, age"
+            self.curs.execute(sql, (time))
+            rows = self.curs.fetchall()
+            return rows
         except Exception as e:
             print("에러 발생!!", e)
 

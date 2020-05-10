@@ -64,32 +64,32 @@ class ch_Dialog(QDialog):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_12), _translate("MainWindow", "M60"))
 
         #이부분에 변경할 광고 이미지 추가해주세용
-        self.pushButton.setStyleSheet('image:url(imgFile/chAD/f10.jpeg.);border:0px;')
-        self.pushButton_2.setStyleSheet('image:url(imgFile/chAD/f11.jpg.);border:0px;')
-        self.pushButton_3.setStyleSheet('image:url(imgFile/chAD/f20.jpg.);border:0px;')
-        self.pushButton_4.setStyleSheet('image:url(imgFile/chAD/f21.jpg.);border:0px;')
-        self.pushButton_5.setStyleSheet('image:url(imgFile/chAD/f30.jpeg.);border:0px;')
-        self.pushButton_6.setStyleSheet('image:url(imgFile/chAD/f31.jpeg.);border:0px;')
+        self.pushButton.setStyleSheet('image:url(../imgFile/chAD/f10.jpeg.);border:0px;')
+        self.pushButton_2.setStyleSheet('image:url(../imgFile/chAD/f11.jpg.);border:0px;')
+        self.pushButton_3.setStyleSheet('image:url(../imgFile/chAD/f20.jpg.);border:0px;')
+        self.pushButton_4.setStyleSheet('image:url(../imgFile/chAD/f21.jpg.);border:0px;')
+        self.pushButton_5.setStyleSheet('image:url(../imgFile/chAD/f30.jpeg.);border:0px;')
+        self.pushButton_6.setStyleSheet('image:url(../imgFile/chAD/f31.jpeg.);border:0px;')
 
-        self.pushButton_7.setStyleSheet('image:url(imgFile/chAD/f40.jpeg.);border:0px;')
-        self.pushButton_8.setStyleSheet('image:url(imgFile/chAD/f41.jpeg.);border:0px;')
-        self.pushButton_9.setStyleSheet('image:url(imgFile/chAD/f50.jpg.);border:0px;')
-        self.pushButton_10.setStyleSheet('image:url(imgFile/chAD/f51.jpg.);border:0px;')
-        self.pushButton_11.setStyleSheet('image:url(imgFile/chAD/f60.jpeg.);border:0px;')
-        self.pushButton_12.setStyleSheet('image:url(imgFile/chAD/f61.jpg.);border:0px;')
+        self.pushButton_7.setStyleSheet('image:url(../imgFile/chAD/f40.jpeg.);border:0px;')
+        self.pushButton_8.setStyleSheet('image:url(../imgFile/chAD/f41.jpeg.);border:0px;')
+        self.pushButton_9.setStyleSheet('image:url(../imgFile/chAD/f50.jpg.);border:0px;')
+        self.pushButton_10.setStyleSheet('image:url(../imgFile/chAD/f51.jpg.);border:0px;')
+        self.pushButton_11.setStyleSheet('image:url(../imgFile/chAD/f60.jpeg.);border:0px;')
+        self.pushButton_12.setStyleSheet('image:url(../imgFile/chAD/f61.jpg.);border:0px;')
 
-        self.pushButton_13.setStyleSheet('image:url(imgFile/chAD/m10.jpg.);border:0px;')
-        self.pushButton_14.setStyleSheet('image:url(imgFile/chAD/m11.jpg.);border:0px;')
-        self.pushButton_15.setStyleSheet('image:url(imgFile/chAD/m20.jpeg.);border:0px;')
-        self.pushButton_16.setStyleSheet('image:url(imgFile/chAD/m21.png.);border:0px;')
-        self.pushButton_17.setStyleSheet('image:url(imgFile/chAD/m30.jpg.);border:0px;')
-        self.pushButton_18.setStyleSheet('image:url(imgFile/chAD/m31.jpg.);border:0px;')
-        self.pushButton_19.setStyleSheet('image:url(imgFile/chAD/m40.jpg.);border:0px;')
-        self.pushButton_20.setStyleSheet('image:url(imgFile/chAD/m41.jpg.);border:0px;')
-        self.pushButton_21.setStyleSheet('image:url(imgFile/chAD/m50.jpg.);border:0px;')
-        self.pushButton_22.setStyleSheet('image:url(imgFile/chAD/m51.jpg.);border:0px;')
-        self.pushButton_23.setStyleSheet('image:url(imgFile/chAD/m60.jpeg.);border:0px;')
-        self.pushButton_24.setStyleSheet('image:url(imgFile/chAD/m61.jpeg.);border:0px;')
+        self.pushButton_13.setStyleSheet('image:url(../imgFile/chAD/m10.jpg.);border:0px;')
+        self.pushButton_14.setStyleSheet('image:url(../imgFile/chAD/m11.jpg.);border:0px;')
+        self.pushButton_15.setStyleSheet('image:url(../imgFile/chAD/m20.jpeg.);border:0px;')
+        self.pushButton_16.setStyleSheet('image:url(../imgFile/chAD/m21.png.);border:0px;')
+        self.pushButton_17.setStyleSheet('image:url(../imgFile/chAD/m30.jpg.);border:0px;')
+        self.pushButton_18.setStyleSheet('image:url(../imgFile/chAD/m31.jpg.);border:0px;')
+        self.pushButton_19.setStyleSheet('image:url(../imgFile/chAD/m40.jpg.);border:0px;')
+        self.pushButton_20.setStyleSheet('image:url(../imgFile/chAD/m41.jpg.);border:0px;')
+        self.pushButton_21.setStyleSheet('image:url(../imgFile/chAD/m50.jpg.);border:0px;')
+        self.pushButton_22.setStyleSheet('image:url(../imgFile/chAD/m51.jpg.);border:0px;')
+        self.pushButton_23.setStyleSheet('image:url(../imgFile/chAD/m60.jpeg.);border:0px;')
+        self.pushButton_24.setStyleSheet('image:url(../imgFile/chAD/m61.jpeg.);border:0px;')
 
     #여자
     def f10(self):
@@ -206,85 +206,85 @@ class Window(QMainWindow,):
         id=cd.ad_ID
         #10대 여자
         if id =='f10':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f10.jpeg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f10.jpeg)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
         if id == 'f11':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f11.jpg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f11.jpg)')
             self.textBrowser.append(id+"광고로 변경됐슴다")
         #20대 여자
         if id =='f20':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f20.jpg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f20.jpg)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
         if id == 'f21':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f21.jpg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f21.jpg)')
             self.textBrowser.append(id+"광고로 변경됐슴다")
         #30대 여자
         if id =='f30':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f30.jpeg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f30.jpeg)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
         if id == 'f31':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f31.jpeg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f31.jpeg)')
             self.textBrowser.append(id+"광고로 변경됐슴다")
         #40대 여자
         if id =='f40':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f40.jpeg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f40.jpeg)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
         if id == 'f41':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f41.jpeg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f41.jpeg)')
             self.textBrowser.append(id+"광고로 변경됐슴다")
         #50대 여자
         if id =='f50':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f50.jpg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f50.jpg)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
         if id == 'f51':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f51.jpg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f51.jpg)')
             self.textBrowser.append(id+"광고로 변경됐슴다")
         #60대 여자
         if id == 'f60':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/f60.jpeg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/f60.jpeg)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
         #10대 남자
         if id == 'm10':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m10.jpg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m10.jpg)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
         if id == 'm11':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m11.jpg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m11.jpg)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
         #20대 남자
         if id == 'm20':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m20.jpeg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m20.jpeg)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
         if id == 'm21':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m21.png)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m21.png)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
         #30대 남자
         if id == 'm30':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m30.jpg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m30.jpg)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
         if id == 'm31':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m31.jpg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m31.jpg)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
 
         #40대 남자
         if id == 'm40':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m40.jpg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m40.jpg)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
         if id == 'm41':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m41.jpg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m41.jpg)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
         #50대 남자
         if id == 'm50':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m50.jpg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m50.jpg)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
         if id == 'm51':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m51.jpg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m51.jpg)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
         #60대 남자
         if id == 'm60':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m60.jpeg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m60.jpeg)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
         if id == 'm61':
-            self.label_2.setStyleSheet('image:url(imgFile/chAD/m61.jpeg)')
+            self.label_2.setStyleSheet('image:url(../imgFile/chAD/m61.jpeg)')
             self.textBrowser.append(id + "광고로 변경됐슴다")
 
 

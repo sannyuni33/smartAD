@@ -13,7 +13,7 @@ from PyQt5.QtCore import pyqtSlot, QTimer
 
 
 tcpClientA = None
-MainUI = 'UI\displayUi.ui'
+MainUI = 'DisplayRPI/displayUi.ui'
 # IDflag = None # idflag boolean 처리
 
 
@@ -69,7 +69,7 @@ class ClientThread(Thread):
         self.window = window
 
     def run(self):
-        host = '172.30.98.130'
+        host = '172.30.1.23'
         port = 9899
         BUFFER_SIZE = 2048
         global tcpClientA

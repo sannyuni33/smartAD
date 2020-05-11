@@ -20,7 +20,7 @@
       <x>40</x>
       <y>470</y>
       <width>141</width>
-      <height>81</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="font">
@@ -39,7 +39,7 @@
       <x>560</x>
       <y>470</y>
       <width>171</width>
-      <height>81</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="font">
@@ -58,17 +58,17 @@
       <x>370</x>
       <y>470</y>
       <width>171</width>
-      <height>81</height>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>08서울남산체 EB</family>
-      <pointsize>24</pointsize>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="text">
-     <string>통계 조회</string>
+     <string>시간대별 통계 조회</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -113,7 +113,7 @@
       <x>200</x>
       <y>470</y>
       <width>151</width>
-      <height>81</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="font">
@@ -132,7 +132,7 @@
       <x>750</x>
       <y>470</y>
       <width>171</width>
-      <height>81</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="font">
@@ -143,6 +143,25 @@
     </property>
     <property name="text">
      <string>종료</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_6">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>520</y>
+      <width>171</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>08서울남산체 EB</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>광고별 통계 조회</string>
     </property>
    </widget>
   </widget>

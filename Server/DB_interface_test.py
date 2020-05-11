@@ -81,10 +81,12 @@ class DB_interface:
         except Exception as e:
             print("에러 발생!!", e)
 
-
     def lookUpADStat(self):
         try:
-            sql = "select AD_ID from AD where " \
-                  "target_gender =%s and target_age=%s"
+            sql = "select AD_ID, int_point from AD " \
+                  "order by int_point desc"
+            self.curs.execute(sql)
+            rows = self.curs.fetchmany(10)
+            return rows
         except Exception as e:
             print("에러 발생!!", e)

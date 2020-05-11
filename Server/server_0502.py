@@ -18,7 +18,9 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QTabWidget
 from PyQt5.QtWidgets import *
 from DB_interface_test import DB_interface
 from matplotlib import pyplot as plt
+from matplotlib import font_manager, rc
 import numpy as np
+from time import *
 
 # 클라이언트 연결
 conn = None
@@ -39,6 +41,10 @@ client_id = "38hNSdXWRhGUHxMpaRoV"
 client_secret = "5YF8TJC9YQ"
 url = "https://openapi.naver.com/v1/vision/face"
 headers = {'X-Naver-Client-Id': client_id, 'X-Naver-Client-Secret': client_secret}
+
+# matplotlib 한글 출력 설정
+font_name = font_manager.FontProperties(fname="C:/Windows/Fonts/08seoulnamsanl.ttf").get_name()
+rc('font', family=font_name)
 
 recog_result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 genderAge = None
@@ -179,6 +185,7 @@ class Window(QMainWindow, ):
         self.pushButton_3.clicked.connect(self.showTimeStat)
         self.pushButton_4.clicked.connect(self.changeAD)
         self.pushButton_5.clicked.connect(self.closeAD)
+        self.pushButton_6.clicked.connect(self.showAdStat)
 
     def startAD(self):
         send("start")
@@ -223,25 +230,41 @@ class Window(QMainWindow, ):
 
         bar_width = 0.35
         opacity = 0.5
-        font = {'size': 7.5}
+        font = {'size': 12}
         matplotlib.rc('font', **font)
         plt.bar(label, res, bar_width, bottom=2,
                 tick_label=label, align='center', label='A',
                 alpha=opacity, color='b', edgecolor='black', linewidth=1.2)
 
-        plt.title(str(datetime.datetime.today().hour) + "'o clock recognition statistics")
+        plt.title(str(datetime.datetime.today().hour) + "시 인식결과통계")
         plt.xlim(-0.5, 12)
-        plt.ylabel('number of recognized')
+        plt.ylabel('인식 횟수')
 
         plt.show()
 
     def showAdStat(self):
-        DB.lookUpADStat()
-        self.textBrowser.appen("광고별 관심지수통계를 조회합니다.")
+        self.textBrowser.append("광고별 관심지수통계를 조회합니다.")
+        tmp_res = DB.lookUpADStat()
+        X_label = []
+        Y_label = []
+        for i in tmp_res:
+            X_label.insert(0, i[0])
+            Y_label.insert(0, i[1])
+        fig = plt.figure(figsize=(12, 8))
+        ax = fig.add_subplot(111)
+
+        ypos = np.arange(10)
+        rects = plt.barh(ypos, Y_label, align='center', height=0.5)
+        plt.yticks(ypos, X_label)
+
+        plt.title('관심 지수 TOP 10 광고')
+        plt.xlabel('관심 지수')
+        plt.show()
 
     def closeAD(self):
         send("exit")
         self.textBrowser.append("시스템을 종료합니다.")
+        time.sleep(3)
 
     def changeAD(self):
         # ch window를 인자로 받아서 실행시킨다.

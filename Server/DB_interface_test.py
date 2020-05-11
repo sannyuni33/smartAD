@@ -81,7 +81,8 @@ class DB_interface:
         except Exception as e:
             print("에러 발생!!", e)
 
-    def lookUpADStat(self, time):
+
+    def lookUpADStat(self):
         try:
             sql = "select AD_ID from AD where " \
                   "target_gender =%s and target_age=%s"

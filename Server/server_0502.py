@@ -1,5 +1,7 @@
 import sys
 import datetime
+
+import matplotlib
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QSplitter, QVBoxLayout, \
     QDialog, QPushButton, QApplication, QTextEdit, \
@@ -12,7 +14,7 @@ import requests
 import json
 import queue
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel,QTabWidget
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QTabWidget
 from PyQt5.QtWidgets import *
 from DB_interface_test import DB_interface
 from matplotlib import pyplot as plt
@@ -60,7 +62,7 @@ def faceAnalyse(FILE_NAME):
 
     # 마지막으로 hsv2를 다시 BGR 형태로 변경합니다.
     hsv3 = cv2.cvtColor(hsv2, cv2.COLOR_HSV2BGR)
-    cv2.imwrite(FILE_NAME,hsv3)
+    cv2.imwrite(FILE_NAME, hsv3)
     files = {'image': open(FILE_NAME, 'rb')}
 
     response = requests.post(url, files=files, headers=headers)
@@ -115,7 +117,7 @@ def faceAnalyse(FILE_NAME):
             else:
                 recog_result[11] += 1
     cv2.imwrite(FILE_NAME, img)
-    window.label.setStyleSheet('image:url('+FILE_NAME+')')
+    window.label.setStyleSheet('image:url(' + FILE_NAME + ')')
 
     if max(recog_result) == 0:
         return -1, -1
@@ -159,12 +161,13 @@ def send(msg):
     camConn.send(text.encode("utf-8"))
     disConn.send(text.encode("utf-8"))
 
+
 # 서버 관리자용 GUI
-class Window(QMainWindow,):
+class Window(QMainWindow, ):
     def __init__(self):
         super().__init__()
 
-        #초기화면 세팅
+        # 초기화면 세팅
         uic.loadUi(MainUI, self)
         self.setWindowTitle("서버 GUI")
 
@@ -187,7 +190,7 @@ class Window(QMainWindow,):
 
     def showTimeStat(self):
         self.textBrowser.append("시간대별 인식통계를 조회합니다.")
-        res = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        res = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         res_cnt = DB.lookUpTimeStat(datetime.datetime.today().hour)
         for row in res_cnt:
             if row[0] == 'male' and row[1] == 10:
@@ -214,22 +217,23 @@ class Window(QMainWindow,):
                 res[10] += row[2]
             elif row[0] == 'female' and row[1] == 60:
                 res[11] += row[2]
-        print(res)
-        label = ['(male, 10)', '(male, 20)', '(male, 30)', '(male, 40)',
-                 '(male, 50)', '(male, 60)', '(female, 10)', '(female, 20)',
-                 '(female, 30)', '(female, 40)', '(female, 50)', '(female, 60)']
+        label = ['male\n10', 'male\n20', 'male\n30', 'male\n40',
+                 'male\n50', 'male\n60', 'female\n10', 'female\n20',
+                 'female\n30', 'female\n40', 'female\n50', 'female\n60']
 
-        n_groups = len(label)
-        index = np.agange(n_groups)
         bar_width = 0.35
         opacity = 0.5
+        font = {'size': 7.5}
+        matplotlib.rc('font', **font)
+        plt.bar(label, res, bar_width, bottom=2,
+                tick_label=label, align='center', label='A',
+                alpha=opacity, color='b', edgecolor='black', linewidth=1.2)
 
-        plt.bar(index, res, bar_width,
-                tick_label=label, align='center',
-                alpha=opacity, color='b')
-
+        plt.title(str(datetime.datetime.today().hour) + "'o clock recognition statistics")
+        plt.xlim(-0.5, 12)
         plt.ylabel('number of recognized')
-        plt.title(str(datetime.datetime.hour)+"'s recognition statistics")
+
+        plt.show()
 
     def showAdStat(self):
         DB.lookUpADStat()
@@ -413,77 +417,100 @@ class ch_Dialog(QDialog):
         self.pushButton_23.setStyleSheet('image:url(../imgFile/chAD/m60.jpeg.);border:0px;')
         self.pushButton_24.setStyleSheet('image:url(../imgFile/chAD/m61.jpeg.);border:0px;')
 
-    #여자
+    # 여자
     def f10(self):
         self.ad_ID = 'f10'
         self.close()
+
     def f11(self):
         self.ad_ID = 'f11'
         self.close()
+
     def f20(self):
         self.ad_ID = 'f20'
         self.close()
+
     def f21(self):
         self.ad_ID = 'f21'
         self.close()
+
     def f30(self):
         self.ad_ID = 'f30'
         self.close()
+
     def f31(self):
         self.ad_ID = 'f31'
         self.close()
+
     def f40(self):
         self.ad_ID = 'f40'
         self.close()
+
     def f41(self):
         self.ad_ID = 'f41'
         self.close()
+
     def f50(self):
         self.ad_ID = 'f50'
         self.close()
+
     def f51(self):
         self.ad_ID = 'f51'
         self.close()
+
     def f60(self):
         self.ad_ID = 'f60'
         self.close()
+
     def f61(self):
         self.ad_ID = 'f61'
         self.close()
-    #남자
+
+    # 남자
     def m10(self):
         self.ad_ID = 'm10'
         self.close()
+
     def m11(self):
         self.ad_ID = 'm11'
         self.close()
+
     def m20(self):
         self.ad_ID = 'm20'
         self.close()
+
     def m21(self):
         self.ad_ID = 'm21'
         self.close()
+
     def m30(self):
         self.ad_ID = 'm30'
         self.close()
+
     def m31(self):
         self.ad_ID = 'm31'
         self.close()
+
     def m40(self):
         self.ad_ID = 'm40'
         self.close()
+
     def m41(self):
         self.ad_ID = 'm41'
         self.close()
+
     def m50(self):
         self.ad_ID = 'm50'
         self.close()
+
     def m51(self):
         self.ad_ID = 'm51'
         self.close()
+
     def m60(self):
         self.ad_ID = 'm60'
         self.close()
+
     def m61(self):
         self.ad_ID = 'm61'
         self.close()
@@ -542,7 +569,7 @@ class CameraThread(Thread):
             FILE_NAME = (img_path + str(count) + '.jpg')
 
             self.recvImage(FILE_NAME)
-            window.textBrowser.append(FILE_NAME+" 이미지 수신 완료")
+            window.textBrowser.append(FILE_NAME + " 이미지 수신 완료")
             faceThread = Thread(target=lambda q, arg1: q.put(faceAnalyse(arg1)), args=(que, FILE_NAME))
             faceThread.setDaemon(True)
             faceThread.start()
@@ -551,7 +578,7 @@ class CameraThread(Thread):
             global genderAge
             genderAge = que.get()
             print("서버가 받은 결과는: ", genderAge)
-            guimsg = "성별, 연령대: "+genderAge[0]+str(genderAge[1])
+            guimsg = "성별, 연령대: " + genderAge[0] + str(genderAge[1])
             window.textBrowser.append(guimsg)
             window.label_2.setStyleSheet('image:url(../imgFile/m20.jpg)')
 

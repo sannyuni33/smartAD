@@ -71,8 +71,8 @@ class DB_interface:
     # 제어 API 에서 통계정보를 조회하려고 할 때 수행.. 제일 나중에
     def lookUpTimeStat(self, time):
         try:
-            sql = "select gender, age, count(*) as cnt  " \
-                  "from recog_result where time=%s and" \
+            sql = "select gender, age, count(*) as cnt " \
+                  "from recog_result where time=%s and " \
                   "date > date_add(now(), interval-30 day) " \
                   "group by gender, age"
             self.curs.execute(sql, (time))

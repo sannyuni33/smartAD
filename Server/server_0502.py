@@ -1,4 +1,5 @@
-import sys, datetime
+import sys
+import datetime
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QSplitter, QVBoxLayout, \
     QDialog, QPushButton, QApplication, QTextEdit, \
@@ -166,12 +167,6 @@ class Window(QMainWindow,):
         #초기화면 세팅
         uic.loadUi(MainUI, self)
         self.setWindowTitle("서버 GUI")
-        # self.qPixmapVar_1 = QPixmap()
-        # self.qPixmapVar_2 = QPixmap()
-        # self.qPixmapVar_1.load('sexysang.jpg')
-        # self.qPixmapVar_2.load('hijoo.jpg')
-        # self.label.setPixmap(self.qPixmapVar_1)
-        # self.label_2.setPixmap(self.qPixmapVar_2)
 
         self.label.setStyleSheet('image:url(../imgFile/ready.png)')
         self.label_2.setStyleSheet('image:url(../imgFile/ready.png)')
@@ -193,37 +188,38 @@ class Window(QMainWindow,):
     def showTimeStat(self):
         self.textBrowser.append("시간대별 인식통계를 조회합니다.")
         res = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        res_cnt = DB.lookUpTimeStat(datetime.datetime.hour)
+        res_cnt = DB.lookUpTimeStat(datetime.datetime.today().hour)
         for row in res_cnt:
-            if row['gender'] == 'male' and row['age'] == 10:
-                res[0] += row['cnt']
-            elif row['gender'] == 'male' and row['age'] == 20:
-                res[1] += row['cnt']
-            elif row['gender'] == 'male' and row['age'] == 30:
-                res[2] += row['cnt']
-            elif row['gender'] == 'male' and row['age'] == 40:
-                res[3] += row['cnt']
-            elif row['gender'] == 'male' and row['age'] == 50:
-                res[4] += row['cnt']
-            elif row['gender'] == 'male' and row['age'] == 60:
-                res[5] += row['cnt']
-            elif row['gender'] == 'female' and row['age'] == 10:
-                res[6] += row['cnt']
-            elif row['gender'] == 'female' and row['age'] == 20:
-                res[7] += row['cnt']
-            elif row['gender'] == 'female' and row['age'] == 30:
-                res[8] += row['cnt']
-            elif row['gender'] == 'female' and row['age'] == 40:
-                res[9] += row['cnt']
-            elif row['gender'] == 'female' and row['age'] == 50:
-                res[10] += row['cnt']
-            elif row['gender'] == 'female' and row['age'] == 60:
-                res[11] += row['cnt']
+            if row[0] == 'male' and row[1] == 10:
+                res[0] += row[2]
+            elif row[0] == 'male' and row[1] == 20:
+                res[1] += row[2]
+            elif row[0] == 'male' and row[1] == 30:
+                res[2] += row[2]
+            elif row[0] == 'male' and row[1] == 40:
+                res[3] += row[2]
+            elif row[0] == 'male' and row[1] == 50:
+                res[4] += row[2]
+            elif row[0] == 'male' and row[1] == 60:
+                res[5] += row[2]
+            elif row[0] == 'female' and row[1] == 10:
+                res[6] += row[2]
+            elif row[0] == 'female' and row[1] == 20:
+                res[7] += row[2]
+            elif row[0] == 'female' and row[1] == 30:
+                res[8] += row[2]
+            elif row[0] == 'female' and row[1] == 40:
+                res[9] += row[2]
+            elif row[0] == 'female' and row[1] == 50:
+                res[10] += row[2]
+            elif row[0] == 'female' and row[1] == 60:
+                res[11] += row[2]
+        print(res)
         label = ['(male, 10)', '(male, 20)', '(male, 30)', '(male, 40)',
                  '(male, 50)', '(male, 60)', '(female, 10)', '(female, 20)',
                  '(female, 30)', '(female, 40)', '(female, 50)', '(female, 60)']
-        n_groups = len(label)
 
+        n_groups = len(label)
         index = np.agange(n_groups)
         bar_width = 0.35
         opacity = 0.5

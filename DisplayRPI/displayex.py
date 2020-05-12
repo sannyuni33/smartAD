@@ -69,7 +69,7 @@ class ClientThread(Thread):
         self.window = window
 
     def run(self):
-        host = '172.30.1.23'
+        host = '172.30.1.44'
         port = 9899
         BUFFER_SIZE = 2048
         global tcpClientA

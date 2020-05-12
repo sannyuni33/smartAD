@@ -46,29 +46,29 @@ headers = {'X-Naver-Client-Id': client_id, 'X-Naver-Client-Secret': client_secre
 font_name = font_manager.FontProperties(fname="C:/Windows/Fonts/08seoulnamsanl.ttf").get_name()
 rc('font', family=font_name)
 
-recog_result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 genderAge = None
-ADname = None
+ADtarget = None
 
 
 def faceAnalyse(FILE_NAME):
     # 카메라 클라이언트가 전송한 이미지에 대해 얼굴분석 수행
+    recog_result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
     # 히스토그램 평활화
-    src = cv2.imread(FILE_NAME)
-
-    # hsv 컬러 형태로 변형합니다.
-    hsv = cv2.cvtColor(src, cv2.COLOR_BGR2HSV)
-    # h, s, v로 컬러 영상을 분리 합니다.
-    h, s, v = cv2.split(hsv)
-    # v값을 히스토그램 평활화를 합니다.
-    equalizedV = cv2.equalizeHist(v)
-    # h,s,equalizedV를 합쳐서 새로운 hsv 이미지를 만듭니다.
-    hsv2 = cv2.merge([h, s, equalizedV])
-
-    # 마지막으로 hsv2를 다시 BGR 형태로 변경합니다.
-    hsv3 = cv2.cvtColor(hsv2, cv2.COLOR_HSV2BGR)
-    cv2.imwrite(FILE_NAME, hsv3)
+    # src = cv2.imread(FILE_NAME)
+    #
+    # # hsv 컬러 형태로 변형합니다.
+    # hsv = cv2.cvtColor(src, cv2.COLOR_BGR2HSV)
+    # # h, s, v로 컬러 영상을 분리 합니다.
+    # h, s, v = cv2.split(hsv)
+    # # v값을 히스토그램 평활화를 합니다.
+    # equalizedV = cv2.equalizeHist(v)
+    # # h,s,equalizedV를 합쳐서 새로운 hsv 이미지를 만듭니다.
+    # hsv2 = cv2.merge([h, s, equalizedV])
+    #
+    # # 마지막으로 hsv2를 다시 BGR 형태로 변경합니다.
+    # hsv3 = cv2.cvtColor(hsv2, cv2.COLOR_HSV2BGR)
+    # cv2.imwrite(FILE_NAME, hsv3)
     files = {'image': open(FILE_NAME, 'rb')}
 
     response = requests.post(url, files=files, headers=headers)
@@ -545,12 +545,12 @@ class ServerThread(Thread):
         self.window = window
 
     def run(self):
-        TCP_IP = '172.30.1.23'
+        TCP_IP = '172.30.1.44'
         TCP_PORT = 9899
         tcpServer = socket(AF_INET, SOCK_STREAM)
         tcpServer.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
         tcpServer.bind((TCP_IP, TCP_PORT))
-        tcpServer.listen(2)
+        tcpServer.listen(4)
         threads = []
 
         while True:
@@ -561,12 +561,12 @@ class ServerThread(Thread):
             global disConn
             conn, (ip, port) = tcpServer.accept()
 
-            if ip == '172.30.1.25':
+            if ip == '172.30.1.52':
                 camConn = conn
                 camthread = CameraThread(ip, port, window)
                 camthread.start()
                 threads.append(camthread)
-            if ip == '172.30.1.23':
+            if ip == '172.30.1.44':
                 disConn = conn
                 disthread = DisplayThread(ip, port, window)
                 disthread.start()
@@ -601,24 +601,22 @@ class CameraThread(Thread):
             global genderAge
             genderAge = que.get()
             print("서버가 받은 결과는: ", genderAge)
-            guimsg = "성별, 연령대: " + genderAge[0] + str(genderAge[1])
+            guimsg = "성별, 연령대: " + str(genderAge[0]) + str(genderAge[1])
             window.textBrowser.append(guimsg)
-            window.label_2.setStyleSheet('image:url(../imgFile/m20.jpg)')
 
-            global ADname
+            global ADtarget
 
             if genderAge == (-1, -1):
                 window.textBrowser.append("얼굴이 인식되지 않습니다. 통계기반의 광고를 출력합니다.")
                 majority = DB.findMajority(today.hour)
-                ADname = DB.decideID(majority[0], majority[1])
+                ADtarget = DB.decideID(majority[0], majority[1])
             else:
-                ADname = DB.decideID(genderAge[0], genderAge[1])
-                self.insert_result(genderAge, str(today.year) + "." + str(today.month) + "." + str(today.day),
-                                   str(today.hour), ADname)
+                ADtarget = DB.decideID(genderAge[0], genderAge[1])
+                self.insert_result(genderAge, str(today.hour))
 
-            print("광고가 멀로 정해졌냐면: ", ADname)
-            window.textBrowser.append("광고 ID: " + ADname)
-            window.label_2.setStyleSheet('image:url(../imgFile/m20.jpg)')
+            print("광고가 멀로 정해졌냐면:", ADtarget)
+            window.textBrowser.append("광고 ID: " + ADtarget)
+            window.label_2.setStyleSheet('image:url(../imgFile/'+ADtarget+'.jpg)')
             count += 1
 
     def recvImage(self, FILE_NAME):
@@ -644,13 +642,11 @@ class CameraThread(Thread):
         f.close()  # 여기까지 이미지 파일 수신인데, 카메라 핸들러가 해주는게 맞고.
 
         print('client : ' + FILE_NAME + ' file transfer')
-        server_msg = FILE_NAME + ' received complete'
-        camConn.send(server_msg.encode('utf-8'))
 
-    def insert_result(self, genderAge, date, time, ADname):
+    def insert_result(self, genderAge, time):
         # db.인식성공(성별, 연령대, 날짜, 시간, 광고 ID 이렇게 집어넣음 됨.)
         # 인식성공하고 광고 결정되면 통계에 집어 넣어주는 메소드를 서버에 만들어야 될 듯.
-        DB.insertRecogResult(genderAge[0], genderAge[1], date, time, ADname)
+        DB.insertRecogResult(genderAge[0], genderAge[1], time)
 
 
 class DisplayThread(Thread):
@@ -668,8 +664,8 @@ class DisplayThread(Thread):
             window.textBrowser.append(data.decode('utf-8'))
             print(data.decode('utf-8'))
 
-    def sendID(self, ADname):
-        print("이거 열심히 만들어보......는걸 프로토타입 발표 후에 하면 되겠네", ADname)
+    def sendID(self, ADtarget):
+        print("이거 열심히 만들어보......는걸 프로토타입 발표 후에 하면 되겠네", ADtarget)
 
 
 if __name__ == '__main__':

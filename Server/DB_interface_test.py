@@ -29,7 +29,7 @@ class DB_interface:
     # 최종 결정된 성별, 연령대를 바탕으로 송출 광고 결정
     def decideID(self, gender, age):
         try:
-            sql = "select AD_ID from AD where " \
+            sql = "select target from AD where " \
                   "target_gender = %s and target_age = %s order by rand() limit 1"
             self.curs.execute(sql, (gender, age))
             rows = self.curs.fetchone()
@@ -49,11 +49,11 @@ class DB_interface:
             print("에러 발생!!", e)
 
     # 얼굴인식에 성공했을 경우 인식결과를 통계 테이블에 추가
-    def insertRecogResult(self, gender, age, date, time, AD_ID):
+    def insertRecogResult(self, gender, age, time):
         try:
             sql = "insert into recog_result " \
-                  "values(%s, %s, %s, %s, %s)"
-            self.curs.execute(sql, (gender, age, date, time, AD_ID))
+                  "values(%s, %s, default, %s, null)"
+            self.curs.execute(sql, (gender, age, time))
             self.conn.commit()
         except Exception as e:
             print("에러 발생!!", e)

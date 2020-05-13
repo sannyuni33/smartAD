@@ -230,7 +230,7 @@ class Window(QMainWindow, ):
 
         bar_width = 0.35
         opacity = 0.5
-        font = {'size': 12}
+        font = {'size': 9.5}
         matplotlib.rc('font', **font)
         plt.bar(label, res, bar_width, bottom=2,
                 tick_label=label, align='center', label='A',

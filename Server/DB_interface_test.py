@@ -52,7 +52,7 @@ class DB_interface:
     def insertRecogResult(self, gender, age, time):
         try:
             sql = "insert into recog_result " \
-                  "values(%s, %s, default, %s, null)"
+                  "values(%s, %s, default, %s)"
             self.curs.execute(sql, (gender, age, time))
             self.conn.commit()
         except Exception as e:

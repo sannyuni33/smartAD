@@ -21,25 +21,25 @@ class Window(QDialog, ):
         if ID == 'f10':
             self.label.setStyleSheet('image:url(f10.jpg)')
         if ID == 'f20':
-            self.label.setStyleSheet('image:url(f20.jpg)')
+            self.label.setStyleSheet('image:url(f22.jpg)')
         if ID == 'f30':
             self.label.setStyleSheet('image:url(f30.jpg)')
         if ID == 'f40':
             self.label.setStyleSheet('image:url(f40.jpg)')
         if ID == 'f50':
-            self.label.setStyleSheet('image:url(f50.jpg)')
+            self.label.setStyleSheet('image:url(f52.jpg)')
         if ID == 'f60':
             self.label.setStyleSheet('image:url(f60.jpg)')
         if ID == 'm10':
-            self.label.setStyleSheet('image:url(m10.jpg)')
+            self.label.setStyleSheet('image:url(m12.jpg)')
         if ID == 'm20':
             self.label.setStyleSheet('image:url(m20.jpg)')
         if ID == 'm30':
-            self.label.setStyleSheet('image:url(m30.jpg)')
+            self.label.setStyleSheet('image:url(m32.jpg)')
         if ID == 'm40':
-            self.label.setStyleSheet('image:url(m40.jpg)')
+            self.label.setStyleSheet('image:url(m42.jpg)')
         if ID == 'm50':
-            self.label.setStyleSheet('image:url(m50.jpg)')
+            self.label.setStyleSheet('image:url(m52.jpg)')
         if ID == 'm60':
             self.label.setStyleSheet('image:url(m60.jpg)')
 

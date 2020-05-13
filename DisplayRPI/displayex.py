@@ -31,7 +31,7 @@ class Window(QDialog):
     def aaa(self, ID):
 
         if ID == 'f10':
-            self.label.setStyleSheet('image:url(m10.jpg)')
+            self.label.setStyleSheet('image:url(m12.jpg)')
 
         else:
             self.label.setStyleSheet('image:url(m20.jpg)')
@@ -69,7 +69,7 @@ class ClientThread(Thread):
         self.window = window
 
     def run(self):
-        host = '172.30.1.44'
+        host = '192.168.103.161'
         port = 9899
         BUFFER_SIZE = 2048
         global tcpClientA

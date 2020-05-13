@@ -90,7 +90,7 @@ class Window(QDialog, ):
     def aaa(self, ID):
 
         if ID == 'f10':
-            self.label.setStyleSheet('image:url(m10.jpg)')
+            self.label.setStyleSheet('image:url(m12.jpg)')
 
         else:
             self.label.setStyleSheet('image:url(m20.jpg)')

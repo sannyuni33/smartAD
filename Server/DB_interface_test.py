@@ -35,6 +35,14 @@ class DB_interface:
         except Exception as e:
             print("에러 발생!!", e)
 
+    def deleteAD(self, target):
+        try:
+            sql = "delete from AD where target = %s"
+            self.curs.execute(sql, target)
+            self.conn.commit()
+        except Exception as e:
+            print("에러 발생!!", e)
+
     # 최종 결정된 성별, 연령대를 바탕으로 송출 광고 결정
     def decideID(self, gender, age):
         try:

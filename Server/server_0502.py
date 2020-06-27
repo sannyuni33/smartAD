@@ -735,7 +735,5 @@ if __name__ == '__main__':
     serverThread.start()
     DB = DB_interface()
     window.show()
-    res = faceAnalyse("../imgFile/10여.jpg")
-    print(res)
     sys.exit(app.exec_())
 

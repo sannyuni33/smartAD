@@ -34,7 +34,7 @@ class Window(QDialog):
             self.label.setStyleSheet('image:url(m12.jpg)')
 
         else:
-            self.label.setStyleSheet('image:url(m20.jpg)')
+            self.label.setStyleSheet('image:url(m20.png)')
 
     def urlGo(self):
 

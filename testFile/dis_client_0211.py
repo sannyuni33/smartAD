@@ -33,7 +33,7 @@ class Window(QDialog, ):
         if ID == 'm10':
             self.label.setStyleSheet('image:url(m12.jpg)')
         if ID == 'm20':
-            self.label.setStyleSheet('image:url(m20.jpg)')
+            self.label.setStyleSheet('image:url(m20.png)')
         if ID == 'm30':
             self.label.setStyleSheet('image:url(m32.jpg)')
         if ID == 'm40':

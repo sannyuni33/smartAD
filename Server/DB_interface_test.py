@@ -26,6 +26,15 @@ class DB_interface:
         print("---Database connecting terminate")
         self.conn.close()
 
+    def insertAD(self, AD_ID, target, gender, age):
+        try:
+            sql = "insert into AD values " \
+                  "(%s %s %s %s %s)"
+            self.curs.execute(sql, (AD_ID, target, gender, age, 0))
+            self.conn.commit()
+        except Exception as e:
+            print("에러 발생!!", e)
+
     # 최종 결정된 성별, 연령대를 바탕으로 송출 광고 결정
     def decideID(self, gender, age):
         try:
@@ -68,7 +77,6 @@ class DB_interface:
         except Exception as e:
             print("에러 발생!!", e)
 
-    # 제어 API 에서 통계정보를 조회하려고 할 때 수행.. 제일 나중에
     def lookUpTimeStat(self, time):
         try:
             sql = "select gender, age, count(*) as cnt " \
@@ -88,5 +96,16 @@ class DB_interface:
             self.curs.execute(sql)
             rows = self.curs.fetchmany(10)
             return rows
+        except Exception as e:
+            print("에러 발생!!", e)
+
+    def recogCount(self, gender, age, time):
+        try:
+            sql = "select count(*) from recog_result" \
+                  "where time=%s and date > date_add(now(), interval-30 day)" \
+                  "and gender=%s and age=%s group by gender, age"
+            self.curs.execute(sql, (gender, age, time))
+            row = self.curs.fetchone()
+            return row
         except Exception as e:
             print("에러 발생!!", e)

@@ -2,11 +2,8 @@ import sys
 import datetime
 
 import matplotlib
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QSplitter, QVBoxLayout, \
-    QDialog, QPushButton, QApplication, QTextEdit, \
-    QLineEdit
 from socket import *
+import socket as sc
 from threading import Thread
 import struct
 import cv2
@@ -56,17 +53,17 @@ def faceAnalyse(FILE_NAME):
 
     # 히스토그램 평활화
     # src = cv2.imread(FILE_NAME)
-    #
-    # # hsv 컬러 형태로 변형합니다.
+    # #
+    # # # hsv 컬러 형태로 변형합니다.
     # hsv = cv2.cvtColor(src, cv2.COLOR_BGR2HSV)
-    # # h, s, v로 컬러 영상을 분리 합니다.
+    # # # h, s, v로 컬러 영상을 분리 합니다.
     # h, s, v = cv2.split(hsv)
-    # # v값을 히스토그램 평활화를 합니다.
+    # # # v값을 히스토그램 평활화를 합니다.
     # equalizedV = cv2.equalizeHist(v)
-    # # h,s,equalizedV를 합쳐서 새로운 hsv 이미지를 만듭니다.
+    # # # h,s,equalizedV를 합쳐서 새로운 hsv 이미지를 만듭니다.
     # hsv2 = cv2.merge([h, s, equalizedV])
-    #
-    # # 마지막으로 hsv2를 다시 BGR 형태로 변경합니다.
+    # #
+    # # # 마지막으로 hsv2를 다시 BGR 형태로 변경합니다.
     # hsv3 = cv2.cvtColor(hsv2, cv2.COLOR_HSV2BGR)
     # cv2.imwrite(FILE_NAME, hsv3)
     files = {'image': open(FILE_NAME, 'rb')}
@@ -126,36 +123,40 @@ def faceAnalyse(FILE_NAME):
     window.label.setStyleSheet('image:url(' + FILE_NAME + ')')
 
     if max(recog_result) == 0:
-        return -1, -1
+        return 0
     else:
-        max_index = recog_result.index(max(recog_result))
+        index_list = [i for i, j in enumerate(recog_result) if j == max(recog_result)]
+        # max_index = recog_result.index(max(recog_result))
 
-    if max_index == 0:
-        genderAge = ('male', 10)
-    elif max_index == 1:
-        genderAge = ('male', 20)
-    elif max_index == 2:
-        genderAge = ('male', 30)
-    elif max_index == 3:
-        genderAge = ('male', 40)
-    elif max_index == 4:
-        genderAge = ('male', 50)
-    elif max_index == 5:
-        genderAge = ('male', 60)
-    elif max_index == 6:
-        genderAge = ('female', 10)
-    elif max_index == 7:
-        genderAge = ('female', 20)
-    elif max_index == 8:
-        genderAge = ('female', 30)
-    elif max_index == 9:
-        genderAge = ('female', 40)
-    elif max_index == 10:
-        genderAge = ('female', 50)
-    elif max_index == 11:
-        genderAge = ('female', 60)
-
-    return genderAge
+    print(index_list)
+    result_list = []
+    for i in index_list:
+        if i == 0:
+            result_list.append(['male', 10])
+        elif i == 1:
+            result_list.append(['male', 20])
+        elif i == 2:
+            result_list.append(['male', 30])
+        elif i == 3:
+            result_list.append(['male', 40])
+        elif i == 4:
+            result_list.append(['male', 50])
+        elif i == 5:
+            result_list.append(['male', 60])
+        elif i == 6:
+            result_list.append(['female', 10])
+        elif i == 7:
+            result_list.append(['female', 20])
+        elif i == 8:
+            result_list.append(['female', 30])
+        elif i == 9:
+            result_list.append(['female', 40])
+        elif i == 10:
+            result_list.append(['female', 50])
+        elif i == 11:
+            result_list.append(['female', 60])
+    print(result_list)
+    return result_list
 
 
 def send(msg):
@@ -441,99 +442,147 @@ class ch_Dialog(QDialog):
     # 여자
     def f12(self):
         self.ad_ID = 'f12'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f11(self):
         self.ad_ID = 'f11'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f22(self):
         self.ad_ID = 'f22'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f21(self):
         self.ad_ID = 'f21'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f32(self):
         self.ad_ID = 'f32'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f31(self):
         self.ad_ID = 'f31'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f42(self):
         self.ad_ID = 'f42'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f41(self):
         self.ad_ID = 'f41'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f52(self):
         self.ad_ID = 'f52'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f51(self):
         self.ad_ID = 'f51'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f62(self):
         self.ad_ID = 'f62'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f61(self):
         self.ad_ID = 'f61'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     # 남자
     def m12(self):
         self.ad_ID = 'm12'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m11(self):
         self.ad_ID = 'm11'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m22(self):
         self.ad_ID = 'm22'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m21(self):
         self.ad_ID = 'm21'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m32(self):
         self.ad_ID = 'm32'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m31(self):
         self.ad_ID = 'm31'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m42(self):
         self.ad_ID = 'm42'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m41(self):
         self.ad_ID = 'm41'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m52(self):
         self.ad_ID = 'm52'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m51(self):
         self.ad_ID = 'm51'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m62(self):
         self.ad_ID = 'm62'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m61(self):
         self.ad_ID = 'm61'
+        global disConn
+        disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
 
@@ -543,11 +592,11 @@ class ServerThread(Thread):
         self.window = window
 
     def run(self):
-        TCP_IP = '192.168.103.161'
+        TCP_IP = sc.gethostbyname_ex(sc.gethostname())
         TCP_PORT = 9899
         tcpServer = socket(AF_INET, SOCK_STREAM)
         tcpServer.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
-        tcpServer.bind((TCP_IP, TCP_PORT))
+        tcpServer.bind((TCP_IP[2][-1], TCP_PORT))
         tcpServer.listen(4)
         threads = []
 
@@ -559,12 +608,12 @@ class ServerThread(Thread):
             global disConn
             conn, (ip, port) = tcpServer.accept()
 
-            if ip == '192.168.137.102':
+            if ip == '192.168.142.178':
                 camConn = conn
                 camthread = CameraThread(ip, port, window)
                 camthread.start()
                 threads.append(camthread)
-            if ip == '192.168.103.161':
+            if ip == '192.168.63.159':
                 disConn = conn
                 disthread = DisplayThread(ip, port, window)
                 disthread.start()
@@ -604,17 +653,29 @@ class CameraThread(Thread):
 
             global ADtarget
 
-            if genderAge == (-1, -1):
+            if not genderAge:
                 window.textBrowser.append("얼굴이 인식되지 않습니다. 통계기반의 광고를 출력합니다.")
                 majority = DB.findMajority(today.hour)
                 ADtarget = DB.decideID(majority[0], majority[1])
             else:
-                ADtarget = DB.decideID(genderAge[0], genderAge[1])
+                # 여기부터 바꿔야 함.
+                if len(genderAge) == 1:
+                    ADtarget = DB.decideID(genderAge[0][0], genderAge[0][1])
+                else:
+                    countList = []
+                    for i in genderAge:
+                        countList.append(DB.recogCount(i[0], i[1], today.hour))
+                    maxIndex = countList.index(max(countList))
+                    ADtarget = DB.decideID(genderAge[maxIndex][0], genderAge[maxIndex][1])
                 self.insert_result(genderAge, str(today.hour))
 
             print("광고가 멀로 정해졌냐면:", ADtarget)
             window.textBrowser.append("광고 ID: " + ADtarget)
             window.label_2.setStyleSheet('image:url(../imgFile/'+ADtarget+'.jpg)')
+            global disConn
+            disConn.send(ADtarget.encode('utf-8'))
+            window.textBrowser.append(ADtarget+"전송완료")
+
             count += 1
 
     def recvImage(self, FILE_NAME):
@@ -674,4 +735,7 @@ if __name__ == '__main__':
     serverThread.start()
     DB = DB_interface()
     window.show()
+    res = faceAnalyse("../imgFile/10여.jpg")
+    print(res)
     sys.exit(app.exec_())
+

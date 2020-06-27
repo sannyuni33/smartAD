@@ -11,6 +11,7 @@ import requests
 import json
 import queue
 from PyQt5 import uic
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QTabWidget
 from PyQt5.QtWidgets import *
 from DB_interface_test import DB_interface
@@ -29,9 +30,11 @@ BUFF_SIZE = 1024
 que = queue.Queue()
 
 # 서버 GUI 구성 ui 파일
-MainUI = 'serverUi.ui'
+MainUI = '../UI/serverUi2.ui'
 # 광고변경 ui 파일
 changeUI = 'chAD.ui'
+addUI = '../UI/addUI.ui'
+deleteUI = '../UI/deleteUI.ui'
 
 # NAVER API 연결
 client_id = "38hNSdXWRhGUHxMpaRoV"
@@ -45,27 +48,27 @@ rc('font', family=font_name)
 
 genderAge = None
 ADtarget = None
+#히스토그램 온오프 상태변수
+histoflag = False
 
 
 def faceAnalyse(FILE_NAME):
     # 카메라 클라이언트가 전송한 이미지에 대해 얼굴분석 수행
     recog_result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
+    global histoflag
     # 히스토그램 평활화
-    # src = cv2.imread(FILE_NAME)
-    # #
-    # # # hsv 컬러 형태로 변형합니다.
-    # hsv = cv2.cvtColor(src, cv2.COLOR_BGR2HSV)
-    # # # h, s, v로 컬러 영상을 분리 합니다.
-    # h, s, v = cv2.split(hsv)
-    # # # v값을 히스토그램 평활화를 합니다.
-    # equalizedV = cv2.equalizeHist(v)
-    # # # h,s,equalizedV를 합쳐서 새로운 hsv 이미지를 만듭니다.
-    # hsv2 = cv2.merge([h, s, equalizedV])
-    # #
-    # # # 마지막으로 hsv2를 다시 BGR 형태로 변경합니다.
-    # hsv3 = cv2.cvtColor(hsv2, cv2.COLOR_HSV2BGR)
-    # cv2.imwrite(FILE_NAME, hsv3)
+    if not histoflag:
+        pass
+    else:
+        src = cv2.imread(FILE_NAME)
+        hsv = cv2.cvtColor(src, cv2.COLOR_BGR2HSV)
+        h, s, v = cv2.split(hsv)
+        equalizedV = cv2.equalizeHist(v)
+        hsv2 = cv2.merge([h, s, equalizedV])
+        hsv3 = cv2.cvtColor(hsv2, cv2.COLOR_HSV2BGR)
+        cv2.imwrite(FILE_NAME, hsv3)
+
     files = {'image': open(FILE_NAME, 'rb')}
 
     response = requests.post(url, files=files, headers=headers)
@@ -126,9 +129,8 @@ def faceAnalyse(FILE_NAME):
         return 0
     else:
         index_list = [i for i, j in enumerate(recog_result) if j == max(recog_result)]
-        # max_index = recog_result.index(max(recog_result))
 
-    print(index_list)
+    print("index_list: ", index_list)
     result_list = []
     for i in index_list:
         if i == 0:
@@ -155,17 +157,17 @@ def faceAnalyse(FILE_NAME):
             result_list.append(['female', 50])
         elif i == 11:
             result_list.append(['female', 60])
-    print(result_list)
+    print("result_list: ", result_list)
     return result_list
 
-
-def send(msg):
-    text = msg  # 이거 없애고 camConn.send(msg.encode()) 해도 될듯
-    # 여기서 카메라로 보낼 메시지 광고판으로 보낼 메시지
-    # 구분 잘해야 함
+def sendCam(msg):
+    text = msg
     global camConn
-    global disConn
     camConn.send(text.encode("utf-8"))
+
+def sendDis(msg):
+    text = msg
+    global disConn
     disConn.send(text.encode("utf-8"))
 
 
@@ -173,7 +175,7 @@ def send(msg):
 class Window(QMainWindow, ):
     def __init__(self):
         super().__init__()
-
+        global histoflag
         # 초기화면 세팅
         uic.loadUi(MainUI, self)
         self.setWindowTitle("서버 GUI")
@@ -183,18 +185,32 @@ class Window(QMainWindow, ):
 
         self.pushButton.clicked.connect(self.startAD)
         self.pushButton_2.clicked.connect(self.pauseAD)
-        self.pushButton_3.clicked.connect(self.showTimeStat)
+        self.pushButton_3.clicked.connect(self.closeAd)
         self.pushButton_4.clicked.connect(self.changeAD)
-        self.pushButton_5.clicked.connect(self.closeAD)
-        self.pushButton_6.clicked.connect(self.showAdStat)
+        self.pushButton_5.clicked.connect(self.chCamTime)
+        self.checkBox.stateChanged.connect(self.histogramOn)
+        self.pushButton_6.clicked.connect(self.addAdInfo)
+        self.pushButton_7.clicked.connect(self.changeAdInfo)
+        self.pushButton_8.clicked.connect(self.deleteAdInfo)
+        self.pushButton_9.clicked.connect(self.showAdStat)
+        self.pushButton_10.clicked.connect(self.showTimeStat)
+        chmsg = self.lineEdit.text()
 
     def startAD(self):
-        send("start")
+        sendCam("start")
+        sendDis("start")
         self.textBrowser.append("광고를 시작합니다!")
 
     def pauseAD(self):
-        send("pause")
+        sendCam("pause")
+        sendDis("pause")
         self.textBrowser.append("광고를 일시 중단합니다!")
+
+    def closeAd(self):
+        sendCam("exit")
+        sendDis("exit")
+        self.textBrowser.append("시스템을 종료합니다.")
+        time.sleep(3)
 
     def showTimeStat(self):
         self.textBrowser.append("시간대별 인식통계를 조회합니다.")
@@ -262,101 +278,91 @@ class Window(QMainWindow, ):
         plt.xlabel('관심 지수')
         plt.show()
 
-    def closeAD(self):
-        send("exit")
-        self.textBrowser.append("시스템을 종료합니다.")
-        time.sleep(3)
-
     def changeAD(self):
         # ch window를 인자로 받아서 실행시킨다.
         cd = ch_Dialog(self)
         cd.exec()
         id = cd.ad_ID
-        # 10대 여자
-        if id == 'f12':
-            self.label_2.setStyleSheet('image:url(../imgFile/f12.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'f11':
-            self.label_2.setStyleSheet('image:url(../imgFile/f11.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 20대 여자
-        if id == 'f22':
-            self.label_2.setStyleSheet('image:url(../imgFile/f22.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'f21':
-            self.label_2.setStyleSheet('image:url(../imgFile/f21.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 30대 여자
-        if id == 'f32':
-            self.label_2.setStyleSheet('image:url(../imgFile/f32.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'f31':
-            self.label_2.setStyleSheet('image:url(../imgFile/f31.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 40대 여자
-        if id == 'f42':
-            self.label_2.setStyleSheet('image:url(../imgFile/f42.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'f41':
-            self.label_2.setStyleSheet('image:url(../imgFile/f41.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 50대 여자
-        if id == 'f52':
-            self.label_2.setStyleSheet('image:url(../imgFile/f52.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'f51':
-            self.label_2.setStyleSheet('image:url(../imgFile/f51.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 60대 여자
-        if id == 'f62':
-            self.label_2.setStyleSheet('image:url(../imgFile/f62.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'f61':
-            self.label_2.setStyleSheet('image:url(../imgFile/f61.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 10대 남자
-        if id == 'm12':
-            self.label_2.setStyleSheet('image:url(../imgFile/m12.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'm11':
-            self.label_2.setStyleSheet('image:url(../imgFile/m11.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 20대 남자
-        if id == 'm22':
-            self.label_2.setStyleSheet('image:url(../imgFile/m22.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'm21':
-            self.label_2.setStyleSheet('image:url(../imgFile/m21.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 30대 남자
-        if id == 'm32':
-            self.label_2.setStyleSheet('image:url(../imgFile/m32.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'm31':
-            self.label_2.setStyleSheet('image:url(../imgFile/m31.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+        self.label_2.setStyleSheet('image:url(../imgFile/' + id + '.jpg)')
+        self.textBrowser.append(id + "광고로 변경됐슴다")
 
-        # 40대 남자
-        if id == 'm42':
-            self.label_2.setStyleSheet('image:url(../imgFile/m42.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'm41':
-            self.label_2.setStyleSheet('image:url(../imgFile/m41.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 50대 남자
-        if id == 'm52':
-            self.label_2.setStyleSheet('image:url(../imgFile/m52.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'm51':
-            self.label_2.setStyleSheet('image:url(../imgFile/m51.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        # 60대 남자
-        if id == 'm62':
-            self.label_2.setStyleSheet('image:url(../imgFile/m62.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
-        if id == 'm61':
-            self.label_2.setStyleSheet('image:url(../imgFile/m61.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+    def chCamTime(self):
+        self.chmsg = self.lineEdit.text()
+        sendCam(self.chmsg)
+        self.textBrowser.append(self.chmsg + "초로 카메라 주기 변경")
+
+    def histogramOn(self, state):
+        # 히스토그램 온오프
+        if state == Qt.Checked:
+            self.textBrowser.append("히스토 온")
+            self.histoflag = True
+        else:
+            self.textBrowser.append("히스토 오프")
+            self.histoflag = False
+
+    def addAdInfo(self):
+        self.textBrowser.append("광고정보를 추가합니다. ")
+        # fname = QFileDialog.getOpenFileName(self)
+        # self.label.setText(fname[0])
+        # imgfile = fname[0]
+        # img = cv2.imread(imgfile, cv2.IMREAD_COLOR)
+        # cv2.imwrite("test01.jpg", img)
+        cd2 = add_Dialog(self)
+        cd2.exec()
+
+    def changeAdInfo(self):
+        # 150, 290, 261x31
+        self.textBrowser.append("광고정보를 변경합니다. ")
+
+    def deleteAdInfo(self):
+        self.textBrowser.append("광고정보를 삭제합니다.")
+        # 광고정보삭제 dialog 에서 입력한 target 값을 메시지로 보내면, 디스플레이가 삭제할것.
+        # sendDis("delete"+target)
+        cd3 = delete_Dialog(self)
+        cd3.exec()
+
+    # 150, 350, 261X31
+
+
+# 광고정보 추가 GUI
+class add_Dialog(QDialog):
+    def __init__(self, parent):
+        super(add_Dialog, self).__init__(parent)
+        uic.loadUi(addUI, self)
+        self.pushButton.clicked.connect(self.addImage)
+        self.pushButton_2.clicked.connect(self.addVideoImage)
+        self.pushButton_3.clicked.connect(self.addVrImage)
+        self.pushButton_4.clicked.connect(self.add3dImage)
+        self.pushButton_5.clicked.connect(self.addOk)
+        self.pushButton_6.clicked.connect(self.addClose)
+
+        #self.retranslateUi()
+        self.show()
+    def addImage(self):
+        fname = QFileDialog.getOpenFileName(self)
+        imgfile = fname[0]
+        img = cv2.imread(imgfile, cv2.IMREAD_COLOR)
+        cv2.imwrite("test01.jpg", img)
+        self.close()
+        #여기다가 광고 이미지를 넣어주면 된다
+    def addVideoImage(self):
+
+        self.close()
+
+    def addVrImage(self):
+
+        self.close()
+
+    def add3dImage(self):
+
+        self.close()
+
+    def addOk(self):
+        # 인자값 전달
+        self.close()
+
+    def addClose(self):
+        self.close()
 
 
 # 광고변경 GUI
@@ -586,6 +592,14 @@ class ch_Dialog(QDialog):
         self.close()
 
 
+class delete_Dialog(QDialog):
+    def __init__(self, parent):
+        super(delete_Dialog, self).__init__(parent)
+        uic.loadUi(deleteUI, self)
+        # self.pushButton.clicked.connect(self.addImage)
+        self.show()
+
+
 class ServerThread(Thread):
     def __init__(self, window):
         Thread.__init__(self)
@@ -608,12 +622,12 @@ class ServerThread(Thread):
             global disConn
             conn, (ip, port) = tcpServer.accept()
 
-            if ip == '192.168.142.178':
+            if ip == '172.30.1.40':
                 camConn = conn
                 camthread = CameraThread(ip, port, window)
                 camthread.start()
                 threads.append(camthread)
-            if ip == '192.168.63.159':
+            if ip == '172.30.1.54':
                 disConn = conn
                 disthread = DisplayThread(ip, port, window)
                 disthread.start()
@@ -648,9 +662,6 @@ class CameraThread(Thread):
             global genderAge
             genderAge = que.get()
             print("서버가 받은 결과는: ", genderAge)
-            guimsg = "성별, 연령대: " + str(genderAge[0]) + str(genderAge[1])
-            window.textBrowser.append(guimsg)
-
             global ADtarget
 
             if not genderAge:
@@ -658,13 +669,15 @@ class CameraThread(Thread):
                 majority = DB.findMajority(today.hour)
                 ADtarget = DB.decideID(majority[0], majority[1])
             else:
-                # 여기부터 바꿔야 함.
+                guimsg = "성별, 연령대: " + str(genderAge[0][0]) + str(genderAge[0][1])
+                window.textBrowser.append(guimsg)
                 if len(genderAge) == 1:
                     ADtarget = DB.decideID(genderAge[0][0], genderAge[0][1])
                 else:
                     countList = []
                     for i in genderAge:
                         countList.append(DB.recogCount(i[0], i[1], today.hour))
+                    print("countList: ", countList)
                     maxIndex = countList.index(max(countList))
                     ADtarget = DB.decideID(genderAge[maxIndex][0], genderAge[maxIndex][1])
                 self.insert_result(genderAge, str(today.hour))
@@ -705,7 +718,7 @@ class CameraThread(Thread):
     def insert_result(self, genderAge, time):
         # db.인식성공(성별, 연령대, 날짜, 시간, 광고 ID 이렇게 집어넣음 됨.)
         # 인식성공하고 광고 결정되면 통계에 집어 넣어주는 메소드를 서버에 만들어야 될 듯.
-        DB.insertRecogResult(genderAge[0], genderAge[1], time)
+        DB.insertRecogResult(genderAge[0][0], genderAge[0][1], time)
 
 
 class DisplayThread(Thread):
@@ -729,7 +742,6 @@ class DisplayThread(Thread):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-
     window = Window()
     serverThread = ServerThread(window)
     serverThread.start()

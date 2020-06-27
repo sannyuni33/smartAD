@@ -107,12 +107,13 @@ class DB_interface:
         except Exception as e:
             print("에러 발생!!", e)
 
+    # 인식결과에서 max 값을 가진 인덱스가 여러개일 경우, 해당 튜플들의 인식횟수를 리턴
     def recogCount(self, gender, age, time):
         try:
             sql = "select count(*) from recog_result" \
                   "where time=%s and date > date_add(now(), interval-30 day)" \
                   "and gender=%s and age=%s group by gender, age"
-            self.curs.execute(sql, (gender, age, time))
+            self.curs.execute(sql, (time, gender, age))
             row = self.curs.fetchone()
             return row
         except Exception as e:

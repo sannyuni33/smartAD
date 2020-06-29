@@ -1,3 +1,4 @@
+import os
 import sys
 import datetime
 
@@ -30,11 +31,14 @@ BUFF_SIZE = 1024
 que = queue.Queue()
 
 # 서버 GUI 구성 ui 파일
-MainUI = '../UI/serverUi2.ui'
-# 광고변경 ui 파일
-changeUI = 'chAD.ui'
+MainUI = '../UI/serverUI0629.ui'
 addUI = '../UI/addUI.ui'
 deleteUI = '../UI/deleteUI.ui'
+changeTwinUI = '../UI/changeTwinUI.ui'
+
+# 광고변경 ui 파일
+changeUI = 'chAD.ui'
+
 
 # NAVER API 연결
 client_id = "38hNSdXWRhGUHxMpaRoV"
@@ -48,7 +52,8 @@ rc('font', family=font_name)
 
 genderAge = None
 ADtarget = None
-#히스토그램 온오프 상태변수
+
+# 히스토그램 온오프 상태변수
 histoflag = False
 
 
@@ -160,10 +165,12 @@ def faceAnalyse(FILE_NAME):
     print("result_list: ", result_list)
     return result_list
 
+
 def sendCam(msg):
     text = msg
     global camConn
     camConn.send(text.encode("utf-8"))
+
 
 def sendDis(msg):
     text = msg
@@ -182,38 +189,42 @@ class Window(QMainWindow, ):
 
         self.label.setStyleSheet('image:url(../imgFile/ready.png)')
         self.label_2.setStyleSheet('image:url(../imgFile/ready.png)')
+        self.pushButton.clicked.connect(self.showAdInfo)
+        self.pushButton_2.clicked.connect(self.addAdInfo)
+        self.pushButton_3.clicked.connect(self.changeTwinInfo)
+        self.pushButton_4.clicked.connect(self.deleteAdInfo)
+        self.pushButton_5.clicked.connect(self.showAdStat)
+        self.pushButton_6.clicked.connect(self.showTimeStat)
+        self.pushButton_7.clicked.connect(self.startAD)
+        self.pushButton_8.clicked.connect(self.pauseAD)
+        self.pushButton_9.clicked.connect(self.chCamTime)
+        self.pushButton_10.clicked.connect(self.changeAD)
+        self.checkBox.stateChanged.connect(self.closeAd)
+        # chmsg = self.lineEdit.text()
 
-        self.pushButton.clicked.connect(self.startAD)
-        self.pushButton_2.clicked.connect(self.pauseAD)
-        self.pushButton_3.clicked.connect(self.closeAd)
-        self.pushButton_4.clicked.connect(self.changeAD)
-        self.pushButton_5.clicked.connect(self.chCamTime)
-        self.checkBox.stateChanged.connect(self.histogramOn)
-        self.pushButton_6.clicked.connect(self.addAdInfo)
-        self.pushButton_7.clicked.connect(self.changeAdInfo)
-        self.pushButton_8.clicked.connect(self.deleteAdInfo)
-        self.pushButton_9.clicked.connect(self.showAdStat)
-        self.pushButton_10.clicked.connect(self.showTimeStat)
-        chmsg = self.lineEdit.text()
+    def showAdInfo(self):
+        print("광고정보조회")
 
-    def startAD(self):
-        sendCam("start")
-        sendDis("start")
-        self.textBrowser.append("광고를 시작합니다!")
+    def addAdInfo(self):
+        print("광고정보를 추가합니다. ")
+        cd2 = add_Dialog(self)
+        cd2.exec()
 
-    def pauseAD(self):
-        sendCam("pause")
-        sendDis("pause")
-        self.textBrowser.append("광고를 일시 중단합니다!")
+    def changeTwinInfo(self):
+        # 150, 290, 261x31
+        print("광고정보를 변경합니다. ")
+        cd4 = change_Dialog(self)
+        cd4.exec()
 
-    def closeAd(self):
-        sendCam("exit")
-        sendDis("exit")
-        self.textBrowser.append("시스템을 종료합니다.")
-        time.sleep(3)
+    def deleteAdInfo(self):
+        print("광고정보를 삭제합니다.")
+        # 광고정보삭제 dialog 에서 입력한 target 값을 메시지로 보내면, 디스플레이가 삭제할것.
+        # sendDis("delete"+target)
+        cd3 = delete_Dialog(self)
+        cd3.exec()
 
     def showTimeStat(self):
-        self.textBrowser.append("시간대별 인식통계를 조회합니다.")
+        print("시간대별 인식통계를 조회합니다.")
         res = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         res_cnt = DB.lookUpTimeStat(datetime.datetime.today().hour)
         for row in res_cnt:
@@ -260,7 +271,7 @@ class Window(QMainWindow, ):
         plt.show()
 
     def showAdStat(self):
-        self.textBrowser.append("광고별 관심지수통계를 조회합니다.")
+        print("광고별 관심지수통계를 조회합니다.")
         tmp_res = DB.lookUpADStat()
         X_label = []
         Y_label = []
@@ -278,50 +289,65 @@ class Window(QMainWindow, ):
         plt.xlabel('관심 지수')
         plt.show()
 
+    def startAD(self):
+        sendCam("start")
+        sendDis("start")
+        print("광고를 시작합니다!")
+
+    def pauseAD(self):
+        sendCam("pause")
+        sendDis("pause")
+        print("광고를 일시 중단합니다!")
+
+    def chCamTime(self):
+        self.chmsg = self.lineEdit.text()
+        sendCam(self.chmsg)
+        print(self.chmsg + "초로 카메라 주기 변경")
+
     def changeAD(self):
         # ch window를 인자로 받아서 실행시킨다.
         cd = ch_Dialog(self)
         cd.exec()
         id = cd.ad_ID
         self.label_2.setStyleSheet('image:url(../imgFile/' + id + '.jpg)')
-        self.textBrowser.append(id + "광고로 변경됐슴다")
+        print(id + "광고로 변경됐슴다")
 
-    def chCamTime(self):
-        self.chmsg = self.lineEdit.text()
-        sendCam(self.chmsg)
-        self.textBrowser.append(self.chmsg + "초로 카메라 주기 변경")
+    def closeAd(self):
+        sendCam("exit")
+        sendDis("exit")
+        print("시스템을 종료합니다.")
+        time.sleep(3)
 
     def histogramOn(self, state):
         # 히스토그램 온오프
         if state == Qt.Checked:
-            self.textBrowser.append("히스토 온")
+            print("히스토 온")
             self.histoflag = True
         else:
-            self.textBrowser.append("히스토 오프")
+            print("히스토 오프")
             self.histoflag = False
 
-    def addAdInfo(self):
-        self.textBrowser.append("광고정보를 추가합니다. ")
-        # fname = QFileDialog.getOpenFileName(self)
-        # self.label.setText(fname[0])
-        # imgfile = fname[0]
-        # img = cv2.imread(imgfile, cv2.IMREAD_COLOR)
-        # cv2.imwrite("test01.jpg", img)
-        cd2 = add_Dialog(self)
-        cd2.exec()
 
-    def changeAdInfo(self):
-        # 150, 290, 261x31
-        self.textBrowser.append("광고정보를 변경합니다. ")
+def sendFile(FILE_NAME):
+    FILE_SIZE = os.path.getsize(FILE_NAME)
+    FILE_SIZE = struct.pack('L', FILE_SIZE)
 
-    def deleteAdInfo(self):
-        self.textBrowser.append("광고정보를 삭제합니다.")
-        # 광고정보삭제 dialog 에서 입력한 target 값을 메시지로 보내면, 디스플레이가 삭제할것.
-        # sendDis("delete"+target)
-        cd3 = delete_Dialog(self)
-        cd3.exec()
+    try:
+        n = 0
+        f = open(FILE_NAME, 'rb')
+        i = f.read(BUFF_SIZE)
+        sendDis(FILE_SIZE)
+        n += 1
+        while i:
+            sendDis(i)
+            i = f.read(BUFF_SIZE)
+        f.close()
 
-    # 150, 350, 261X31
+        print('(check) ' + FILE_NAME + ' transfer complete')
+        print('send함수 끝')
+
+    except Exception as e:
+        sys.exit()
 
 
 # 광고정보 추가 GUI
@@ -329,39 +355,89 @@ class add_Dialog(QDialog):
     def __init__(self, parent):
         super(add_Dialog, self).__init__(parent)
         uic.loadUi(addUI, self)
+        self.AD_ID = self.lineEdit.text()
+        self.target = self.lineEdit_2.text()
+
+        # 성별
+        self.comboBox.activated[str].connect(self.ComboBoxEvent)
+        # 연령대
+        self.comboBox_2.activated[str].connect(self.ComboBoxEvent2)
         self.pushButton.clicked.connect(self.addImage)
-        self.pushButton_2.clicked.connect(self.addVideoImage)
-        self.pushButton_3.clicked.connect(self.addVrImage)
-        self.pushButton_4.clicked.connect(self.add3dImage)
         self.pushButton_5.clicked.connect(self.addOk)
         self.pushButton_6.clicked.connect(self.addClose)
+        self.gender = ""
+        self.age = ""
+        self.fname = ""
 
-        #self.retranslateUi()
         self.show()
+
+    def ComboBoxEvent(self):  # 성별
+        self.gender = self.comboBox.currentText()
+
+    def ComboBoxEvent2(self):  # 연령대
+        self.age = self.comboBox_2.currentText()
+
     def addImage(self):
-        fname = QFileDialog.getOpenFileName(self)
-        imgfile = fname[0]
-        img = cv2.imread(imgfile, cv2.IMREAD_COLOR)
-        cv2.imwrite("test01.jpg", img)
+        self.fname = QFileDialog.getOpenFileName(self)
         self.close()
-        #여기다가 광고 이미지를 넣어주면 된다
-    def addVideoImage(self):
-
-        self.close()
-
-    def addVrImage(self):
-
-        self.close()
-
-    def add3dImage(self):
-
-        self.close()
+        # 여기다가 광고 이미지를 넣어주면 된다
 
     def addOk(self):
-        # 인자값 전달
-        self.close()
+        DB.insertAD(self.AD_ID, self.tartget, self.gender, self.age)
+        sendDis('img'+self.target)
+        sendFile(self.fname)
 
     def addClose(self):
+        self.close()
+
+
+# 광고정보 삭제 GUI
+class delete_Dialog(QDialog):
+    def __init__(self, parent):
+        super(delete_Dialog, self).__init__(parent)
+        uic.loadUi(deleteUI, self)
+        self.pushButton.clicked.connect(self.deleteOk)
+        self.pushButton_2.clicked.connect(self.deleteClose)
+        self.chmsg = self.lineEdit.text()
+        self.show()
+
+    def deleteOk(self):
+        # 인자값 전달
+        print(self.imageId)
+        DB.deleteAD(self.chmsg)
+        self.chmsg = self.lineEdit.text()
+        sendDis(self.chmsg)
+        self.close()
+
+    def deleteClose(self):
+        self.close()
+
+
+# 디지털트윈 광고 추가 GUI
+class change_Dialog(QDialog):
+    def __init__(self, parent):
+        super(change_Dialog, self).__init__(parent)
+        uic.loadUi(changeTwinUI, self)
+
+        self.pushButton.clicked.connect(self.changeTwin)
+        self.pushButton_2.clicked.connect(self.changeOk)
+        self.pushButton_3.clicked.connect(self.changeClose)
+        self.show()
+
+    def changeTwin(self):
+        imageName = QFileDialog.getOpenFileName(self)
+        self.imgfile = imageName[0]
+
+    def changeOk(self):
+        global disConn
+        sendDis(self.chmsg)
+        sendDis(self.imgfile)
+        self.chmsg = self.lineEdit.text()
+        print(self.chmsg)
+        print(self.imgfile)
+        self.close()
+
+    def changeClose(self):
         self.close()
 
 
@@ -592,14 +668,6 @@ class ch_Dialog(QDialog):
         self.close()
 
 
-class delete_Dialog(QDialog):
-    def __init__(self, parent):
-        super(delete_Dialog, self).__init__(parent)
-        uic.loadUi(deleteUI, self)
-        # self.pushButton.clicked.connect(self.addImage)
-        self.show()
-
-
 class ServerThread(Thread):
     def __init__(self, window):
         Thread.__init__(self)
@@ -616,13 +684,13 @@ class ServerThread(Thread):
 
         while True:
             print("Multi Threaded Python server : Waiting for connections from TCP clients...")
-            window.textBrowser.append("클라이언트 접속 대기중...")
+            print("클라이언트 접속 대기중...")
             global conn
             global camConn
             global disConn
             conn, (ip, port) = tcpServer.accept()
 
-            if ip == '172.30.1.40':
+            if ip == '172.30.1.51':
                 camConn = conn
                 camthread = CameraThread(ip, port, window)
                 camthread.start()
@@ -643,7 +711,7 @@ class CameraThread(Thread):
         self.window = window
         self.ip = ip
         self.port = port
-        window.textBrowser.append("[+] 카메라 클라이언트와 연결되었습니다! " + ip + ':' + str(port))
+        print("[+] 카메라 클라이언트와 연결되었습니다! " + ip + ':' + str(port))
 
     def run(self):
         count = 0
@@ -653,7 +721,7 @@ class CameraThread(Thread):
             FILE_NAME = (img_path + str(count) + '.jpg')
 
             self.recvImage(FILE_NAME)
-            window.textBrowser.append(FILE_NAME + " 이미지 수신 완료")
+            print(FILE_NAME + " 이미지 수신 완료")
             faceThread = Thread(target=lambda q, arg1: q.put(faceAnalyse(arg1)), args=(que, FILE_NAME))
             faceThread.setDaemon(True)
             faceThread.start()
@@ -665,12 +733,12 @@ class CameraThread(Thread):
             global ADtarget
 
             if not genderAge:
-                window.textBrowser.append("얼굴이 인식되지 않습니다. 통계기반의 광고를 출력합니다.")
+                print("얼굴이 인식되지 않습니다. 통계기반의 광고를 출력합니다.")
                 majority = DB.findMajority(today.hour)
                 ADtarget = DB.decideID(majority[0], majority[1])
             else:
                 guimsg = "성별, 연령대: " + str(genderAge[0][0]) + str(genderAge[0][1])
-                window.textBrowser.append(guimsg)
+                print(guimsg)
                 if len(genderAge) == 1:
                     ADtarget = DB.decideID(genderAge[0][0], genderAge[0][1])
                 else:
@@ -683,11 +751,11 @@ class CameraThread(Thread):
                 self.insert_result(genderAge, str(today.hour))
 
             print("광고가 멀로 정해졌냐면:", ADtarget)
-            window.textBrowser.append("광고 ID: " + ADtarget)
+            print("광고 ID: " + ADtarget)
             window.label_2.setStyleSheet('image:url(../imgFile/'+ADtarget+'.jpg)')
             global disConn
             disConn.send(ADtarget.encode('utf-8'))
-            window.textBrowser.append(ADtarget+"전송완료")
+            print(ADtarget+"전송완료")
 
             count += 1
 
@@ -727,17 +795,15 @@ class DisplayThread(Thread):
         self.window = window
         self.ip = ip
         self.port = port
-        window.textBrowser.append("[+] 광고판 클라이언트와 연결되었습니다! " + ip + ':' + str(port))
+        print("[+] 광고판 클라이언트와 연결되었습니다! " + ip + ':' + str(port))
 
     def run(self):
         while True:
             global disConn
             data = disConn.recv(BUFF_SIZE)
-            window.textBrowser.append(data.decode('utf-8'))
+            print(data.decode('utf-8'))
             print(data.decode('utf-8'))
 
-    def sendID(self, ADtarget):
-        print("이거 열심히 만들어보......는걸 프로토타입 발표 후에 하면 되겠네", ADtarget)
 
 
 if __name__ == '__main__':

@@ -26,6 +26,17 @@ class DB_interface:
         print("---Database connecting terminate")
         self.conn.close()
 
+    # 광고정보 조회시 호출
+    def showAD(self):
+        try:
+            sql = "select * from AD"
+            self.curs.execute(sql)
+            rows = self.curs.fetchall()
+            return rows
+        except Exception as e:
+            print("에러 발생!!", e)
+
+    # 광고정보 추가시 호출
     def insertAD(self, AD_ID, target, gender, age):
         try:
             sql = "insert into AD values " \
@@ -35,6 +46,7 @@ class DB_interface:
         except Exception as e:
             print("에러 발생!!", e)
 
+    # 광고정보 삭제시 호출
     def deleteAD(self, target):
         try:
             sql = "delete from AD where target = %s"

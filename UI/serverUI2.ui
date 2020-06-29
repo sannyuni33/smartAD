@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1201</width>
-    <height>677</height>
+    <width>1206</width>
+    <height>873</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,15 +17,15 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>490</y>
+      <x>30</x>
+      <y>600</y>
       <width>121</width>
       <height>61</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Agency FB</family>
+      <family>08서울남산체 B</family>
       <pointsize>14</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -38,15 +38,15 @@
    <widget class="QPushButton" name="pushButton_4">
     <property name="geometry">
      <rect>
-      <x>540</x>
-      <y>490</y>
+      <x>530</x>
+      <y>600</y>
       <width>141</width>
       <height>61</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Agency FB</family>
+      <family>08서울남산체 B</family>
       <pointsize>14</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -59,15 +59,15 @@
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>490</y>
+      <x>190</x>
+      <y>600</y>
       <width>151</width>
       <height>61</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Agency FB</family>
+      <family>08서울남산체 B</family>
       <pointsize>14</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -80,11 +80,16 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>500</x>
-      <y>30</y>
+      <x>490</x>
+      <y>140</y>
       <width>411</width>
       <height>411</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>08서울남산체 B</family>
+     </font>
     </property>
     <property name="text">
      <string/>
@@ -93,11 +98,16 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>30</y>
+      <x>20</x>
+      <y>140</y>
       <width>411</width>
       <height>411</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>08서울남산체 B</family>
+     </font>
     </property>
     <property name="text">
      <string/>
@@ -106,25 +116,30 @@
    <widget class="QTextBrowser" name="textBrowser">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>590</y>
+      <x>30</x>
+      <y>700</y>
       <width>871</width>
       <height>141</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>08서울남산체 B</family>
+     </font>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>490</y>
+      <x>370</x>
+      <y>600</y>
       <width>131</width>
       <height>61</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Agency FB</family>
+      <family>08서울남산체 B</family>
       <pointsize>14</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -137,15 +152,15 @@
    <widget class="QPushButton" name="pushButton_5">
     <property name="geometry">
      <rect>
-      <x>710</x>
-      <y>520</y>
+      <x>700</x>
+      <y>630</y>
       <width>201</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Agency FB</family>
+      <family>08서울남산체 B</family>
       <pointsize>14</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -158,11 +173,16 @@
    <widget class="QCheckBox" name="checkBox">
     <property name="geometry">
      <rect>
-      <x>790</x>
-      <y>10</y>
+      <x>780</x>
+      <y>120</y>
       <width>96</width>
       <height>19</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>08서울남산체 B</family>
+     </font>
     </property>
     <property name="text">
      <string>평활화모드</string>
@@ -171,14 +191,15 @@
    <widget class="QPushButton" name="pushButton_6">
     <property name="geometry">
      <rect>
-      <x>920</x>
-      <y>0</y>
+      <x>910</x>
+      <y>110</y>
       <width>281</width>
       <height>141</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>08서울남산체 B</family>
       <pointsize>20</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -191,34 +212,36 @@
    <widget class="QPushButton" name="pushButton_7">
     <property name="geometry">
      <rect>
-      <x>920</x>
-      <y>140</y>
+      <x>910</x>
+      <y>250</y>
       <width>281</width>
       <height>151</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>20</pointsize>
+      <family>08서울남산체 B</family>
+      <pointsize>17</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
     <property name="text">
-     <string>광고정보 변경</string>
+     <string>디지털트윈 광고 변경</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_8">
     <property name="geometry">
      <rect>
-      <x>920</x>
-      <y>290</y>
+      <x>910</x>
+      <y>400</y>
       <width>281</width>
       <height>141</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>08서울남산체 B</family>
       <pointsize>20</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -231,14 +254,15 @@
    <widget class="QPushButton" name="pushButton_9">
     <property name="geometry">
      <rect>
-      <x>920</x>
-      <y>430</y>
+      <x>910</x>
+      <y>540</y>
       <width>281</width>
       <height>151</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>08서울남산체 B</family>
       <pointsize>20</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -251,14 +275,15 @@
    <widget class="QPushButton" name="pushButton_10">
     <property name="geometry">
      <rect>
-      <x>920</x>
-      <y>580</y>
+      <x>910</x>
+      <y>690</y>
       <width>281</width>
       <height>151</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>08서울남산체 B</family>
       <pointsize>20</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -271,14 +296,15 @@
    <widget class="QLineEdit" name="lineEdit">
     <property name="geometry">
      <rect>
-      <x>770</x>
-      <y>490</y>
+      <x>760</x>
+      <y>600</y>
       <width>41</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>08서울남산체 B</family>
       <pointsize>13</pointsize>
      </font>
     </property>
@@ -289,14 +315,15 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>810</x>
-      <y>490</y>
+      <x>800</x>
+      <y>600</y>
       <width>41</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>08서울남산체 B</family>
       <pointsize>12</pointsize>
      </font>
     </property>
@@ -304,16 +331,27 @@
      <string>(초)</string>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1201</width>
-     <height>26</height>
-    </rect>
-   </property>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>20</y>
+      <width>841</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>08서울남산체 B</family>
+      <pointsize>25</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>디지털 트윈을 활용한 SMART AD</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

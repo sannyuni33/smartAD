@@ -35,7 +35,6 @@ class ClientThread(Thread):
                 newThread.setDaemon(True)
                 newThread.start()
             elif msg == 'pause':
-
                 newThread.setStop()
                 # 쓰레드 자체를 실제로 종료시킴! 강제 종료도 아님!
                 # CameraWork 객체의 onOff 가 False 니까 반복문이 멈추고 run() 이 끝나기 때문
@@ -59,6 +58,7 @@ class CameraWork(Thread):
         self.onOff = True
         global camera
         global chTime
+
     def setStop(self):
         self.onOff = False
 

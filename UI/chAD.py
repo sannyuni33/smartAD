@@ -206,106 +206,106 @@ class Window(QMainWindow,):
 
     def startAD(self):
         print("시작")
-        self.textBrowser.append("시작")
+        print("시작")
 
     def pauseAD(self):
         print("일시정지")
-        self.textBrowser.append("일시정지")
+        print("일시정지")
 
     def closeAD(self):
         print("종료")
-        self.textBrowser.append("종료")
+        print("종료")
 
     def changeAD(self):
         # ch window를 인자로 받아서 실행시킨다.
 
         cd = ch_Dialog(self)
         cd.exec()
-        self.textBrowser.append("광고 변경을 시작합니다")
+        print("광고 변경을 시작합니다")
         id = cd.ad_ID
 
         # 10대 여자
         if id == 'f10':
             self.label_2.setStyleSheet('image:url(../imgFile/f20.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
         if id == 'f11':
             self.label_2.setStyleSheet('image:url(../imgFile/f11.jpg)')
-            self.textBrowser.append(id+"광고로 변경됐슴다")
+            print(id+"광고로 변경됐슴다")
         # 20대 여자
         if id == 'f20':
             self.label_2.setStyleSheet('image:url(../imgFile/f22.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
         if id == 'f21':
             self.label_2.setStyleSheet('image:url(../imgFile/f21.jpg)')
-            self.textBrowser.append(id+"광고로 변경됐슴다")
+            print(id+"광고로 변경됐슴다")
         # 30대 여자
         if id == 'f30':
             self.label_2.setStyleSheet('image:url(../imgFile/f32.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
         if id == 'f31':
             self.label_2.setStyleSheet('image:url(../imgFile/f31.jpg)')
-            self.textBrowser.append(id+"광고로 변경됐슴다")
+            print(id+"광고로 변경됐슴다")
         # 40대 여자
         if id == 'f40':
             self.label_2.setStyleSheet('image:url(../imgFile/f42.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
         if id == 'f41':
             self.label_2.setStyleSheet('image:url(../imgFile/f41.jpg)')
-            self.textBrowser.append(id+"광고로 변경됐슴다")
+            print(id+"광고로 변경됐슴다")
         # 50대 여자
         if id == 'f50':
             self.label_2.setStyleSheet('image:url(../imgFile/f52.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
         if id == 'f51':
             self.label_2.setStyleSheet('image:url(../imgFile/f51.jpg)')
-            self.textBrowser.append(id+"광고로 변경됐슴다")
+            print(id+"광고로 변경됐슴다")
         # 60대 여자
         if id == 'f60':
             self.label_2.setStyleSheet('image:url(../imgFile/f62.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
         # 10대 남자
         if id == 'm10':
             self.label_2.setStyleSheet('image:url(../imgFile/m12.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
         if id == 'm11':
             self.label_2.setStyleSheet('image:url(../imgFile/m11.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
         #20대 남자
         if id == 'm20':
             self.label_2.setStyleSheet('image:url(../imgFile/m22.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
         if id == 'm21':
             self.label_2.setStyleSheet('image:url(../imgFile/m21.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
         # 30대 남자
         if id == 'm30':
             self.label_2.setStyleSheet('image:url(../imgFile/m32.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
         if id == 'm31':
             self.label_2.setStyleSheet('image:url(../imgFile/m31.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
 
         # 40대 남자
         if id == 'm40':
             self.label_2.setStyleSheet('image:url(../imgFile/m42.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
         if id == 'm41':
             self.label_2.setStyleSheet('image:url(../imgFile/m41.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
         # 50대 남자
         if id == 'm50':
             self.label_2.setStyleSheet('image:url(../imgFile/m52.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
         if id == 'm51':
             self.label_2.setStyleSheet('image:url(../imgFile/m51.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
         # 60대 남자
         if id == 'm60':
             self.label_2.setStyleSheet('image:url(../imgFile/m62.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
         if id == 'm61':
             self.label_2.setStyleSheet('image:url(../imgFile/m61.jpg)')
-            self.textBrowser.append(id + "광고로 변경됐슴다")
+            print(id + "광고로 변경됐슴다")
 
 
 if __name__ == '__main__':

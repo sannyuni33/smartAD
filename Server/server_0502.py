@@ -32,6 +32,7 @@ que = queue.Queue()
 
 # 서버 GUI 구성 ui 파일
 MainUI = '../UI/serverUI0629.ui'
+showAdUI = '../UI/showAdUI.ui'
 addUI = '../UI/addUI.ui'
 deleteUI = '../UI/deleteUI.ui'
 changeTwinUI = '../UI/changeTwinUI.ui'
@@ -204,6 +205,8 @@ class Window(QMainWindow, ):
 
     def showAdInfo(self):
         print("광고정보조회")
+        cd5 = showAd_Dialog(self)
+        cd5.exec
 
     def addAdInfo(self):
         print("광고정보를 추가합니다. ")
@@ -273,6 +276,7 @@ class Window(QMainWindow, ):
     def showAdStat(self):
         print("광고별 관심지수통계를 조회합니다.")
         tmp_res = DB.lookUpADStat()
+        print(tmp_res)
         X_label = []
         Y_label = []
         for i in tmp_res:
@@ -329,6 +333,7 @@ class Window(QMainWindow, ):
 
 
 def sendFile(FILE_NAME):
+    global disConn
     FILE_SIZE = os.path.getsize(FILE_NAME)
     FILE_SIZE = struct.pack('L', FILE_SIZE)
 
@@ -336,18 +341,43 @@ def sendFile(FILE_NAME):
         n = 0
         f = open(FILE_NAME, 'rb')
         i = f.read(BUFF_SIZE)
-        sendDis(FILE_SIZE)
+
+        disConn.send(FILE_SIZE)
         n += 1
         while i:
-            sendDis(i)
+            disConn.send(i)
             i = f.read(BUFF_SIZE)
         f.close()
 
         print('(check) ' + FILE_NAME + ' transfer complete')
-        print('send함수 끝')
 
     except Exception as e:
         sys.exit()
+
+
+# 광고조회
+class showAd_Dialog(QDialog):
+    def __init__(self, parent):
+        super(showAd_Dialog, self).__init__(parent)
+        uic.loadUi(showAdUI, self)
+
+        self.pushButton.clicked.connect(self.changeOk)
+
+        self.show()
+        self.dbInfo = DB.showAD()
+        self.showAdInfo2(self.dbInfo)
+
+    def showAdInfo2(self, dbInfo):  # ui컬럼에 db정보 추가 함수
+        for idx, (hname, price_str, price, vol, ayou) in enumerate(dbInfo):
+            self.tableWidget.setItem(idx, 0, QTableWidgetItem(hname))
+            self.tableWidget.setItem(idx, 1, QTableWidgetItem(price_str))
+            self.tableWidget.setItem(idx, 2, QTableWidgetItem(price))
+            self.tableWidget.setItem(idx, 3, QTableWidgetItem(str(vol)))
+            self.tableWidget.setItem(idx, 4, QTableWidgetItem(str(ayou)))
+
+    def changeOk(self):
+
+        self.close()
 
 
 # 광고정보 추가 GUI
@@ -357,7 +387,6 @@ class add_Dialog(QDialog):
         uic.loadUi(addUI, self)
         self.AD_ID = self.lineEdit.text()
         self.target = self.lineEdit_2.text()
-
         # 성별
         self.comboBox.activated[str].connect(self.ComboBoxEvent)
         # 연령대
@@ -365,9 +394,9 @@ class add_Dialog(QDialog):
         self.pushButton.clicked.connect(self.addImage)
         self.pushButton_5.clicked.connect(self.addOk)
         self.pushButton_6.clicked.connect(self.addClose)
-        self.gender = ""
-        self.age = ""
-        self.fname = ""
+        self.label_6.setStyleSheet('background:white')
+        self.gender = "male"
+        self.age = "10"
 
         self.show()
 
@@ -379,13 +408,12 @@ class add_Dialog(QDialog):
 
     def addImage(self):
         self.fname = QFileDialog.getOpenFileName(self)
-        self.close()
-        # 여기다가 광고 이미지를 넣어주면 된다
+        self.label_6.setText(self.fname[0])
 
     def addOk(self):
-        DB.insertAD(self.AD_ID, self.tartget, self.gender, self.age)
-        sendDis('img'+self.target)
-        sendFile(self.fname)
+        DB.insertAD(self.lineEdit.text(), self.lineEdit_2.text(), self.gender, self.age)
+        sendDis('img' + self.lineEdit_2.text())
+        sendFile(self.fname[0])
 
     def addClose(self):
         self.close()
@@ -690,12 +718,12 @@ class ServerThread(Thread):
             global disConn
             conn, (ip, port) = tcpServer.accept()
 
-            if ip == '172.30.1.51':
+            if ip == '192.168.143.235':
                 camConn = conn
                 camthread = CameraThread(ip, port, window)
                 camthread.start()
                 threads.append(camthread)
-            if ip == '172.30.1.54':
+            if ip == '192.168.101.175':
                 disConn = conn
                 disthread = DisplayThread(ip, port, window)
                 disthread.start()
@@ -768,7 +796,6 @@ class CameraThread(Thread):
         f = open(FILE_NAME, 'wb')
         while True:
             client_file = camConn.recv(BUFF_SIZE)
-            # print(client_file)
 
             if not client_file:
                 break
@@ -802,8 +829,6 @@ class DisplayThread(Thread):
             global disConn
             data = disConn.recv(BUFF_SIZE)
             print(data.decode('utf-8'))
-            print(data.decode('utf-8'))
-
 
 
 if __name__ == '__main__':

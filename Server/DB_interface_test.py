@@ -40,8 +40,8 @@ class DB_interface:
     def insertAD(self, AD_ID, target, gender, age):
         try:
             sql = "insert into AD values " \
-                  "(%s %s %s %s %s)"
-            self.curs.execute(sql, (AD_ID, target, gender, age, 0))
+                  "(%s, %s, %s, %s, %s)"
+            self.curs.execute(sql, (AD_ID, target, gender, age, '0'))
             self.conn.commit()
         except Exception as e:
             print("에러 발생!!", e)

@@ -1,7 +1,6 @@
 import os
 import sys
 import datetime
-
 import matplotlib
 from socket import *
 import socket as sc
@@ -13,7 +12,8 @@ import json
 import queue
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QTabWidget
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import *
 from DB_interface_test import DB_interface
 from matplotlib import pyplot as plt
@@ -31,7 +31,7 @@ BUFF_SIZE = 1024
 que = queue.Queue()
 
 # 서버 GUI 구성 ui 파일
-MainUI = '../UI/serverUI0629.ui'
+MainUI = '../UI/serverUI0701.ui'
 showAdUI = '../UI/showAdUI.ui'
 addUI = '../UI/addUI.ui'
 deleteUI = '../UI/deleteUI.ui'
@@ -39,7 +39,6 @@ changeTwinUI = '../UI/changeTwinUI.ui'
 
 # 광고변경 ui 파일
 changeUI = 'chAD.ui'
-
 
 # NAVER API 연결
 client_id = "38hNSdXWRhGUHxMpaRoV"
@@ -55,16 +54,16 @@ genderAge = None
 ADtarget = None
 
 # 히스토그램 온오프 상태변수
-histoflag = False
+histoFlag = False
 
 
 def faceAnalyse(FILE_NAME):
     # 카메라 클라이언트가 전송한 이미지에 대해 얼굴분석 수행
     recog_result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-    global histoflag
+    global histoFlag
     # 히스토그램 평활화
-    if not histoflag:
+    if not histoFlag:
         pass
     else:
         src = cv2.imread(FILE_NAME)
@@ -82,7 +81,6 @@ def faceAnalyse(FILE_NAME):
 
     if rescode == 200:
         pass
-        # print(response.text)
     else:
         print("Error Code:" + rescode)
 
@@ -102,6 +100,7 @@ def faceAnalyse(FILE_NAME):
         # putText 할 때 이미지? 얼굴? 크기에 따라 폰트 크기를 다르게 한다면 좋을 것 같다!
         cv2.putText(img, result, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.40, (255, 255, 255), 1, cv2.LINE_AA)
 
+        # 이 부분이 좀 오래걸리겠네.. 여자 60대 나오면 if-else 한 번, if  또 한 번, elif 네 번..
         if gender == 'male':
             if 10 <= final_age < 20:
                 recog_result[0] += 1
@@ -129,7 +128,9 @@ def faceAnalyse(FILE_NAME):
             else:
                 recog_result[11] += 1
     cv2.imwrite(FILE_NAME, img)
-    window.label.setStyleSheet('image:url(' + FILE_NAME + ')')
+    window.qPixmapFileVar.load(FILE_NAME)
+    window.qPixmapFileVar = window.qPixmapFileVar.scaled(650, 720)
+    window.label.setPixmap(window.qPixmapFileVar)
 
     if max(recog_result) == 0:
         return 0
@@ -138,6 +139,8 @@ def faceAnalyse(FILE_NAME):
 
     print("index_list: ", index_list)
     result_list = []
+
+    # 여기도 마찬가지
     for i in index_list:
         if i == 0:
             result_list.append(['male', 10])
@@ -183,13 +186,16 @@ def sendDis(msg):
 class Window(QMainWindow, ):
     def __init__(self):
         super().__init__()
-        global histoflag
+        global histoFlag
         # 초기화면 세팅
         uic.loadUi(MainUI, self)
+        self.showFullScreen()
         self.setWindowTitle("서버 GUI")
-
-        self.label.setStyleSheet('image:url(../imgFile/ready.png)')
-        self.label_2.setStyleSheet('image:url(../imgFile/ready.png)')
+        self.qPixmapFileVar = QPixmap()
+        self.qPixmapFileVar.load("../imgFile/ready.png")
+        self.qPixmapFileVar = self.qPixmapFileVar.scaled(650, 720)
+        self.label.setPixmap(self.qPixmapFileVar)
+        self.label_2.setPixmap(self.qPixmapFileVar)
         self.pushButton.clicked.connect(self.showAdInfo)
         self.pushButton_2.clicked.connect(self.addAdInfo)
         self.pushButton_3.clicked.connect(self.changeTwinInfo)
@@ -200,8 +206,8 @@ class Window(QMainWindow, ):
         self.pushButton_8.clicked.connect(self.pauseAD)
         self.pushButton_9.clicked.connect(self.chCamTime)
         self.pushButton_10.clicked.connect(self.changeAD)
-        self.checkBox.stateChanged.connect(self.closeAd)
-        # chmsg = self.lineEdit.text()
+        self.pushButton_11.clicked.connect(self.closeAd)
+        self.checkBox.stateChanged.connect(self.histogramOn)
 
     def showAdInfo(self):
         print("광고정보조회")
@@ -214,15 +220,12 @@ class Window(QMainWindow, ):
         cd2.exec()
 
     def changeTwinInfo(self):
-        # 150, 290, 261x31
         print("광고정보를 변경합니다. ")
         cd4 = change_Dialog(self)
         cd4.exec()
 
     def deleteAdInfo(self):
         print("광고정보를 삭제합니다.")
-        # 광고정보삭제 dialog 에서 입력한 target 값을 메시지로 보내면, 디스플레이가 삭제할것.
-        # sendDis("delete"+target)
         cd3 = delete_Dialog(self)
         cd3.exec()
 
@@ -230,6 +233,7 @@ class Window(QMainWindow, ):
         print("시간대별 인식통계를 조회합니다.")
         res = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         res_cnt = DB.lookUpTimeStat(datetime.datetime.today().hour)
+        # 여기도 if elif 하지말고 바꾸기
         for row in res_cnt:
             if row[0] == 'male' and row[1] == 10:
                 res[0] += row[2]
@@ -276,7 +280,6 @@ class Window(QMainWindow, ):
     def showAdStat(self):
         print("광고별 관심지수통계를 조회합니다.")
         tmp_res = DB.lookUpADStat()
-        print(tmp_res)
         X_label = []
         Y_label = []
         for i in tmp_res:
@@ -309,11 +312,13 @@ class Window(QMainWindow, ):
         print(self.chmsg + "초로 카메라 주기 변경")
 
     def changeAD(self):
-        # ch window를 인자로 받아서 실행시킨다.
         cd = ch_Dialog(self)
         cd.exec()
         id = cd.ad_ID
-        self.label_2.setStyleSheet('image:url(../imgFile/' + id + '.jpg)')
+        self.qPixmapFileVar2 = QPixmap()
+        self.qPixmapFileVar2.load("../imgFile/" + id + ".jpg")
+        self.qPixmapFileVar2 = self.qPixmapFileVar2.scaled(650, 720)
+        self.label_2.setPixmap(self.qPixmapFileVar2)
         print(id + "광고로 변경됐슴다")
 
     def closeAd(self):
@@ -323,13 +328,13 @@ class Window(QMainWindow, ):
         time.sleep(3)
 
     def histogramOn(self, state):
-        # 히스토그램 온오프
+        global histoFlag
         if state == Qt.Checked:
             print("히스토 온")
-            self.histoflag = True
+            histoFlag = True
         else:
             print("히스토 오프")
-            self.histoflag = False
+            histoFlag = False
 
 
 def sendFile(FILE_NAME):
@@ -360,15 +365,15 @@ class showAd_Dialog(QDialog):
     def __init__(self, parent):
         super(showAd_Dialog, self).__init__(parent)
         uic.loadUi(showAdUI, self)
-
         self.pushButton.clicked.connect(self.changeOk)
-
         self.show()
         self.dbInfo = DB.showAD()
+        self.tableWidget.setRowCount(len(self.dbInfo))
         self.showAdInfo2(self.dbInfo)
 
     def showAdInfo2(self, dbInfo):  # ui컬럼에 db정보 추가 함수
         for idx, (hname, price_str, price, vol, ayou) in enumerate(dbInfo):
+            print(idx)
             self.tableWidget.setItem(idx, 0, QTableWidgetItem(hname))
             self.tableWidget.setItem(idx, 1, QTableWidgetItem(price_str))
             self.tableWidget.setItem(idx, 2, QTableWidgetItem(price))
@@ -414,6 +419,7 @@ class add_Dialog(QDialog):
         DB.insertAD(self.lineEdit.text(), self.lineEdit_2.text(), self.gender, self.age)
         sendDis('img' + self.lineEdit_2.text())
         sendFile(self.fname[0])
+        self.close()
 
     def addClose(self):
         self.close()
@@ -426,15 +432,11 @@ class delete_Dialog(QDialog):
         uic.loadUi(deleteUI, self)
         self.pushButton.clicked.connect(self.deleteOk)
         self.pushButton_2.clicked.connect(self.deleteClose)
-        self.chmsg = self.lineEdit.text()
         self.show()
 
     def deleteOk(self):
-        # 인자값 전달
-        print(self.imageId)
-        DB.deleteAD(self.chmsg)
-        self.chmsg = self.lineEdit.text()
-        sendDis(self.chmsg)
+        DB.deleteAD(self.lineEdit.text())
+        sendDis('del' + self.lineEdit.text())
         self.close()
 
     def deleteClose(self):
@@ -447,22 +449,24 @@ class change_Dialog(QDialog):
         super(change_Dialog, self).__init__(parent)
         uic.loadUi(changeTwinUI, self)
 
+        self.comboBox.activated[str].connect(self.ComboBoxEvent)
         self.pushButton.clicked.connect(self.changeTwin)
         self.pushButton_2.clicked.connect(self.changeOk)
         self.pushButton_3.clicked.connect(self.changeClose)
         self.show()
 
+        self.twin = "vid"
+
+    def ComboBoxEvent(self):
+        self.twin = self.comboBox.currentText()
+
     def changeTwin(self):
-        imageName = QFileDialog.getOpenFileName(self)
-        self.imgfile = imageName[0]
+        self.twinName = QFileDialog.getOpenFileName(self)
 
     def changeOk(self):
         global disConn
-        sendDis(self.chmsg)
-        sendDis(self.imgfile)
-        self.chmsg = self.lineEdit.text()
-        print(self.chmsg)
-        print(self.imgfile)
+        sendDis(self.twin+self.self.lineEdit.text())
+        sendFile(self.twinName[0])
         self.close()
 
     def changeClose(self):
@@ -718,12 +722,12 @@ class ServerThread(Thread):
             global disConn
             conn, (ip, port) = tcpServer.accept()
 
-            if ip == '192.168.143.235':
+            if ip == '192.168.140.246':
                 camConn = conn
                 camthread = CameraThread(ip, port, window)
                 camthread.start()
                 threads.append(camthread)
-            if ip == '192.168.101.175':
+            if ip == '192.168.103.62':
                 disConn = conn
                 disthread = DisplayThread(ip, port, window)
                 disthread.start()
@@ -780,7 +784,9 @@ class CameraThread(Thread):
 
             print("광고가 멀로 정해졌냐면:", ADtarget)
             print("광고 ID: " + ADtarget)
-            window.label_2.setStyleSheet('image:url(../imgFile/'+ADtarget+'.jpg)')
+            window.qPixmapFileVar.load(('../imgFile/' + ADtarget + '.jpg'))
+            window.qPixmapFileVar = window.qPixmapFileVar.scaled(650, 720)
+            window.label_2.setPixmap(window.qPixmapFileVar)
             global disConn
             disConn.send(ADtarget.encode('utf-8'))
             print(ADtarget+"전송완료")

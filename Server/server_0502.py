@@ -38,7 +38,7 @@ deleteUI = '../UI/deleteUI.ui'
 changeTwinUI = '../UI/changeTwinUI.ui'
 
 # 광고변경 ui 파일
-changeUI = 'chAD.ui'
+changeUI = '../UI/chAD.ui'
 
 # NAVER API 연결
 client_id = "38hNSdXWRhGUHxMpaRoV"

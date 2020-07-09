@@ -92,10 +92,11 @@ def faceAnalyse(FILE_NAME):
         img = cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 3)
         gender = i['gender']['value']
         age = i['age']['value']
+        confi = i['age']['confidence']
         age1, age2 = age.split('~')
         final_age = (int(age1) + int(age2)) / 2
 
-        result = """%s, %s""" % (gender, str(age))
+        result = """%s, %s, %s""" % (gender, str(age), str(confi))
         print(result)
         # putText 할 때 이미지? 얼굴? 크기에 따라 폰트 크기를 다르게 한다면 좋을 것 같다!
         cv2.putText(img, result, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.40, (255, 255, 255), 1, cv2.LINE_AA)
@@ -137,7 +138,6 @@ def faceAnalyse(FILE_NAME):
     else:
         index_list = [i for i, j in enumerate(recog_result) if j == max(recog_result)]
 
-    print("index_list: ", index_list)
     result_list = []
 
     # 여기도 마찬가지
@@ -722,12 +722,12 @@ class ServerThread(Thread):
             global disConn
             conn, (ip, port) = tcpServer.accept()
 
-            if ip == '192.168.140.246':
+            if ip == '192.168.142.29':
                 camConn = conn
                 camthread = CameraThread(ip, port, window)
                 camthread.start()
                 threads.append(camthread)
-            if ip == '192.168.103.62':
+            if ip == '192.168.103.67':
                 disConn = conn
                 disthread = DisplayThread(ip, port, window)
                 disthread.start()
@@ -796,7 +796,7 @@ class CameraThread(Thread):
     def recvImage(self, FILE_NAME):
         global camConn
         FILE_LEN = 0
-        FILE_SIZE = camConn.recv(8)
+        FILE_SIZE = camConn.recv(4)
         FILE_SIZE = struct.unpack('L', FILE_SIZE)[0]
 
         f = open(FILE_NAME, 'wb')
@@ -812,13 +812,9 @@ class CameraThread(Thread):
             if FILE_LEN == int(FILE_SIZE):
                 break
 
-        f.close()  # 여기까지 이미지 파일 수신인데, 카메라 핸들러가 해주는게 맞고.
-
-        print('client : ' + FILE_NAME + ' file transfer')
+        f.close()
 
     def insert_result(self, genderAge, time):
-        # db.인식성공(성별, 연령대, 날짜, 시간, 광고 ID 이렇게 집어넣음 됨.)
-        # 인식성공하고 광고 결정되면 통계에 집어 넣어주는 메소드를 서버에 만들어야 될 듯.
         DB.insertRecogResult(genderAge[0][0], genderAge[0][1], time)
 
 

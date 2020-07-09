@@ -12,19 +12,20 @@ tcpClientA = None
 BUFF_SIZE=1024
 camera=PiCamera()
 
+
 class ClientThread(Thread):
     def __init__(self):
         Thread.__init__(self)
 
     def run(self):
-        host = '172.30.1.54'
+        host ='192.168.103.67'
         port = 9899
         BUFFER_SIZE = 1024
         global tcpClientA
         global chTime
         tcpClientA = socket(AF_INET, SOCK_STREAM)
         tcpClientA.connect((host, port))
-        print("서버랑 연결되었습니다")
+        print("서버 연결 성공")
 
         while True:
             data = tcpClientA.recv(BUFFER_SIZE)
@@ -43,12 +44,11 @@ class ClientThread(Thread):
                 break
             elif int(msg) <= 100:
                 chTime = int(msg)
-                print(chTime)
+                print("카메라 주기"+chTime+"초로 변경합니다.")
             else:
                 print("오류")
                 break
         tcpClientA.close()
-
 
 class CameraWork(Thread):
     def __init__(self, tcpClientA):
@@ -58,20 +58,14 @@ class CameraWork(Thread):
         self.onOff = True
         global camera
         global chTime
-
     def setStop(self):
         self.onOff = False
 
     def run(self):
         while True:
             print("찍습니다")
-            self.captureImage(self.FILE_NAME,chTime)
-            time.sleep(3)
-            print("보내기 전이요")
+            self.captureImage(self.FILE_NAME, chTime)
             self.sendImage(self.FILE_NAME)
-            print("send이미지 끝")
-            time.sleep(2)
-            print("삭제 전이요")
             os.remove(r'image.jpg')
             print('삭제 완료')
             if not self.onOff:
@@ -100,14 +94,11 @@ class CameraWork(Thread):
             f.close()
 
             print('(check) ' + FILE_NAME + ' transfer complete')
-            print('send함수 끝')
-
         except Exception as e:
             sys.exit()
 
 
 if __name__ == '__main__':
-
     clientThread = ClientThread()
     clientThread.start()
 

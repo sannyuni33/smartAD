@@ -130,3 +130,4 @@ class DB_interface:
             return row
         except Exception as e:
             print("에러 발생!!", e)
+            return int(0)

@@ -14,6 +14,8 @@ import time
 from time import sleep
 from omxplayer import OMXPlayer
 
+MainUI = '/home/pi/displayUI2.ui'
+
 # ID = None
 # chID = None
 currAD = None
@@ -50,40 +52,42 @@ class Window(QMainWindow):
         super().__init__()
         # global ID
         # global chID
+        uic.loadUi(MainUI, self)
+        self.showFullScreen()
         self.setWindowTitle("Display")
-        self.setGeometry(-10, 0, 810, 600)
-
-        # creating a label widget
-        self.label = QLabel(self)
-
-        self.label.setStyleSheet('image:url(/home/pi/proto/Twin/Image/ready.png)')
-        self.label.setGeometry(40, 30, 700, 300)
-        self.button_1 = QPushButton("Video", self)
-        self.button_1.setGeometry(100, 350, 160, 70)
-        self.button_1.clicked.connect(self.vid)
-
-        self.button_2 = QPushButton("VR", self)
-        self.button_2.resize(160, 70)
-        self.button_2.move(310, 350)
-        self.button_2.clicked.connect(self.vr)
-
-        self.button_3 = QPushButton("3D", self)
-        self.button_3.setGeometry(520, 350, 160, 70)
-        self.button_3.clicked.connect(self.threeD)
-
-        # show all the widgets
+        self.qPixmapFileVar = QPixmap()
+        self.qPixmapFileVar.load("/home/pi/proto/Twin/Image/ready.png")
+        self.qPixmapFileVar = self.qPixmapFileVar.scaled(780, 370)
+        self.label_2.setPixmap(self.qPixmapFileVar)
+        self.pushButton.clicked.connect(self.vid)
+        self.pushButton_2.clicked.connect(self.vr)
+        self.pushButton_3.clicked.connect(self.threeD)
         self.show()
 
     def setAD(self, ID):
         self.ID = ID
-        self.label.setStyleSheet('image:url(/home/pi/proto/Twin/Image/' + ID + '.jpg)')
+        self.qPixmapFileVar2 = QPixmap()
+        self.qPixmapFileVar2.load("/home/pi/proto/Twin/Image/"+ID+".jpg")
+        self.qPixmapFileVar2 = self.qPixmapFileVar2.scaled(780, 370)
+        self.label_2.setPixmap(self.qPixmapFileVar2)
 
     def vid(self):
         print("video clicked, ID: " + self.ID)
-        player = OMXPlayer('/home/pi/proto/Twin/vid/' + self.ID + '.mp4')
-        player.play()
-        sleep(31)
-        player.quit()
+        if self.ID == 'm30':  # 텐트
+            player = OMXPlayer('/home/pi/proto/vid/3D/m30.mp4')
+            player.play()
+            sleep(26)  # 25초길이 동영상
+            player.quit()
+        elif self.ID == 'm51':  # BMW
+            player = OMXPlayer('/home/pi/proto/vid/3D/m51.mp4')
+            player.play()
+            sleep(39)  # 38초길이 동영상
+            player.quit()
+        elif self.ID == 'f31':  # 유모차
+            player = OMXPlayer('/home/pi/proto/vid/3D/f31.mp4')
+            player.play()
+            sleep(26)  # 25초길이 동영상
+            player.quit()
 
     def vr(self):
         print("VR clicked, ID: " + self.ID)
@@ -144,7 +148,7 @@ class ClientThread(Thread):
         self.window = window
 
     def run(self):
-        host = '172.30.1.16'
+        host = '192.168.103.67'
         port = 9899
         BUFFER_SIZE = 1024
         global tcpClientA

@@ -77,7 +77,7 @@ class Window(QMainWindow):
             sleep(31)
             player.quit()
         else:
-            print("동영상 파일이 존재하지 않습니다.")
+            print("동영상을 제공하지 않는 광고입니다.")
 
     def vr(self):
         print("VR clicked, ID: " + self.ID)
@@ -87,12 +87,10 @@ class Window(QMainWindow):
         # chrome_driver = webdriver.Chrome(chrome_options=options)
         # 이부분만 수정해주면 됨
         if self.ID == 'm50':  # 골프장 vr
-            chrome_driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', chrome_options=options)
             # chrome_driver = webdriver.Chrome(chrome_options=options)
             chrome_driver.get("https://viewer.youvr.io/post/view/OpDnGyKzp9RMKVg9")
 
         elif self.ID == 'f20':
-            chrome_driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', chrome_options=options)
             # chrome_driver = webdriver.Chrome(chrome_options=options)
             chrome_driver.get("https://viewer.youvr.io/post/view/1nmeOk1YJ2kZWgBG")
         time.sleep(30)  # 터치가 끝날 때 까지로 바꿀 수는 없을까? (마지막 터치 인식 후 5초 뒤 종료라던지..)
@@ -105,7 +103,7 @@ class Window(QMainWindow):
             sleep(31)
             player.quit()
         else:
-            print("3D 파일이 존재하지 않습니다.")
+            print("3D 모델을 제공하지 않는 광고입니다.")
 
 
 class ClientThread(Thread):

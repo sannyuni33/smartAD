@@ -72,9 +72,12 @@ class Window(QMainWindow):
 
     def vid(self):
         print("video clicked, ID: " + self.ID)
-        player = OMXPlayer('/home/pi/proto/Twin/vid/'+self.ID+'.mp4')
-        sleep(31)
-        player.quit()
+        if os.path.isfile('/home/pi/proto/Twin/vid/' + self.ID + '.mp4'):
+            player = OMXPlayer('/home/pi/proto/Twin/vid/' + self.ID + '.mp4')
+            sleep(31)
+            player.quit()
+        else:
+            print("동영상 파일이 존재하지 않습니다.")
 
     def vr(self):
         print("VR clicked, ID: " + self.ID)
@@ -97,9 +100,12 @@ class Window(QMainWindow):
 
     def threeD(self):
         print("3D clicked, ID: " + self.ID)
-        player = OMXPlayer('/home/pi/proto/Twin/3D/'+self.ID+'.mp4')
-        sleep(31)
-        player.quit()
+        if os.path.isfile('/home/pi/proto/Twin/3D/' + self.ID + '.mp4'):
+            player = OMXPlayer('/home/pi/proto/Twin/3D/' + self.ID + '.mp4')
+            sleep(31)
+            player.quit()
+        else:
+            print("3D 파일이 존재하지 않습니다.")
 
 
 class ClientThread(Thread):

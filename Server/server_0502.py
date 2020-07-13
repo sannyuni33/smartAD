@@ -123,30 +123,13 @@ def faceAnalyse(FILE_NAME):
 
     # 여기도 마찬가지
     for i in index_list:
-        if i == 0:
-            result_list.append(['male', 10])
-        elif i == 1:
-            result_list.append(['male', 20])
-        elif i == 2:
-            result_list.append(['male', 30])
-        elif i == 3:
-            result_list.append(['male', 40])
-        elif i == 4:
-            result_list.append(['male', 50])
-        elif i == 5:
-            result_list.append(['male', 60])
-        elif i == 6:
-            result_list.append(['female', 10])
-        elif i == 7:
-            result_list.append(['female', 20])
-        elif i == 8:
-            result_list.append(['female', 30])
-        elif i == 9:
-            result_list.append(['female', 40])
-        elif i == 10:
-            result_list.append(['female', 50])
-        elif i == 11:
-            result_list.append(['female', 60])
+        if i < 6:
+            temp_gender = 'male'
+            temp_age = (i+1)*10
+        else:
+            temp_gender = 'female'
+            temp_age = (i-5)*10
+        result_list.append([temp_gender, temp_age])
     print("result_list: ", result_list)
     return result_list
 

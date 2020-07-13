@@ -3,7 +3,7 @@ import os
 import struct
 
 from PyQt5.QtWidgets import *
-from PyQt5 import QtCore
+from PyQt5 import QtCore, uic
 from PyQt5.QtGui import *
 import sys, time
 from socket import *
@@ -12,7 +12,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options  # 전체화면 사용을 위해 Options 모듈 추가
 import time
 from time import sleep
-from omxplayer import OMXPlayer
+from omxplayer.player import OMXPlayer
 
 MainUI = '/home/pi/displayUI2.ui'
 
@@ -23,7 +23,6 @@ tempAD = None
 prevAD = None
 tcpClientA = None
 BUFF_SIZE = 1024
-
 
 def recvFile(FILE_NAME):
     global tcpClientA
@@ -73,21 +72,9 @@ class Window(QMainWindow):
 
     def vid(self):
         print("video clicked, ID: " + self.ID)
-        if self.ID == 'm30':  # 텐트
-            player = OMXPlayer('/home/pi/proto/vid/3D/m30.mp4')
-            player.play()
-            sleep(26)  # 25초길이 동영상
-            player.quit()
-        elif self.ID == 'm51':  # BMW
-            player = OMXPlayer('/home/pi/proto/vid/3D/m51.mp4')
-            player.play()
-            sleep(39)  # 38초길이 동영상
-            player.quit()
-        elif self.ID == 'f31':  # 유모차
-            player = OMXPlayer('/home/pi/proto/vid/3D/f31.mp4')
-            player.play()
-            sleep(26)  # 25초길이 동영상
-            player.quit()
+        player = OMXPlayer('/home/pi/proto/Twin/vid/'+self.ID+'.mp4')
+        sleep(31)
+        player.quit()
 
     def vr(self):
         print("VR clicked, ID: " + self.ID)
@@ -110,36 +97,9 @@ class Window(QMainWindow):
 
     def threeD(self):
         print("3D clicked, ID: " + self.ID)
-        if self.ID == 'm20':  # 아이폰
-            player = OMXPlayer('/home/pi/proto/Twin/3D/m20.mp4')
-            player.play()
-            sleep(21)  # 20초길이 동영상
-            player.quit()
-        elif self.ID == 'm30':  # 텐트
-            player = OMXPlayer('/home/pi/proto/Twin/3D/m30.mp4')
-            player.play()
-            sleep(26)  # 25초길이 동영상
-            player.quit()
-        elif self.ID == 'm51':  # BMW
-            player = OMXPlayer('/home/pi/proto/Twin/3D/m51.mp4')
-            player.play()
-            sleep(26)  # 25초길이 동영상
-            player.quit()
-        elif self.ID == 'f31':  # 유모차
-            player = OMXPlayer('/home/pi/proto/Twin/3D/f31.mp4')
-            player.play()
-            sleep(31)  # 30초길이 동영상
-            player.quit()
-        elif self.ID == 'f42':  # 핸드백
-            player = OMXPlayer('/home/pi/proto/Twin/3D/f42.mp4')
-            player.play()
-            sleep(26)  # 30초길이 동영상
-            player.quit()
-        elif self.ID == 'f50':  # 아파트 내부구조
-            player = OMXPlayer('/home/pi/proto/Twin/3D/f50.mp4')
-            player.play()
-            sleep(31)  # 30초길이 동영상
-            player.quit()
+        player = OMXPlayer('/home/pi/proto/Twin/3D/'+self.ID+'.mp4')
+        sleep(31)
+        player.quit()
 
 
 class ClientThread(Thread):

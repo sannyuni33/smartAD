@@ -102,9 +102,7 @@ def faceAnalyse(FILE_NAME):
         cv2.putText(img, result, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.40, (255, 255, 255), 1, cv2.LINE_AA)
 
         recog_index = 0
-        if gender == 'male':
-            continue
-        else:
+        if gender == 'female':
             recog_index += 6
         recog_index += (final_age/10) + 1
         recog_result[recog_index] += 1
@@ -121,7 +119,6 @@ def faceAnalyse(FILE_NAME):
 
     result_list = []
 
-    # 여기도 마찬가지
     for i in index_list:
         if i < 6:
             temp_gender = 'male'
@@ -197,32 +194,11 @@ class Window(QMainWindow, ):
         print("시간대별 인식통계를 조회합니다.")
         res = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         res_cnt = DB.lookUpTimeStat(datetime.datetime.today().hour)
-        # 여기도 if elif 하지말고 바꾸기
         for row in res_cnt:
-            if row[0] == 'male' and row[1] == 10:
-                res[0] += row[2]
-            elif row[0] == 'male' and row[1] == 20:
-                res[1] += row[2]
-            elif row[0] == 'male' and row[1] == 30:
-                res[2] += row[2]
-            elif row[0] == 'male' and row[1] == 40:
-                res[3] += row[2]
-            elif row[0] == 'male' and row[1] == 50:
-                res[4] += row[2]
-            elif row[0] == 'male' and row[1] == 60:
-                res[5] += row[2]
-            elif row[0] == 'female' and row[1] == 10:
-                res[6] += row[2]
-            elif row[0] == 'female' and row[1] == 20:
-                res[7] += row[2]
-            elif row[0] == 'female' and row[1] == 30:
-                res[8] += row[2]
-            elif row[0] == 'female' and row[1] == 40:
-                res[9] += row[2]
-            elif row[0] == 'female' and row[1] == 50:
-                res[10] += row[2]
-            elif row[0] == 'female' and row[1] == 60:
-                res[11] += row[2]
+            index = 0
+            if row[0] == 'female':
+                index += 6
+            index += (int(row[1])/10)-1
         label = ['male\n10', 'male\n20', 'male\n30', 'male\n40',
                  'male\n50', 'male\n60', 'female\n10', 'female\n20',
                  'female\n30', 'female\n40', 'female\n50', 'female\n60']

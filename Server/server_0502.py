@@ -191,7 +191,7 @@ class Window(QMainWindow, ):
             index = 0
             if row[0] == 'female':
                 index += 6
-            index += (int(row[1])/10)-1
+            index += (int(row[1])//10)-1
         label = ['male\n10', 'male\n20', 'male\n30', 'male\n40',
                  'male\n50', 'male\n60', 'female\n10', 'female\n20',
                  'female\n30', 'female\n40', 'female\n50', 'female\n60']

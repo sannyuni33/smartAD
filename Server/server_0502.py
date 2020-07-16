@@ -91,7 +91,7 @@ def faceAnalyse(FILE_NAME):
 
         result = """%s, %s, %s""" % (gender, str(age), str(confi))
         if gender:
-            DB.insertRecogResult(gender, final_age, time)
+            DB.insertRecogResult(gender, int(final_age//10), datetime.datetime.today().hour)
         print(result)
         # putText 할 때 이미지? 얼굴? 크기에 따라 폰트 크기를 다르게 한다면 좋을 것 같다!
         cv2.putText(img, result, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.40, (255, 255, 255), 1, cv2.LINE_AA)
@@ -99,9 +99,8 @@ def faceAnalyse(FILE_NAME):
         recog_index = 0
         if gender == 'female':
             recog_index += 6
-        recog_index += int((final_age//10)) + 1
+        recog_index += int((final_age//10)) - 1
         recog_result[recog_index] += 1
-
 
     cv2.imwrite(FILE_NAME, img)
     window.qPixmapFileVar.load(FILE_NAME)
@@ -656,7 +655,7 @@ class ServerThread(Thread):
             global disConn
             conn, (ip, port) = tcpServer.accept()
 
-            if ip == '192.168.142.29':
+            if ip == '192.168.142.15':
                 camConn = conn
                 camthread = CameraThread(ip, port, window)
                 camthread.start()

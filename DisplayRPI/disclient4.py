@@ -81,20 +81,20 @@ class Window(QMainWindow):
 
     def vr(self):
         print("VR clicked, ID: " + self.ID)
-        options = Options()
-        options.add_argument('--kiosk')  # chrome에서 F11을 눌러 전체화면으로 넓히는 옵션
-        chrome_driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', chrome_options=options)
-        # chrome_driver = webdriver.Chrome(chrome_options=options)
+        if  os.path.isfile('/home/pi/proto/Twin/vr/' + self.ID + '.txt'):
+            f = open('/home/pi/proto/Twin/vr/' + self.ID + '.txt', 'r')
+            self.vrLink = f.readline()
+            f.close()
+            options = Options()
+            options.add_argument('--kiosk')  # chrome에서 F11을 눌러 전체화면으로 넓히는 옵션
         # 이부분만 수정해주면 됨
-        if self.ID == 'm50':  # 골프장 vr
-            # chrome_driver = webdriver.Chrome(chrome_options=options)
-            chrome_driver.get("https://viewer.youvr.io/post/view/OpDnGyKzp9RMKVg9")
+            chrome_driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', chrome_options=options)
+            chrome_driver.get(self.vrLink)
+            time.sleep(30)  # 터치가 끝날 때 까지로 바꿀 수는 없을까? (마지막 터치 인식 후 5초 뒤 종료라던지..)
+            chrome_driver.quit()
+        else :
+            print("VR을 제공하지 않는 광고입니다.")
 
-        elif self.ID == 'f20':
-            # chrome_driver = webdriver.Chrome(chrome_options=options)
-            chrome_driver.get("https://viewer.youvr.io/post/view/1nmeOk1YJ2kZWgBG")
-        time.sleep(30)  # 터치가 끝날 때 까지로 바꿀 수는 없을까? (마지막 터치 인식 후 5초 뒤 종료라던지..)
-        chrome_driver.quit()
 
     def threeD(self):
         print("3D clicked, ID: " + self.ID)

@@ -90,6 +90,8 @@ def faceAnalyse(FILE_NAME):
         final_age = (int(age1) + int(age2)) / 2
 
         result = """%s, %s, %s""" % (gender, str(age), str(confi))
+        if gender:
+            DB.insertRecogResult(gender, final_age, time)
         print(result)
         # putText 할 때 이미지? 얼굴? 크기에 따라 폰트 크기를 다르게 한다면 좋을 것 같다!
         cv2.putText(img, result, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.40, (255, 255, 255), 1, cv2.LINE_AA)
@@ -99,6 +101,7 @@ def faceAnalyse(FILE_NAME):
             recog_index += 6
         recog_index += int((final_age//10)) + 1
         recog_result[recog_index] += 1
+
 
     cv2.imwrite(FILE_NAME, img)
     window.qPixmapFileVar.load(FILE_NAME)
@@ -111,7 +114,6 @@ def faceAnalyse(FILE_NAME):
         index_list = [i for i, j in enumerate(recog_result) if j == max(recog_result)]
 
     result_list = []
-
     for i in index_list:
         if i < 6:
             temp_gender = 'male'
@@ -314,7 +316,6 @@ class showAd_Dialog(QDialog):
             self.tableWidget.setItem(idx, 4, QTableWidgetItem(str(ayou)))
 
     def changeOk(self):
-
         self.close()
 
 
@@ -682,8 +683,7 @@ class CameraThread(Thread):
         count = 0
         while True:
             global camConn
-            img_path = '../imgFile/'
-            FILE_NAME = (img_path + str(count) + '.jpg')
+            FILE_NAME = ('../imgFile/' + str(count) + '.jpg')
 
             self.recvImage(FILE_NAME)
             print(FILE_NAME + " 이미지 수신 완료")
@@ -702,8 +702,6 @@ class CameraThread(Thread):
                 majority = DB.findMajority(today.hour)
                 ADtarget = DB.decideID(majority[0], majority[1])
             else:
-                guimsg = "성별, 연령대: " + str(genderAge[0][0]) + str(genderAge[0][1])
-                print(guimsg)
                 if len(genderAge) == 1:
                     ADtarget = DB.decideID(genderAge[0][0], genderAge[0][1])
                 else:
@@ -713,7 +711,6 @@ class CameraThread(Thread):
                     print("countList: ", countList)
                     maxIndex = countList.index(max(countList))
                     ADtarget = DB.decideID(genderAge[maxIndex][0], genderAge[maxIndex][1])
-                self.insert_result(genderAge, str(today.hour))
 
             print("광고가 멀로 정해졌냐면:", ADtarget)
             print("광고 ID: " + ADtarget)
@@ -746,9 +743,6 @@ class CameraThread(Thread):
                 break
 
         f.close()
-
-    def insert_result(self, genderAge, time):
-        DB.insertRecogResult(genderAge[0][0], genderAge[0][1], time)
 
 
 class DisplayThread(Thread):

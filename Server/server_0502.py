@@ -27,6 +27,12 @@ camConn = None
 disConn = None
 BUFF_SIZE = 1024
 
+# 메인쓰레드와 워커쓰레드 모두 접근 가능한 전역변수. (얼굴 분석 결과)
+genderAge = None
+ADtarget = None
+histoFlag = False
+
+
 # 얼굴분석 워커 쓰레드가 리턴하는 값을 메인 쓰레드가 받아보기 위해 큐 사용
 que = queue.Queue()
 
@@ -36,8 +42,6 @@ showAdUI = '../UI/showAdUI.ui'
 addUI = '../UI/addUI.ui'
 deleteUI = '../UI/deleteUI.ui'
 changeTwinUI = '../UI/changeTwinUI.ui'
-
-# 광고변경 ui 파일
 changeUI = '../UI/chAD.ui'
 
 # NAVER API 연결
@@ -50,22 +54,13 @@ headers = {'X-Naver-Client-Id': client_id, 'X-Naver-Client-Secret': client_secre
 font_name = font_manager.FontProperties(fname="C:/Windows/Fonts/08seoulnamsanl.ttf").get_name()
 rc('font', family=font_name)
 
-genderAge = None
-ADtarget = None
 
-# 히스토그램 온오프 상태변수
-histoFlag = False
-
-
+# 카메라 클라이언트가 전송한 이미지에 대해 얼굴분석 수행
 def faceAnalyse(FILE_NAME):
-    # 카메라 클라이언트가 전송한 이미지에 대해 얼굴분석 수행
     recog_result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
     global histoFlag
     # 히스토그램 평활화
-    if not histoFlag:
-        pass
-    else:
+    if histoFlag:
         src = cv2.imread(FILE_NAME)
         hsv = cv2.cvtColor(src, cv2.COLOR_BGR2HSV)
         h, s, v = cv2.split(hsv)
@@ -79,9 +74,7 @@ def faceAnalyse(FILE_NAME):
     response = requests.post(url, files=files, headers=headers)
     rescode = response.status_code
 
-    if rescode == 200:
-        pass
-    else:
+    if rescode != 200:
         print("Error Code:" + rescode)
 
     json_data = json.loads(response.text)
@@ -104,7 +97,7 @@ def faceAnalyse(FILE_NAME):
         recog_index = 0
         if gender == 'female':
             recog_index += 6
-        recog_index += (final_age/10) + 1
+        recog_index += int((final_age//10)) + 1
         recog_result[recog_index] += 1
 
     cv2.imwrite(FILE_NAME, img)

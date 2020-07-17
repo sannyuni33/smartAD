@@ -338,10 +338,10 @@ class add_Dialog(QDialog):
 
         self.show()
 
-    def ComboBoxEvent(self):  # 성별
+    def ComboBoxEvent(self):
         self.gender = self.comboBox.currentText()
 
-    def ComboBoxEvent2(self):  # 연령대
+    def ComboBoxEvent2(self):
         self.age = self.comboBox_2.currentText()
 
     def addImage(self):
@@ -711,7 +711,6 @@ class CameraThread(Thread):
                     maxIndex = countList.index(max(countList))
                     ADtarget = DB.decideID(genderAge[maxIndex][0], genderAge[maxIndex][1])
 
-            print("광고가 멀로 정해졌냐면:", ADtarget)
             print("광고 ID: " + ADtarget)
             window.qPixmapFileVar.load(('../imgFile/' + ADtarget + '.jpg'))
             window.qPixmapFileVar = window.qPixmapFileVar.scaled(650, 720)
@@ -719,7 +718,6 @@ class CameraThread(Thread):
             global disConn
             disConn.send(ADtarget.encode('utf-8'))
             print(ADtarget+"전송완료")
-
             count += 1
 
     def recvImage(self, FILE_NAME):
@@ -731,16 +729,12 @@ class CameraThread(Thread):
         f = open(FILE_NAME, 'wb')
         while True:
             client_file = camConn.recv(BUFF_SIZE)
-
             if not client_file:
                 break
-
             f.write(client_file)
             FILE_LEN += len(client_file)
-
             if FILE_LEN == int(FILE_SIZE):
                 break
-
         f.close()
 
 

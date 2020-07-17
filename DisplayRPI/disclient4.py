@@ -24,6 +24,7 @@ prevAD = None
 tcpClientA = None
 BUFF_SIZE = 1024
 
+
 def recvFile(FILE_NAME):
     global tcpClientA
     FILE_LEN = 0
@@ -81,20 +82,19 @@ class Window(QMainWindow):
 
     def vr(self):
         print("VR clicked, ID: " + self.ID)
-        if  os.path.isfile('/home/pi/proto/Twin/vr/' + self.ID + '.txt'):
+        if os.path.isfile('/home/pi/proto/Twin/vr/' + self.ID + '.txt'):
             f = open('/home/pi/proto/Twin/vr/' + self.ID + '.txt', 'r')
             self.vrLink = f.readline()
             f.close()
             options = Options()
             options.add_argument('--kiosk')  # chrome에서 F11을 눌러 전체화면으로 넓히는 옵션
-        # 이부분만 수정해주면 됨
+            # 이부분만 수정해주면 됨
             chrome_driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', chrome_options=options)
             chrome_driver.get(self.vrLink)
             time.sleep(30)  # 터치가 끝날 때 까지로 바꿀 수는 없을까? (마지막 터치 인식 후 5초 뒤 종료라던지..)
             chrome_driver.quit()
-        else :
+        else:
             print("VR을 제공하지 않는 광고입니다.")
-
 
     def threeD(self):
         print("3D clicked, ID: " + self.ID)
@@ -143,6 +143,7 @@ class ClientThread(Thread):
                 recvFile('/home/pi/proto/Twin/vid/' + f + '.mp4')
             elif msg[:2] == 'vr':
                 f = msg[2:]
+                recvFile('/home/pi/proto/Twin/vr/' + f + '.txt')
             elif msg[:2] == '3d':
                 f = msg[2:]
                 recvFile('/home/pi/proto/Twin/3D/' + f + '.mp4')
@@ -152,6 +153,8 @@ class ClientThread(Thread):
                     os.remove('/home/pi/proto/Twin/Image/' + f + '.jpg')
                 if os.path.isfile('/home/pi/proto/Twin/vid/' + f + '.mp4'):
                     os.remove('/home/pi/proto/Twin/vid/' + f + '.mp4')
+                if os.path.isfile('/home/pi/proto/Twin/vr/' + f + '.txt'):
+                    os.remove('/home/pi/proto/Twin/vr/' + f + '.txt')
                 if os.path.isfile('/home/pi/proto/Twin/3D/' + f + '.mp4'):
                     os.remove('/home/pi/proto/Twin/3D/' + f + '.mp4')
             else:

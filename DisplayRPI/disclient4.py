@@ -139,12 +139,15 @@ class ClientThread(Thread):
                 f = msg[3:]
                 recvFile('/home/pi/proto/Twin/Image/' + f + '.jpg')
             elif msg[:3] == 'vid':
+                print("vid 추가 메시지 받음요")
                 f = msg[3:]
                 recvFile('/home/pi/proto/Twin/vid/' + f + '.mp4')
             elif msg[:2] == 'vr':
+                print("vr 추가 메시지 받음요")
                 f = msg[2:]
                 recvFile('/home/pi/proto/Twin/vr/' + f + '.txt')
             elif msg[:2] == '3d':
+                print("3d 추가 메시지 받음요")
                 f = msg[2:]
                 recvFile('/home/pi/proto/Twin/3D/' + f + '.mp4')
             elif msg[:3] == 'del':

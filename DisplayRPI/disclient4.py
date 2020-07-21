@@ -3,11 +3,11 @@ import os
 import struct
 
 from PyQt5.QtWidgets import *
-from PyQt5 import QtCore, uic
+from PyQt5 import uic
 from PyQt5.QtGui import *
-import sys, time
+import sys
 from socket import *
-from threading import Thread, Timer
+from threading import Thread
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options  # 전체화면 사용을 위해 Options 모듈 추가
 import time
@@ -135,19 +135,15 @@ class ClientThread(Thread):
                 print("빠이욤")
                 break
             elif msg[:3] == 'img':
-                print("img 추가 메시지 받음요")
                 f = msg[3:]
                 recvFile('/home/pi/proto/Twin/Image/' + f + '.jpg')
             elif msg[:3] == 'vid':
-                print("vid 추가 메시지 받음요")
                 f = msg[3:]
                 recvFile('/home/pi/proto/Twin/vid/' + f + '.mp4')
             elif msg[:2] == 'vr':
-                print("vr 추가 메시지 받음요")
                 f = msg[2:]
                 recvFile('/home/pi/proto/Twin/vr/' + f + '.txt')
             elif msg[:2] == '3d':
-                print("3d 추가 메시지 받음요")
                 f = msg[2:]
                 recvFile('/home/pi/proto/Twin/3D/' + f + '.mp4')
             elif msg[:3] == 'del':

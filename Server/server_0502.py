@@ -381,13 +381,11 @@ class change_Dialog(QDialog):
     def __init__(self, parent):
         super(change_Dialog, self).__init__(parent)
         uic.loadUi(changeTwinUI, self)
-
         self.comboBox.activated[str].connect(self.ComboBoxEvent)
         self.pushButton.clicked.connect(self.changeTwin)
         self.pushButton_2.clicked.connect(self.changeOk)
         self.pushButton_3.clicked.connect(self.changeClose)
         self.show()
-
         self.twin = "vid"
 
     def ComboBoxEvent(self):
@@ -398,7 +396,7 @@ class change_Dialog(QDialog):
 
     def changeOk(self):
         global disConn
-        sendDis(self.twin+self.self.lineEdit.text())
+        sendDis(self.twin+self.lineEdit.text())
         sendFile(self.twinName[0])
         self.close()
 
@@ -655,7 +653,7 @@ class ServerThread(Thread):
             global disConn
             conn, (ip, port) = tcpServer.accept()
 
-            if ip == '192.168.142.15':
+            if ip == '192.168.142.189':
                 camConn = conn
                 camthread = CameraThread(ip, port, window)
                 camthread.start()

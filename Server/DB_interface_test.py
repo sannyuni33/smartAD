@@ -1,10 +1,10 @@
 import pymysql
 
 conn_info = {
-    'host': 'localhost',
-    'user': 'jspbook',
-    'password': 'passwd',
-    'db': 'jspdb',
+    'host': '*********',
+    'user': '*******',
+    'password': '******',
+    'db': '*****',
     'charset': 'utf8'
 }
 

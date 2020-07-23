@@ -49,7 +49,10 @@ def recvFile(FILE_NAME):
 class Window(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.chAD, self.prevAD, self.currAD, self.nextAD = None
+        self.chAD = None
+        self.prevAD = None
+        self.currAD = None
+        self.nextAD = None
         self.usingDT = False
         uic.loadUi(MainUI, self)
         self.showFullScreen()
@@ -175,10 +178,9 @@ class ClientThread(Thread):
                 if os.path.isfile('/home/pi/proto/Twin/3D/' + f + '.mp4'):
                     os.remove('/home/pi/proto/Twin/3D/' + f + '.mp4')
             elif msg[:2] == 'ch':
-                # 일단은 얼굴분석해서 정해진 광고랑 구분을 해보았음.
-                # 서버에서도 chm21, chf42 이런식으로 보내줘야함.
                 f = msg[2:]
                 window.setChAD(f)
+                window.postAD()
             else:
                 print(msg)
                 window.setAD(msg)

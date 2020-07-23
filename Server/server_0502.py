@@ -412,33 +412,34 @@ class ch_Dialog(QDialog):
         uic.loadUi(changeUI, self)
         self.retranslateUi()
         self.show()
-        self.pushButton.clicked.connect(self.f12)
-        self.pushButton_2.clicked.connect(self.f11)
-        self.pushButton_3.clicked.connect(self.f22)
-        self.pushButton_4.clicked.connect(self.f21)
-        self.pushButton_5.clicked.connect(self.f32)
-        self.pushButton_6.clicked.connect(self.f31)
+        print("여기까진 에러 아님요 1")
+        self.pushButton.clicked.connect(lambda: self.sendChAD('f12'))
+        self.pushButton_2.clicked.connect(lambda: self.sendChAD('f11'))
+        self.pushButton_3.clicked.connect(lambda: self.sendChAD('f22'))
+        self.pushButton_4.clicked.connect(lambda: self.sendChAD('f21'))
+        self.pushButton_5.clicked.connect(lambda: self.sendChAD('f32'))
+        self.pushButton_6.clicked.connect(lambda: self.sendChAD('f31'))
 
-        self.pushButton_7.clicked.connect(self.f42)
-        self.pushButton_8.clicked.connect(self.f41)
-        self.pushButton_9.clicked.connect(self.f52)
-        self.pushButton_10.clicked.connect(self.f51)
-        self.pushButton_11.clicked.connect(self.f62)
-        self.pushButton_12.clicked.connect(self.f61)
+        self.pushButton_7.clicked.connect(lambda: self.sendChAD('f42'))
+        self.pushButton_8.clicked.connect(lambda: self.sendChAD('f41'))
+        self.pushButton_9.clicked.connect(lambda: self.sendChAD('f52'))
+        self.pushButton_10.clicked.connect(lambda: self.sendChAD('f51'))
+        self.pushButton_11.clicked.connect(lambda: self.sendChAD('f62'))
+        self.pushButton_12.clicked.connect(lambda: self.sendChAD('f61'))
 
-        self.pushButton_13.clicked.connect(self.m12)
-        self.pushButton_14.clicked.connect(self.m11)
-        self.pushButton_15.clicked.connect(self.m22)
-        self.pushButton_16.clicked.connect(self.m21)
-        self.pushButton_17.clicked.connect(self.m32)
-        self.pushButton_18.clicked.connect(self.m31)
+        self.pushButton_13.clicked.connect(lambda: self.sendChAD('m12'))
+        self.pushButton_14.clicked.connect(lambda: self.sendChAD('m11'))
+        self.pushButton_15.clicked.connect(lambda: self.sendChAD('m22'))
+        self.pushButton_16.clicked.connect(lambda: self.sendChAD('m21'))
+        self.pushButton_17.clicked.connect(lambda: self.sendChAD('m32'))
+        self.pushButton_18.clicked.connect(lambda: self.sendChAD('m31'))
 
-        self.pushButton_19.clicked.connect(self.m42)
-        self.pushButton_20.clicked.connect(self.m41)
-        self.pushButton_21.clicked.connect(self.m52)
-        self.pushButton_22.clicked.connect(self.m51)
-        self.pushButton_23.clicked.connect(self.m62)
-        self.pushButton_24.clicked.connect(self.m61)
+        self.pushButton_19.clicked.connect(lambda: self.sendChAD('m42'))
+        self.pushButton_20.clicked.connect(lambda: self.sendChAD('m41'))
+        self.pushButton_21.clicked.connect(lambda: self.sendChAD('m52'))
+        self.pushButton_22.clicked.connect(lambda: self.sendChAD('m51'))
+        self.pushButton_23.clicked.connect(lambda: self.sendChAD('m62'))
+        self.pushButton_24.clicked.connect(lambda: self.sendChAD('m61'))
 
     def retranslateUi(self):
         # 이 함수는 탭마다 광고 이미지 넣어주는 함수
@@ -484,150 +485,11 @@ class ch_Dialog(QDialog):
         self.pushButton_23.setStyleSheet('image:url(../imgFile/m62.jpg.);border:0px;')
         self.pushButton_24.setStyleSheet('image:url(../imgFile/m61.jpg.);border:0px;')
 
-    # 여자
-    def f12(self):
-        self.ad_ID = 'chf12'
+    def sendChAD(self, ID):
+        self.ad_ID = ID
         global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def f11(self):
-        self.ad_ID = 'chf11'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def f22(self):
-        self.ad_ID = 'chf22'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def f21(self):
-        self.ad_ID = 'chf21'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def f32(self):
-        self.ad_ID = 'chf32'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def f31(self):
-        self.ad_ID = 'chf31'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def f42(self):
-        self.ad_ID = 'chf42'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def f41(self):
-        self.ad_ID = 'chf41'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def f52(self):
-        self.ad_ID = 'chf52'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def f51(self):
-        self.ad_ID = 'chf51'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def f62(self):
-        self.ad_ID = 'chf62'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def f61(self):
-        self.ad_ID = 'chf61'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    # 남자
-    def m12(self):
-        self.ad_ID = 'chm12'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def m11(self):
-        self.ad_ID = 'chm11'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def m22(self):
-        self.ad_ID = 'chm22'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def m21(self):
-        self.ad_ID = 'chm21'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def m32(self):
-        self.ad_ID = 'chm32'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def m31(self):
-        self.ad_ID = 'chm31'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def m42(self):
-        self.ad_ID = 'chm42'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def m41(self):
-        self.ad_ID = 'chm41'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def m52(self):
-        self.ad_ID = 'chm52'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def m51(self):
-        self.ad_ID = 'chm51'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def m62(self):
-        self.ad_ID = 'chm62'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
-        self.close()
-
-    def m61(self):
-        self.ad_ID = 'chm61'
-        global disConn
-        disConn.send(self.ad_ID.encode('utf-8'))
+        msg = 'ch'+self.ad_ID
+        disConn.send(msg.encode('utf-8'))
         self.close()
 
 

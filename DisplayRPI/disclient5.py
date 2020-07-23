@@ -9,17 +9,13 @@ import sys
 from socket import *
 from threading import Thread
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options  # 전체화면 사용을 위해 Options 모듈 추가
+from selenium.webdriver.chrome.options import Options
 import time
 from time import sleep
 from omxplayer.player import OMXPlayer
 
 MainUI = '/home/pi/displayUI2.ui'
 
-# prevAD = None
-# currAD = None
-# nextAD = None
-# usingDT = False
 tcpClientA = None
 BUFF_SIZE = 1024
 
@@ -35,13 +31,10 @@ def recvFile(FILE_NAME):
         client_file = tcpClientA.recv(BUFF_SIZE)
         if not client_file:
             break
-
         f.write(client_file)
         FILE_LEN += len(client_file)
-
         if FILE_LEN == int(FILE_SIZE):
             break
-
     f.close()
     print('client : ' + FILE_NAME + ' file transfer')
 
@@ -112,8 +105,7 @@ class Window(QMainWindow):
             self.vrLink = f.readline()
             f.close()
             options = Options()
-            options.add_argument('--kiosk')  # chrome에서 F11을 눌러 전체화면으로 넓히는 옵션
-            # 이부분만 수정해주면 됨
+            options.add_argument('--kiosk')
             chrome_driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', chrome_options=options)
             chrome_driver.get(self.vrLink)
             time.sleep(30)  # 터치가 끝날 때 까지로 바꿀 수는 없을까? (마지막 터치 인식 후 5초 뒤 종료라던지..)
@@ -191,6 +183,6 @@ class ClientThread(Thread):
 if __name__ == '__main__':
     App = QApplication(sys.argv)
     window = Window()
-    clientThread = ClientThread(window)  # 쓰레드 객체 생성
-    clientThread.start()  # 쓰레드 시작
+    clientThread = ClientThread(window)
+    clientThread.start()
     sys.exit(App.exec())

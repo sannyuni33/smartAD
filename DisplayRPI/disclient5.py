@@ -19,7 +19,6 @@ MainUI = '/home/pi/displayUI2.ui'
 # prevAD = None
 # currAD = None
 # nextAD = None
-chAD = None
 # usingDT = False
 tcpClientA = None
 BUFF_SIZE = 1024
@@ -50,10 +49,8 @@ def recvFile(FILE_NAME):
 class Window(QMainWindow):
     def __init__(self):
         super().__init__()
-        # global prevAD, currAD, nextAD, usingDT
-        global chAD
+        self.chAD, self.prevAD, self.currAD, self.nextAD = None
         self.usingDT = False
-
         uic.loadUi(MainUI, self)
         self.showFullScreen()
         self.setWindowTitle("Display")
@@ -70,19 +67,31 @@ class Window(QMainWindow):
         if not self.usingDT:
             self.prevAD = self.currAD
             self.currAD = ID
-            if chAD:
+            if self.chAD:
                 self.currAD = chAD
-
-                # 전역변수 chAD(변경된 광고)를 비워주고 싶은데 그걸 하면 오류생김.
+                self.chAD = None
         else:
             self.nextAD = ID
             if chAD:
                 self.nextAD = chAD
+                self.chAD = None
 
+    def postAD(self):
         self.qPixmapFileVar2 = QPixmap()
-        self.qPixmapFileVar2.load("/home/pi/proto/Twin/Image/"+ID+".jpg")
+        self.qPixmapFileVar2.load("/home/pi/proto/Twin/Image/" + self.currAD + ".jpg")
         self.qPixmapFileVar2 = self.qPixmapFileVar2.scaled(780, 370)
         self.label_2.setPixmap(self.qPixmapFileVar2)
+        self.prevAD, self.currAD = self.currAD, self.prevAD
+        if self.nextAD:
+            self.currAD = self.nextAD
+            self.nextAD = None
+
+    def postPrevAD(self):
+        self.prevAD, self.currAD = self.currAD, self.prevAD
+        self.postAD()
+
+    def setChAD(self, chAD):
+        self.chAD = chAD
 
     def vid(self):
         print("video clicked, ID: " + self.ID)
@@ -169,12 +178,11 @@ class ClientThread(Thread):
                 # 일단은 얼굴분석해서 정해진 광고랑 구분을 해보았음.
                 # 서버에서도 chm21, chf42 이런식으로 보내줘야함.
                 f = msg[2:]
-                chAD = f
+                window.setChAD(f)
             else:
                 print(msg)
-                # currAD = ID
                 window.setAD(msg)
-                # IDflag= True
+                window.postAD()
         tcpClientA.close()
 
 

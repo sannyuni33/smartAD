@@ -486,146 +486,146 @@ class ch_Dialog(QDialog):
 
     # 여자
     def f12(self):
-        self.ad_ID = 'f12'
+        self.ad_ID = 'chf12'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f11(self):
-        self.ad_ID = 'f11'
+        self.ad_ID = 'chf11'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f22(self):
-        self.ad_ID = 'f22'
+        self.ad_ID = 'chf22'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f21(self):
-        self.ad_ID = 'f21'
+        self.ad_ID = 'chf21'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f32(self):
-        self.ad_ID = 'f32'
+        self.ad_ID = 'chf32'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f31(self):
-        self.ad_ID = 'f31'
+        self.ad_ID = 'chf31'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f42(self):
-        self.ad_ID = 'f42'
+        self.ad_ID = 'chf42'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f41(self):
-        self.ad_ID = 'f41'
+        self.ad_ID = 'chf41'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f52(self):
-        self.ad_ID = 'f52'
+        self.ad_ID = 'chf52'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f51(self):
-        self.ad_ID = 'f51'
+        self.ad_ID = 'chf51'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f62(self):
-        self.ad_ID = 'f62'
+        self.ad_ID = 'chf62'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def f61(self):
-        self.ad_ID = 'f61'
+        self.ad_ID = 'chf61'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     # 남자
     def m12(self):
-        self.ad_ID = 'm12'
+        self.ad_ID = 'chm12'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m11(self):
-        self.ad_ID = 'm11'
+        self.ad_ID = 'chm11'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m22(self):
-        self.ad_ID = 'm22'
+        self.ad_ID = 'chm22'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m21(self):
-        self.ad_ID = 'm21'
+        self.ad_ID = 'chm21'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m32(self):
-        self.ad_ID = 'm32'
+        self.ad_ID = 'chm32'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m31(self):
-        self.ad_ID = 'm31'
+        self.ad_ID = 'chm31'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m42(self):
-        self.ad_ID = 'm42'
+        self.ad_ID = 'chm42'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m41(self):
-        self.ad_ID = 'm41'
+        self.ad_ID = 'chm41'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m52(self):
-        self.ad_ID = 'm52'
+        self.ad_ID = 'chm52'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m51(self):
-        self.ad_ID = 'm51'
+        self.ad_ID = 'chm51'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m62(self):
-        self.ad_ID = 'm62'
+        self.ad_ID = 'chm62'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()
 
     def m61(self):
-        self.ad_ID = 'm61'
+        self.ad_ID = 'chm61'
         global disConn
         disConn.send(self.ad_ID.encode('utf-8'))
         self.close()

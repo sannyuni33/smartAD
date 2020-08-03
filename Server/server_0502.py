@@ -99,7 +99,7 @@ def faceAnalyse(FILE_NAME):
         recog_index = 0
         if gender == 'female':
             recog_index += 6
-        recog_index += int((final_age//10)) - 1 if int((final_age//10)) <= 6 else 6
+        recog_index += int((final_age//10)) - 1 if int((final_age//10)) <= 6 else 5
         recog_result[recog_index] += 1
 
     cv2.imwrite(FILE_NAME, img)
@@ -515,12 +515,12 @@ class ServerThread(Thread):
             global disConn
             conn, (ip, port) = tcpServer.accept()
 
-            if ip == '192.168.140.255':
+            if ip == '192.168.141.159':
                 camConn = conn
                 camthread = CameraThread(ip, port, window)
                 camthread.start()
                 threads.append(camthread)
-            if ip == '192.168.103.72':
+            if ip == '192.168.101.23':
                 disConn = conn
                 disthread = DisplayThread(ip, port, window)
                 disthread.start()

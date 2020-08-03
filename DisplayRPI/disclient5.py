@@ -63,14 +63,15 @@ class Window(QMainWindow):
         if not self.usingDT:
             self.prevAD = self.currAD
             self.currAD = ID
-            if self.chAD:
-                self.currAD = chAD
-                self.chAD = None
+            # if self.chAD:
+            #     self.currAD = chAD
+            #     self.chAD = None
+            #     return
         else:
             self.nextAD = ID
-            if chAD:
-                self.nextAD = chAD
-                self.chAD = None
+            # if chAD:
+            #     self.nextAD = chAD
+            #     self.chAD = None
 
     def postAD(self):
         self.qPixmapFileVar2 = QPixmap()
@@ -88,6 +89,8 @@ class Window(QMainWindow):
 
     def setChAD(self, chAD):
         self.chAD = chAD
+        print("chAD 바꿔줌요 self.chAD = ", self.chAD)
+        self.setAD(self.chAD)
 
     def vid(self):
         print("video clicked, ID: " + self.ID)
@@ -129,7 +132,7 @@ class ClientThread(Thread):
         self.window = window
 
     def run(self):
-        host = '192.168.103.67'
+        host = '192.168.101.23'
         port = 9899
         BUFFER_SIZE = 1024
         global tcpClientA, chAD
@@ -170,7 +173,9 @@ class ClientThread(Thread):
                 if os.path.isfile('/home/pi/proto/Twin/3D/' + f + '.mp4'):
                     os.remove('/home/pi/proto/Twin/3D/' + f + '.mp4')
             elif msg[:2] == 'ch':
+                print("광고변경 메시지요")
                 f = msg[2:]
+                print("변경할려는 광고는: ", f)
                 window.setChAD(f)
                 window.postAD()
             else:

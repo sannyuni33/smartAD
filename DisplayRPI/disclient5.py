@@ -63,34 +63,27 @@ class Window(QMainWindow):
         if not self.usingDT:
             self.prevAD = self.currAD
             self.currAD = ID
-            # if self.chAD:
-            #     self.currAD = chAD
-            #     self.chAD = None
-            #     return
         else:
             self.nextAD = ID
-            # if chAD:
-            #     self.nextAD = chAD
-            #     self.chAD = None
 
     def postAD(self):
         self.qPixmapFileVar2 = QPixmap()
         self.qPixmapFileVar2.load("/home/pi/proto/Twin/Image/" + self.currAD + ".jpg")
         self.qPixmapFileVar2 = self.qPixmapFileVar2.scaled(780, 370)
         self.label_2.setPixmap(self.qPixmapFileVar2)
-        self.prevAD, self.currAD = self.currAD, self.prevAD
         if self.nextAD:
             self.currAD = self.nextAD
             self.nextAD = None
+            # 여기에 postAD()를 해주면 트윈 광고가 끝나자마자 다음 광고 이미지로 바뀌어있음.
+            # 근데 post를 안해주면 nextAD 에 넣어주는 의미가 없음.
+            # 그럼 vid, vr, threeD 메소드의 끝부분에 sleep 몇 초 걸고 post 하면?
+            # 그러면 하나의 트윈광고만 볼 수 있고 다음으로 넘어가야 하는거임.
+            # 하나의 광고에 대해서 동영상도 보고싶고 VR도 보고 싶으면 어떡하지?
+            #
 
     def postPrevAD(self):
         self.prevAD, self.currAD = self.currAD, self.prevAD
         self.postAD()
-
-    def setChAD(self, chAD):
-        self.chAD = chAD
-        print("chAD 바꿔줌요 self.chAD = ", self.chAD)
-        self.setAD(self.chAD)
 
     def vid(self):
         print("video clicked, ID: " + self.ID)
@@ -172,12 +165,6 @@ class ClientThread(Thread):
                     os.remove('/home/pi/proto/Twin/vr/' + f + '.txt')
                 if os.path.isfile('/home/pi/proto/Twin/3D/' + f + '.mp4'):
                     os.remove('/home/pi/proto/Twin/3D/' + f + '.mp4')
-            elif msg[:2] == 'ch':
-                print("광고변경 메시지요")
-                f = msg[2:]
-                print("변경할려는 광고는: ", f)
-                window.setChAD(f)
-                window.postAD()
             else:
                 print(msg)
                 window.setAD(msg)

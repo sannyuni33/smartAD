@@ -488,7 +488,7 @@ class ch_Dialog(QDialog):
     def sendChAD(self, ID):
         self.ad_ID = ID
         global disConn
-        msg = 'ch'+self.ad_ID
+        msg = self.ad_ID
         disConn.send(msg.encode('utf-8'))
         self.close()
 

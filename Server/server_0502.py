@@ -307,7 +307,6 @@ class showAd_Dialog(QDialog):
 
     def showAdInfo2(self, dbInfo):  # ui컬럼에 db정보 추가 함수
         for idx, (hname, price_str, price, vol, ayou) in enumerate(dbInfo):
-            print(idx)
             self.tableWidget.setItem(idx, 0, QTableWidgetItem(hname))
             self.tableWidget.setItem(idx, 1, QTableWidgetItem(price_str))
             self.tableWidget.setItem(idx, 2, QTableWidgetItem(price))
@@ -412,7 +411,6 @@ class ch_Dialog(QDialog):
         uic.loadUi(changeUI, self)
         self.retranslateUi()
         self.show()
-        print("여기까진 에러 아님요 1")
         self.pushButton.clicked.connect(lambda: self.sendChAD('f12'))
         self.pushButton_2.clicked.connect(lambda: self.sendChAD('f11'))
         self.pushButton_3.clicked.connect(lambda: self.sendChAD('f22'))

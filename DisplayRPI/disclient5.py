@@ -5,16 +5,19 @@ import struct
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 import sys
 from socket import *
 from threading import Thread
+
+from PyQt5.uic.properties import QtWidgets
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import time
 from time import sleep
 from omxplayer.player import OMXPlayer
 
-MainUI = '/home/pi/displayUI2.ui'
+MainUI = '/home/pi/displayUIsang2.ui'
 
 tcpClientA = None
 BUFF_SIZE = 1024
@@ -57,7 +60,14 @@ class Window(QMainWindow):
         self.pushButton.clicked.connect(self.vid)
         self.pushButton_2.clicked.connect(self.vr)
         self.pushButton_3.clicked.connect(self.threeD)
+        self.pushButton_4.clicked.connetc(self.postPrevAD)
+        self.pushButton_4.setIcon(QIcon("/home/pi/sss.jpg"))
+        self.pushButton_4.setIconSize(QSize(70, 40))
         self.show()
+
+    def showMessageBox(self, dt):
+        msgbox = QtWidgets.QMessageBox(self)
+        msgbox.critical(self, 'MessageBox title', dt+'을 제공하지 않는 광고입니다.\n')
 
     def setAD(self, ID):
         if not self.usingDT:
@@ -92,7 +102,7 @@ class Window(QMainWindow):
             sleep(31)
             player.quit()
         else:
-            print("동영상을 제공하지 않는 광고입니다.")
+            self.showMessageBox('동영상')
 
     def vr(self):
         print("VR clicked, ID: " + self.ID)
@@ -107,7 +117,7 @@ class Window(QMainWindow):
             time.sleep(30)  # 터치가 끝날 때 까지로 바꿀 수는 없을까? (마지막 터치 인식 후 5초 뒤 종료라던지..)
             chrome_driver.quit()
         else:
-            print("VR을 제공하지 않는 광고입니다.")
+            self.showMessageBox('VR')
 
     def threeD(self):
         print("3D clicked, ID: " + self.ID)
@@ -116,7 +126,7 @@ class Window(QMainWindow):
             sleep(31)
             player.quit()
         else:
-            print("3D 모델을 제공하지 않는 광고입니다.")
+            self.showMessageBox('3D')
 
 
 class ClientThread(Thread):

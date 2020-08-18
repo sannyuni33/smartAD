@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 import os
 import struct
+import sys
 
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-import sys
+
 from socket import *
 from threading import Thread
-
-from PyQt5.uic.properties import QtWidgets
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import time
@@ -60,7 +60,7 @@ class Window(QMainWindow):
         self.pushButton.clicked.connect(self.vid)
         self.pushButton_2.clicked.connect(self.vr)
         self.pushButton_3.clicked.connect(self.threeD)
-        self.pushButton_4.clicked.connetc(self.postPrevAD)
+        self.pushButton_4.clicked.connect(self.postPrevAD)
         self.pushButton_4.setIcon(QIcon("/home/pi/sss.jpg"))
         self.pushButton_4.setIconSize(QSize(70, 40))
         self.show()
@@ -84,30 +84,25 @@ class Window(QMainWindow):
         if self.nextAD:
             self.currAD = self.nextAD
             self.nextAD = None
-            # 여기에 postAD()를 해주면 트윈 광고가 끝나자마자 다음 광고 이미지로 바뀌어있음.
-            # 근데 post를 안해주면 nextAD 에 넣어주는 의미가 없음.
-            # 그럼 vid, vr, threeD 메소드의 끝부분에 sleep 몇 초 걸고 post 하면?
-            # 그러면 하나의 트윈광고만 볼 수 있고 다음으로 넘어가야 하는거임.
-            # 하나의 광고에 대해서 동영상도 보고싶고 VR도 보고 싶으면 어떡하지?
-            #
+            self.postAD()
 
     def postPrevAD(self):
         self.prevAD, self.currAD = self.currAD, self.prevAD
         self.postAD()
 
     def vid(self):
-        print("video clicked, ID: " + self.ID)
-        if os.path.isfile('/home/pi/proto/Twin/vid/' + self.ID + '.mp4'):
-            player = OMXPlayer('/home/pi/proto/Twin/vid/' + self.ID + '.mp4')
+        print("video clicked, ID: " + self.currAD)
+        if os.path.isfile('/home/pi/proto/Twin/vid/' + self.currAD + '.mp4'):
+            player = OMXPlayer('/home/pi/proto/Twin/vid/' + self.currAD + '.mp4')
             sleep(31)
             player.quit()
         else:
             self.showMessageBox('동영상')
 
     def vr(self):
-        print("VR clicked, ID: " + self.ID)
-        if os.path.isfile('/home/pi/proto/Twin/vr/' + self.ID + '.txt'):
-            f = open('/home/pi/proto/Twin/vr/' + self.ID + '.txt', 'r')
+        print("VR clicked, ID: " + self.currAD)
+        if os.path.isfile('/home/pi/proto/Twin/vr/' + self.currAD + '.txt'):
+            f = open('/home/pi/proto/Twin/vr/' + self.currAD + '.txt', 'r')
             self.vrLink = f.readline()
             f.close()
             options = Options()
@@ -120,13 +115,13 @@ class Window(QMainWindow):
             self.showMessageBox('VR')
 
     def threeD(self):
-        print("3D clicked, ID: " + self.ID)
-        if os.path.isfile('/home/pi/proto/Twin/3D/' + self.ID + '.mp4'):
-            player = OMXPlayer('/home/pi/proto/Twin/3D/' + self.ID + '.mp4')
+        print("3D clicked, ID: " + self.currAD)
+        if os.path.isfile('/home/pi/proto/Twin/3D/' + self.currAD + '.mp4'):
+            player = OMXPlayer('/home/pi/proto/Twin/3D/' + self.currAD + '.mp4')
             sleep(31)
             player.quit()
         else:
-            self.showMessageBox('3D')
+            self.showMessageBox('3D모델')
 
 
 class ClientThread(Thread):
@@ -135,7 +130,7 @@ class ClientThread(Thread):
         self.window = window
 
     def run(self):
-        host = '192.168.101.23'
+        host = '192.168.101.170'
         port = 9899
         BUFFER_SIZE = 1024
         global tcpClientA, chAD

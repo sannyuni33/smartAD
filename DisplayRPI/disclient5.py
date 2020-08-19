@@ -88,6 +88,8 @@ class Window(QMainWindow):
     def postPrevAD(self):
         self.prevAD, self.currAD = self.currAD, self.prevAD
         self.postAD()
+        global tcpClientA
+        tcpClientA.send(self.currAD.encode('utf-8'))
 
     def vid(self):
         print("video clicked, ID: " + self.currAD)

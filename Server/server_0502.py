@@ -150,6 +150,7 @@ class Window(QMainWindow, ):
         self.qPixmapFileVar = QPixmap()
         self.qPixmapFileVar.load("../imgFile/ready.png")
         self.qPixmapFileVar = self.qPixmapFileVar.scaled(650, 720)
+        self.qPixmapFileVar3 = QPixmap()
         self.label.setPixmap(self.qPixmapFileVar)
         self.label_2.setPixmap(self.qPixmapFileVar)
         self.pushButton.clicked.connect(self.showAdInfo)
@@ -457,7 +458,6 @@ class ch_Dialog(QDialog):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_11), _translate("MainWindow", "M50"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_12), _translate("MainWindow", "M60"))
 
-        # 이부분에 변경할 광고 이미지 추가해주세용
         self.pushButton.setStyleSheet('image:url(../imgFile/f12.jpg.);border:0px;')
         self.pushButton_2.setStyleSheet('image:url(../imgFile/f11.jpg.);border:0px;')
         self.pushButton_3.setStyleSheet('image:url(../imgFile/f22.jpg.);border:0px;')
@@ -609,7 +609,9 @@ class DisplayThread(Thread):
         while True:
             global disConn
             data = disConn.recv(BUFF_SIZE)
-            print(data.decode('utf-8'))
+            window.qPixmapFileVar3.load(("../imgFile/" + data.decode('utf-8') + ".jpg"))
+            window.qPixmapFileVar3 = window.qPixmapFileVar3.scaled(650, 720)
+            window.label_2.setPixmap(window.qPixmapFileVar3)
 
 
 if __name__ == '__main__':

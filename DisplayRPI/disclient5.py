@@ -45,7 +45,6 @@ def recvFile(FILE_NAME):
 class Window(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.chAD = None
         self.prevAD = None
         self.currAD = None
         self.nextAD = None
@@ -130,10 +129,10 @@ class ClientThread(Thread):
         self.window = window
 
     def run(self):
-        host = '192.168.101.170'
+        host = '192.168.102.29'
         port = 9899
         BUFFER_SIZE = 1024
-        global tcpClientA, chAD
+        global tcpClientA
         tcpClientA = socket(AF_INET, SOCK_STREAM)
         tcpClientA.connect((host, port))
         print("서버와 연결되었습니다")

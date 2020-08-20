@@ -122,8 +122,7 @@ class DB_interface:
     def recogCount(self, gender, age, time):
         try:
             sql = "select count(*) from recog_result" \
-                  "where time=%s and date > date_add(now(), interval-30 day)" \
-                  "and gender=%s and age=%s group by gender, age"
+                  "where time=%s and gender=%s and age=%s group by gender, age"
             self.curs.execute(sql, (time, gender, age))
             row = self.curs.fetchone()
             return row

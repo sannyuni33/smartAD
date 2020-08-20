@@ -188,13 +188,15 @@ class Window(QMainWindow, ):
 
     def showTimeStat(self):
         print("시간대별 인식통계를 조회합니다.")
-        res = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        res = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         res_cnt = DB.lookUpTimeStat(datetime.datetime.today().hour)
+        print(res_cnt)
         for row in res_cnt:
             index = 0
             if row[0] == 'female':
                 index += 6
             index += (int(row[1])//10)-1
+            res[index] += row[2]
         label = ['male\n10', 'male\n20', 'male\n30', 'male\n40',
                  'male\n50', 'male\n60', 'female\n10', 'female\n20',
                  'female\n30', 'female\n40', 'female\n50', 'female\n60']

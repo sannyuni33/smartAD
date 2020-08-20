@@ -110,7 +110,7 @@ class Window(QMainWindow):
             options.add_argument('--kiosk')
             chrome_driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', chrome_options=options)
             chrome_driver.get(self.vrLink)
-            time.sleep(30)  # 터치가 끝날 때 까지로 바꿀 수는 없을까? (마지막 터치 인식 후 5초 뒤 종료라던지..)
+            time.sleep(30)
             chrome_driver.quit()
         else:
             self.showMessageBox('VR')

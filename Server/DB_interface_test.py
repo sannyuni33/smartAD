@@ -100,10 +100,9 @@ class DB_interface:
     def lookUpTimeStat(self, time):
         try:
             sql = "select gender, age, count(*) as cnt " \
-                  "from recog_result where time=%s and " \
-                  "date > date_add(now(), interval-30 day) " \
+                  "from recog_result where time=%s "\
                   "group by gender, age"
-            self.curs.execute(sql, (time))
+            self.curs.execute(sql, time)
             rows = self.curs.fetchall()
             return rows
         except Exception as e:

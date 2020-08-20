@@ -89,7 +89,13 @@ def faceAnalyse(FILE_NAME):
         age1, age2 = age.split('~')
         final_age = (int(age1) + int(age2)) / 2
 
+        if gender == 'child':
+            gender = 'female'
+        if final_age < 10:
+            final_age = 10
+
         result = """%s, %s, %s""" % (gender, str(age), str(confi))
+
         if gender:
             DB.insertRecogResult(gender, int(final_age//10), datetime.datetime.today().hour)
             print("인식결과 저장 성공")
